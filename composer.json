@@ -1,0 +1,34 @@
+{
+    "name": "bincani/ap21-sdk-php",
+    "description": "PHP SDK for AP21 API",
+    "keywords": ["PHP","AP21","SDK"],
+    "homepage": "https://github.com/bincani/ap21-sdk-php",
+    "type": "library",
+    "require": {
+        "php": ">=5.6",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "monolog/monolog": "^1.27",
+        "vlucas/phpdotenv": "^5.4"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Ben Incani",
+            "email": "ben.incani@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PHPAP21\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPAP21\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    }
+}
