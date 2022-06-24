@@ -5,6 +5,8 @@
 
 namespace PHPAP21;
 
+use PHPAP21\Exception\ApiException;
+
 class RetailTransactions extends HTTPXMLResource
 {
     protected $resourceKey = 'retailtransactions';

@@ -194,35 +194,29 @@ abstract class HTTPResource implements HTTPResourceInterface
     {
         //If the $name starts with an uppercase letter, it's considered as a child class
         //Otherwise it's a custom action
+        Log::debug(__METHOD__, [$name[0], ctype_upper($name[0])]);
         if (ctype_upper($name[0])) {
             //Get the array key of the childResource in the childResource array
             $childKey = array_search($name, $this->childResource);
-
             if ($childKey === false) {
                 throw new SdkException("Child Resource $name is not available for " . $this->getResourceName());
             }
-
             //If any associative key is given to the childname, then it will be considered as the class name,
             //otherwise the childname will be the class name
             $childClassName = !is_numeric($childKey) ? $childKey : $name;
-
             $childClass = __NAMESPACE__ . "\\" . $childClassName;
-
             //If first argument is provided, it will be considered as the ID of the resource.
             $resourceID = !empty($arguments) ? $arguments[0] : null;
-
-
             $api = new $childClass($resourceID, $this->resourceUrl);
-
             return $api;
-        } else {
+        }
+        else {
             $actionMaps = array(
                 'post'  =>  'customPostActions',
                 'put'   =>  'customPutActions',
                 'get'   =>  'customGetActions',
                 'delete'=>  'customDeleteActions',
             );
-
             //Get the array key for the action in the actions array
             foreach ($actionMaps as $httpMethod => $actionArrayKey) {
                 $actionKey = array_search($name, $this->$actionArrayKey);
@@ -319,13 +313,15 @@ abstract class HTTPResource implements HTTPResourceInterface
      *
      * @return string
      */
-    public function generateUrl($param = null, $customAction = null)
+    public function generateUrl($params = [], $customAction = null)
     {
         $urlParams['CountryCode'] = Ap21SDK::$config['CountryCode'];
-        //Log::debug(sprintf("%s->params", __METHOD__), [$this->resourceUrl, $param, $customAction, $urlParams]);
-        $url = sprintf("%s%s%s%s",
+        if (is_array($params)) {
+            $urlParams = array_merge($urlParams, $params);
+        }
+        Log::debug(sprintf("%s->params", __METHOD__), [$this->resourceUrl, $params, $customAction, $urlParams]);
+        $url = sprintf("%s%s%s",
             $this->resourceUrl,
-            ($param ? "/" . $param : ''),
             ($customAction ? "/$customAction" : '') ,
             (!empty($urlParams) ? '?' . http_build_query($urlParams) : '')
         );
@@ -349,14 +345,14 @@ abstract class HTTPResource implements HTTPResourceInterface
      */
     public function get($urlParams = array(), $url = null, $dataKey = null)
     {
-        if (!$url) $url  = $this->generateUrl($urlParams);
-
+        if (!$url) {
+            $url  = $this->generateUrl($urlParams);
+        }
         $response = HttpRequest::get($url, $this->httpHeaders);
-
-        if (!$dataKey) $dataKey = $this->id ? $this->resourceKey : $this->pluralizeKey();
-
+        if (!$dataKey) {
+            $dataKey = $this->id ? $this->resourceKey : $this->pluralizeKey();
+        }
         return $this->processResponse($response, $dataKey);
-
     }
 
     /**
@@ -375,9 +371,7 @@ abstract class HTTPResource implements HTTPResourceInterface
         if (!$this->countEnabled) {
             throw new SdkException("Count is not available for " . $this->getResourceName());
         }
-
         $url = $this->generateUrl($urlParams, 'count');
-
         return $this->get(array(), $url, 'count');
     }
 
@@ -419,14 +413,15 @@ abstract class HTTPResource implements HTTPResourceInterface
      *
      * @return array
      */
-    public function post($dataArray, $url = null, $wrapData = true)
+    public function post($dataArray, $url = null, $wrapData = false)
     {
-        if (!$url) $url = $this->generateUrl();
-
-        if ($wrapData && !empty($dataArray)) $dataArray = $this->wrapData($dataArray);
-
+        if (!$url) {
+            $url = $this->generateUrl();
+        }
+        if ($wrapData && !empty($dataArray)) {
+            $dataArray = $this->wrapData($dataArray);
+        }
         $response = HttpRequest::post($url, $dataArray, $this->httpHeaders);
-
         return $this->processResponse($response, $this->resourceKey);
     }
 
@@ -446,13 +441,13 @@ abstract class HTTPResource implements HTTPResourceInterface
      */
     public function put($dataArray, $url = null, $wrapData = true)
     {
-
-        if (!$url) $url = $this->generateUrl();
-
-        if ($wrapData && !empty($dataArray)) $dataArray = $this->wrapData($dataArray);
-
+        if (!$url) {
+            $url = $this->generateUrl();
+        }
+        if ($wrapData && !empty($dataArray)) {
+            $dataArray = $this->wrapData($dataArray);
+        }
         $response = HttpRequest::put($url, $dataArray, $this->httpHeaders);
-
         return $this->processResponse($response, $this->resourceKey);
     }
 
@@ -471,10 +466,10 @@ abstract class HTTPResource implements HTTPResourceInterface
      */
     public function delete($urlParams = array(), $url = null)
     {
-        if (!$url) $url = $this->generateUrl($urlParams);
-
+        if (!$url) {
+            $url = $this->generateUrl($urlParams);
+        }
         $response = HttpRequest::delete($url, $this->httpHeaders);
-
         return $this->processResponse($response);
     }
 
@@ -488,8 +483,9 @@ abstract class HTTPResource implements HTTPResourceInterface
      */
     public function wrapData($dataArray, $dataKey = null)
     {
-        if (!$dataKey) $dataKey = $this->getResourcePostKey();
-
+        if (!$dataKey) {
+            $dataKey = $this->getResourcePostKey();
+        }
         return array($dataKey => $dataArray);
     }
 
@@ -617,5 +613,20 @@ abstract class HTTPResource implements HTTPResourceInterface
         $nextPageParams = [];
         parse_str($this->getUrlParams($this->getPrevLink()), $nextPageParams);
         return $nextPageParams;
+    }
+
+    /**
+     * innerHTML
+     *
+     * @param \DOMElement $element
+     * @return void
+     */
+    function innerHTML(\DOMElement $element) {
+        $doc = $element->ownerDocument;
+        $html = '';
+        foreach ($element->childNodes as $node) {
+            $html .= $doc->saveHTML($node);
+        }
+        return $html;
     }
 }

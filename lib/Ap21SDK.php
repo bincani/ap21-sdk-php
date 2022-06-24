@@ -17,7 +17,8 @@ class Ap21SDK
     protected $resources = array(
         'Info',
         'Person',
-        'Product'
+        'Product',
+        'ReferenceType'
     );
 
     /**

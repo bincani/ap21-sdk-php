@@ -25,31 +25,29 @@ class HttpRequest
      *
      * @var string
      */
-    protected static $postData;
-
+    public static $postData;
 
     /**
      * Prepare the data and request headers before making the call
      *
      * @param array $httpHeaders
-     * @param array $dataArray
+     * @param array $postData
      *
      * @return void
      */
-    protected static function prepareRequest($httpHeaders = array(), $dataArray = array())
+    protected static function prepareRequest($httpHeaders = [], $postData = null)
     {
-        self::$postData = $dataArray;
-
+        self::$postData = $postData;
         self::$httpHeaders = $httpHeaders;
-
-        if (!empty($dataArray)) {
-            self::$httpHeaders['Content-type'] = 'application/html';
+        self::$httpHeaders['Content-type'] = 'application/html';
+        if (!empty($postData)) {
+            Log::debug(__METHOD__, [$postData]);
             self::$httpHeaders['Content-Length'] = strlen(self::$postData);
         }
     }
 
     /**
-     * Implement a GET request and return json decoded output
+     * Implement a GET request
      *
      * @param string $url
      * @param array $httpHeaders
@@ -63,37 +61,37 @@ class HttpRequest
     }
 
     /**
-     * Implement a POST request and return json decoded output
+     * Implement a POST request
      *
      * @param string $url
-     * @param array $dataArray
+     * @param array $postData
      * @param array $httpHeaders
      *
      * @return array
      */
-    public static function post($url, $dataArray, $httpHeaders = array())
+    public static function post($url, $postData, $httpHeaders = array())
     {
-        self::prepareRequest($httpHeaders, $dataArray);
+        self::prepareRequest($httpHeaders, $postData);
         return self::processRequest('POST', $url);
     }
 
     /**
-     * Implement a PUT request and return json decoded output
+     * Implement a PUT request
      *
      * @param string $url
-     * @param array $dataArray
+     * @param array $postData
      * @param array $httpHeaders
      *
      * @return array
      */
-    public static function put($url, $dataArray, $httpHeaders = array())
+    public static function put($url, $postData, $httpHeaders = array())
     {
-        self::prepareRequest($httpHeaders, $dataArray);
+        self::prepareRequest($httpHeaders, $postData);
         return self::processRequest('PUT', $url);
     }
 
     /**
-     * Implement a DELETE request and return json decoded output
+     * Implement a DELETE request
      *
      * @param string $url
      * @param array $httpHeaders
@@ -168,7 +166,7 @@ class HttpRequest
     }
 
     /**
-     * Decode JSON response
+     * Decode response
      *
      * @param string $response
      *

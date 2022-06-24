@@ -11,23 +11,8 @@ namespace PHPAP21;
  *
  * @package PHPAP21
  */
-class HttpRequestXml
+class HttpRequestXml extends HttpRequest
 {
-    /**
-     * HTTP request headers
-     *
-     * @var array
-     */
-    protected static $httpHeaders;
-
-    /**
-     * Prepared JSON string to be posted with request
-     *
-     * @var string
-     */
-    protected static $postDataXML;
-
-
     /**
      * Prepare the data and request headers before making the call
      *
@@ -36,76 +21,52 @@ class HttpRequestXml
      *
      * @return void
      */
-    protected static function prepareRequest($httpHeaders = array(), $dataArray = array())
+    protected static function prepareRequest($httpHeaders = [], $postData = null)
     {
-        self::$postDataXML = json_encode($dataArray);
-
+        self::$postData = $postData;
         self::$httpHeaders = $httpHeaders;
-
-        if (!empty($dataArray)) {
-            self::$httpHeaders['Content-type'] = 'application/xml';
-            self::$httpHeaders['Content-Length'] = strlen(self::$postDataXML);
+        /**
+         * causes
+         * 5010 - Person has been updated by another user - Update Time Stamp has changed from  to 24/06/2022 5:38:28 PM
+         * 5045 - The requested major API version is not supported
+         * 5151 - Person ID in request is different from Person ID in the payload
+         */
+        //self::$httpHeaders['Accept'] = 'version_4.0';
+        if (!empty($postData)) {
+            self::$httpHeaders['Content-type'] = 'text/xml';
+            self::$httpHeaders['Content-Length'] = strlen(self::$postData);
         }
+        Log::debug(sprintf("%s->httpHeaders", __METHOD__), self::$httpHeaders);
     }
 
     /**
-     * Implement a GET request and return xml decoded output
+     * Implement a POST request
      *
      * @param string $url
+     * @param array $postData
      * @param array $httpHeaders
      *
      * @return array
      */
-    public static function get($url, $httpHeaders = array())
+    public static function post($url, $postData, $httpHeaders = array())
     {
-        self::prepareRequest($httpHeaders);
-        return self::processRequest('GET', $url);
-    }
-
-    /**
-     * Implement a POST request and return json decoded output
-     *
-     * @param string $url
-     * @param array $dataArray
-     * @param array $httpHeaders
-     *
-     * @return array
-     */
-    public static function post($url, $dataArray, $httpHeaders = array())
-    {
-        self::prepareRequest($httpHeaders, $dataArray);
+        self::prepareRequest($httpHeaders, $postData);
         return self::processRequest('POST', $url);
     }
 
     /**
-     * Implement a PUT request and return json decoded output
+     * Implement a PUT request
      *
      * @param string $url
-     * @param array $dataArray
+     * @param array $postData
      * @param array $httpHeaders
      *
      * @return array
      */
-    public static function put($url, $dataArray, $httpHeaders = array())
+    public static function put($url, $postData, $httpHeaders = array())
     {
-        self::prepareRequest($httpHeaders, $dataArray);
-
+        self::prepareRequest($httpHeaders, $postData);
         return self::processRequest('PUT', $url);
-    }
-
-    /**
-     * Implement a DELETE request and return json decoded output
-     *
-     * @param string $url
-     * @param array $httpHeaders
-     *
-     * @return array
-     */
-    public static function delete($url, $httpHeaders = array())
-    {
-        self::prepareRequest($httpHeaders);
-
-        return self::processRequest('DELETE', $url);
     }
 
     /**
@@ -128,12 +89,15 @@ class HttpRequestXml
                         Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
                         $raw = CurlRequest::get($url, self::$httpHeaders);
                         Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));
+                        die();
                         break;
                     case 'POST':
-                        $raw = CurlRequest::post($url, self::$postDataXML, self::$httpHeaders);
+                        Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
+                        $raw = CurlRequest::post($url, self::$postData, self::$httpHeaders);
                         break;
                     case 'PUT':
-                        $raw = CurlRequest::put($url, self::$postDataXML, self::$httpHeaders);
+                        Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
+                        $raw = CurlRequest::put($url, self::$postData, self::$httpHeaders);
                         break;
                     case 'DELETE':
                         $raw = CurlRequest::delete($url, self::$httpHeaders);
@@ -149,65 +113,5 @@ class HttpRequestXml
                 }
             }
         }
-    }
-
-    /**
-     * Evaluate if send again a request
-     *
-     * @param string $response Raw request response
-     * @param exception $error the request error occured
-     * @param integer $retry the current number of retry
-     *
-     * @return bool
-     */
-    public static function shouldRetry($response, $error, $retry) {
-        $config = Ap21SDK::$config;
-        if (isset($config['RequestRetryCallback'])) {
-           return $config['RequestRetryCallback']($response, $error, $retry);
-        }
-        return false;
-    }
-
-    /**
-     * Decode JSON response
-     *
-     * @param string $response
-     *
-     * @return array
-     */
-    protected static function processResponse($response) {
-        return $response;
-        /*
-        $responseArray = json_decode($response, true);
-        if ($responseArray === null) {
-            // Something went wrong, check HTTP codes
-            $httpOK         = 200; // Request Successful, OK
-            $httpCreated    = 201; // Create Successful
-            $httpDeleted    = 204; // Delete Successful
-            $httpOther      = 303; // See other (headers)
-            $lastHttpResponseHeaders = CurlRequest::$lastHttpResponseHeaders;
-            //should be null if any other library used for http calls
-            $httpCode = CurlRequest::$lastHttpCode;
-            if (
-                $httpCode == $httpOther
-                &&
-                array_key_exists('location', $lastHttpResponseHeaders)
-            ) {
-                return ['location' => $lastHttpResponseHeaders['location']];
-            }
-            if (
-                $httpCode != null
-                &&
-                $httpCode != $httpOK
-                &&
-                $httpCode != $httpCreated
-                &&
-                $httpCode != $httpDeleted
-            ) {
-                throw new Exception\CurlException("Request failed with HTTP Code $httpCode.", $httpCode);
-            }
-        }
-        return $responseArray;
-        */
     }
 }

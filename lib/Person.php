@@ -5,6 +5,8 @@
 
 namespace PHPAP21;
 
+use PHPAP21\Exception\ApiException;
+
 class Person extends HTTPXMLResource
 {
     /**
@@ -40,9 +42,29 @@ class Person extends HTTPXMLResource
         if (!$response) {
             throw new ApiException($message = "no response", CurlRequest::$lastHttpCode);
         }
+
+        // @todo move to generic process
+        if (
+            get_class($response) == "DOMDocument"
+            &&
+            preg_match("/DOCTYPE html/", $response->saveHTML())
+        ) {
+            //Log::debug(__METHOD__, ["html", $html]);
+            $errCode = $this->innerHTML($response->getElementsByTagName('errorcode')[0]);
+            $errDesc = $this->innerHTML($response->getElementsByTagName('description')[0]);
+            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
+        }
+
         // parse xml
         if (!$this->xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)) {
             throw new \Exception("invalid xml!");
+        }
+
+        //$this->xml->getName()
+        if (preg_match("/Ap21Error/i", $this->xml->getName()) ) {
+            $errCode = (string)$this->xml->ErrorCode;
+            $errDesc = (string)$this->xml->Description;
+            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
         }
 
         //Log::debug(__METHOD__, [$dataKey, $this->xml->getName(), $this->pluralizeKey() ]);

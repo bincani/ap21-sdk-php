@@ -4,6 +4,11 @@
  *
  * Clrs
  * The list of colours for this product
+ *
+ * Addtional query parameters
+ *  CustomData = true
+ *      List of Cards of Custom Data on product level
+ *
  */
 
 namespace PHPAP21;

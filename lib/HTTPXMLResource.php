@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface;
 
 abstract class HTTPXMLResource extends HTTPResource
 {
+    protected $count = 0;
+
     public function __construct($id = null, $parentResourceUrl = '') {
         Log::debug(sprintf("%s->id: %s", __METHOD__, $id), [func_get_args()] );
         parent::__construct(...func_get_args());
@@ -24,7 +26,7 @@ abstract class HTTPXMLResource extends HTTPResource
      * @param string $url
      * @param string $dataKey Keyname to fetch data from response array
      *
-     * @uses HttpRequest::get() to send the HTTP request
+     * @uses HttpRequestXml::get() to send the HTTP request
      *
      * @throws ApiException if the response has an error specified
      * @throws CurlException if response received with unexpected HTTP code.
@@ -48,7 +50,7 @@ abstract class HTTPXMLResource extends HTTPResource
             $this->config['useCache']
         ) {
             Log::debug(sprintf("%s->readCache: %s", __METHOD__, $dataKey) );
-            $cacheFile = sprintf("%s/../data/%s.xml", __DIR__, strtolower($dataKey));
+            $cacheFile = sprintf("%s/../data/get/%s.xml", __DIR__, strtolower($dataKey));
             if (!file_exists($cacheFile)) {
                 throw new \Exception(sprintf("cannot open cache file '%s'!", $cacheFile));
             }
@@ -84,9 +86,7 @@ abstract class HTTPXMLResource extends HTTPResource
         if (!$this->countEnabled) {
             throw new SdkException("Count is not available for " . $this->getResourceName());
         }
-
         $url = $this->generateUrl($urlParams, 'count');
-
         return $this->get(array(), $url, 'count');
     }
 
@@ -106,11 +106,10 @@ abstract class HTTPXMLResource extends HTTPResource
         if (!$this->searchEnabled) {
             throw new SdkException("Search is not available for " . $this->getResourceName());
         }
-
-        if (!is_array($query)) $query = array('query' => $query);
-
+        if (!is_array($query)) {
+            $query = array('query' => $query);
+        }
         $url = $this->generateUrl($query, 'search');
-
         return $this->get(array(), $url);
     }
 
@@ -119,23 +118,24 @@ abstract class HTTPXMLResource extends HTTPResource
      *
      * @param array $dataArray Check Ap21 API reference of the specific resource for the list of required and optional data elements to be provided
      * @param string $url
-     * @param bool $wrapData
+     * @param bool $wrapData wraps the date in an array ['resource' => $data]
      *
-     * @uses HttpRequest::post() to send the HTTP request
+     * @uses HttpRequestXml::post() to send the HTTP request
      *
      * @throws ApiException if the response has an error specified
      * @throws CurlException if response received with unexpected HTTP code.
      *
      * @return array
      */
-    public function post($dataArray, $url = null, $wrapData = true)
+    public function post($dataArray, $url = null, $wrapData = false)
     {
-        if (!$url) $url = $this->generateUrl();
-
-        if ($wrapData && !empty($dataArray)) $dataArray = $this->wrapData($dataArray);
-
-        $response = HttpRequest::post($url, $dataArray, $this->httpHeaders);
-
+        if (!$url) {
+            $url = $this->generateUrl();
+        }
+        if ($wrapData && !empty($dataArray)) {
+            $dataArray = $this->wrapData($dataArray);
+        }
+        $response = HttpRequestXml::post($url, $dataArray, $this->httpHeaders);
         return $this->processResponse($response, $this->resourceKey);
     }
 
@@ -144,24 +144,24 @@ abstract class HTTPXMLResource extends HTTPResource
      *
      * @param array $dataArray Check Ap21 API reference of the specific resource for the list of required and optional data elements to be provided
      * @param string $url
-     * @param bool $wrapData
+     * @param bool $wrapData wraps the date in an array ['resource' => $data]
      *
-     * @uses HttpRequest::put() to send the HTTP request
+     * @uses HttpRequestXml::put() to send the HTTP request
      *
      * @throws ApiException if the response has an error specified
      * @throws CurlException if response received with unexpected HTTP code.
      *
      * @return array
      */
-    public function put($dataArray, $url = null, $wrapData = true)
+    public function put($dataArray, $url = null, $wrapData = false)
     {
-
-        if (!$url) $url = $this->generateUrl();
-
-        if ($wrapData && !empty($dataArray)) $dataArray = $this->wrapData($dataArray);
-
-        $response = HttpRequest::put($url, $dataArray, $this->httpHeaders);
-
+        if (!$url) {
+            $url = $this->generateUrl();
+        }
+        if ($wrapData && !empty($dataArray)) {
+            $dataArray = $this->wrapData($dataArray);
+        }
+        $response = HttpRequestXml::put($url, $dataArray, $this->httpHeaders);
         return $this->processResponse($response, $this->resourceKey);
     }
 
@@ -171,7 +171,7 @@ abstract class HTTPXMLResource extends HTTPResource
      * @param array $urlParams Check Ap21 API reference of the specific resource for the list of URL parameters
      * @param string $url
      *
-     * @uses HttpRequest::delete() to send the HTTP request
+     * @uses HttpRequestXml::delete() to send the HTTP request
      *
      * @throws ApiException if the response has an error specified
      * @throws CurlException if response received with unexpected HTTP code.
@@ -180,10 +180,10 @@ abstract class HTTPXMLResource extends HTTPResource
      */
     public function delete($urlParams = array(), $url = null)
     {
-        if (!$url) $url = $this->generateUrl($urlParams);
-
-        $response = HttpRequest::delete($url, $this->httpHeaders);
-
+        if (!$url) {
+            $url = $this->generateUrl($urlParams);
+        }
+        $response = HttpRequestXml::delete($url, $this->httpHeaders);
         return $this->processResponse($response);
     }
 
@@ -197,8 +197,9 @@ abstract class HTTPXMLResource extends HTTPResource
      */
     public function wrapData($dataArray, $dataKey = null)
     {
-        if (!$dataKey) $dataKey = $this->getResourcePostKey();
-
+        if (!$dataKey) {
+            $dataKey = $this->getResourcePostKey();
+        }
         return array($dataKey => $dataArray);
     }
 
@@ -232,8 +233,8 @@ abstract class HTTPXMLResource extends HTTPResource
     }
 
     public function getLinks($responseHeaders){
-        $this->nextLink = $this->getLink($responseHeaders,'next');
-        $this->prevLink = $this->getLink($responseHeaders,'previous');
+        $this->nextLink = $this->getLink($responseHeaders, 'next');
+        $this->prevLink = $this->getLink($responseHeaders, 'previous');
     }
 
     public function getLink($responseHeaders, $type='next'){
@@ -289,5 +290,50 @@ abstract class HTTPXMLResource extends HTTPResource
         $nextPageParams = [];
         parse_str($this->getUrlParams($this->getPrevLink()), $nextPageParams);
         return $nextPageParams;
+    }
+
+    /**
+     * validateResponse
+     *
+     * @param [type] $response
+     * @return void
+     */
+    public function validateResponse($response) {
+        // check response
+        if (!$response) {
+            throw new ApiException($message = "no response", CurlRequest::$lastHttpCode);
+        }
+
+        // see if there are errors inside a HTML document
+        if (
+            get_class($response) == "DOMDocument"
+            &&
+            preg_match("/DOCTYPE html/", $response->saveHTML())
+        ) {
+            $errorNodes = $response->getElementsByTagName('errorcode');
+            if ($errorNodes->length > 0) {
+                Log::debug(__METHOD__, ["html", $response->saveHTML()]);
+                $errCode = $this->innerHTML($errorNodes[0]);
+                $errDesc = $this->innerHTML($response->getElementsByTagName('description')[0]);
+                throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
+            }
+        }
+
+        // parse xml
+        if (
+            get_class($response) != "DOMDocument"
+            &&
+            !$this->xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)
+        ) {
+            throw new \Exception("invalid xml!");
+        }
+
+        // see if there are errors in the XML document
+        if (preg_match("/Ap21Error/i", $this->xml->getName()) ) {
+            $errCode = (string)$this->xml->ErrorCode;
+            $errDesc = (string)$this->xml->Description;
+            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
+        }
+
     }
 }
