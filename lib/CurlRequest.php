@@ -7,8 +7,8 @@
 
 namespace PHPAP21;
 
-use PHPShopify\Exception\CurlException;
-use PHPShopify\Exception\ResourceRateLimitException;
+use PHPAP21\Exception\CurlException;
+use PHPAP21\Exception\ResourceRateLimitException;
 
 class CurlRequest
 {
@@ -57,7 +57,7 @@ class CurlRequest
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'PHPClassic/PHPShopify');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'PHPAP21/ap21-sdk-php');
 
         foreach (self::$config as $option => $value) {
             curl_setopt($ch, $option, $value);
