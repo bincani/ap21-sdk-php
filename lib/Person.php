@@ -21,8 +21,9 @@ class Person extends HTTPXMLResource
      * @inheritDoc
      */
     protected $childResource = array(
-        'CustomerAddress' => 'Address',
+        //'CustomerAddress' => 'Address',
         'RetailTransactions',
+        'Shipment',
         'Order'
     );
 
