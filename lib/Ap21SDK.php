@@ -16,8 +16,8 @@ class Ap21SDK
      */
     protected $resources = array(
         'Info',
-        'Product',
-        'Products'
+        'Person',
+        'Product'
     );
 
     /**
@@ -33,7 +33,7 @@ class Ap21SDK
     /**
      * @var string Default Ap21 API version
      */
-    public static $defaultApiVersion = '2022-01';
+    public static $defaultApiVersion = '2022.2';
 
     /**
      * Shop / API configurations
@@ -60,19 +60,19 @@ class Ap21SDK
      */
     public function __construct($config = array())
     {
-        if(!empty($config)) {
+        if (!empty($config)) {
             Ap21SDK::config($config);
         }
     }
 
     /**
-     * Return Ap21Resource instance for a resource.
+     * Return HTTPResource instance for a resource.
      * @example $ap21->Product->get(); //Returns all available Products
      * Called like an object properties (without parenthesis)
      *
      * @param string $resourceName
      *
-     * @return Ap21Resource
+     * @return HTTPResource
      */
     public function __get($resourceName)
     {
@@ -80,19 +80,20 @@ class Ap21SDK
     }
 
     /**
-     * Return Ap21Resource instance for a resource.
+     * Return HTTPResource instance for a resource.
      * Called like an object method (with parenthesis) optionally with the resource ID as the first argument
      * @example $ap21->Product($productID); //Return a specific product defined by $productID
      *
      * @param string $resourceName
      * @param array $arguments
      *
-     * @throws SdkException if the $name is not a valid Ap21Resource resource.
+     * @throws SdkException if the $name is not a valid HTTPResource resource.
      *
-     * @return Ap21Resource
+     * @return HTTPResource
      */
     public function __call($resourceName, $arguments)
     {
+        Log::debug(sprintf("%s->resourceName: %s", __METHOD__, $resourceName), $arguments);
         if (!in_array($resourceName, $this->resources)) {
             if (isset($this->childResources[$resourceName])) {
                 $message = "$resourceName is a child resource of " . $this->childResources[$resourceName] . ". Cannot be accessed directly.";
@@ -103,6 +104,7 @@ class Ap21SDK
         }
 
         $resourceClassName = __NAMESPACE__ . "\\$resourceName";
+        Log::debug(sprintf("%s->resourceClassName: %s", __METHOD__, $resourceClassName));
 
         //If first argument is provided, it will be considered as the ID of the resource.
         $resourceID = !empty($arguments) ? $arguments[0] : null;

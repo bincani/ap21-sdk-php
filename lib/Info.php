@@ -5,7 +5,7 @@
 
 namespace PHPAP21;
 
-class Info extends Ap21Resource
+class Info extends HTTPResource
 {
     protected $info = [];
 

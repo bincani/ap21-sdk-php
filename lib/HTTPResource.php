@@ -1,6 +1,6 @@
 <?php
 /**
- * @see doc/Retail API Guide - latest.pdf
+ * class HTTPResource
  */
 
 namespace PHPAP21;
@@ -10,16 +10,15 @@ use PHPAP21\Exception\SdkException;
 use PHPAP21\Exception\CurlException;
 use Psr\Http\Message\ResponseInterface;
 
-/*
-|--------------------------------------------------------------------------
-| Ap21 API SDK Base Class
-|--------------------------------------------------------------------------
-|
-| This class handles get, post, put, delete and any other custom actions for the API
-|
-*/
-abstract class Ap21Resource
+abstract class HTTPResource implements HTTPResourceInterface
 {
+    /**
+     * Resource config
+     *
+     * @var array
+     */
+    protected $config = [];
+
     /**
      * HTTP request headers
      *
@@ -134,39 +133,41 @@ abstract class Ap21Resource
 
     public function __construct($id = null, $parentResourceUrl = '')
     {
+        //Log::debug(sprintf("%s->id: %s", __METHOD__, $id), [func_get_args()]);
         $this->id = $id;
 
-        $config = Ap21SDK::$config;
+        $this->config = Ap21SDK::$config;
 
-        $this->resourceUrl = ($parentResourceUrl ? $parentResourceUrl . '/' :  $config['ApiUrl']) . $this->getResourcePath() . ($this->id ? '/' . $this->id : '');
+        $this->resourceUrl = ($parentResourceUrl ? $parentResourceUrl . '/' :  $this->config['ApiUrl']) . $this->getResourcePath() . ($this->id ? '/' . $this->id : '');
+        //Log::debug(sprintf("%s->resourceUrl", __METHOD__), [$parentResourceUrl, $this->resourceUrl]);
 
-        if (isset($config['ApiUser']) && isset($config['ApiPassword'])) {
-            $auth = base64_encode($config['ApiUser'] . ":" . $config['ApiPassword']);
+        if (isset($this->config['ApiUser']) && isset($this->config['ApiPassword'])) {
+            $auth = base64_encode($this->config['ApiUser'] . ":" . $this->config['ApiPassword']);
             $this->httpHeaders['Authorization'] = sprintf("Basic %s", $auth);
         }
-        elseif (isset($config['AccessToken'])) {
-            $this->httpHeaders['X-Ap21-Access-Token'] = $config['AccessToken'];
+        elseif (isset($this->config['AccessToken'])) {
+            $this->httpHeaders['X-Ap21-Access-Token'] = $this->config['AccessToken'];
         }
-        elseif (!isset($config['ApiKey']) || !isset($config['Password'])) {
+        elseif (!isset($this->config['ApiKey']) || !isset($this->config['Password'])) {
             throw new SdkException("Either AccessToken or ApiKey+Password Combination (in case of private API) is required to access the resources. Please check SDK configuration!");
         }
 
-        if (isset($config['Ap21ApiFeatures'])) {
-            foreach($config['Ap21ApiFeatures'] as $apiFeature) {
+        if (isset($this->config['Ap21ApiFeatures'])) {
+            foreach($this->config['Ap21ApiFeatures'] as $apiFeature) {
                 $this->httpHeaders['X-Ap21-Api-Features'] = $apiFeature;
             }
         }
     }
 
     /**
-     * Return Ap21Resource instance for the child resource.
+     * Return HTTPResource instance for the child resource.
      *
      * @example $ap21->Product($productID)->Image->get(); //Here Product is the parent resource and Image is a child resource
      * Called like an object properties (without parenthesis)
      *
      * @param string $childName
      *
-     * @return Ap21Resource
+     * @return HTTPResource
      */
     public function __get($childName)
     {
@@ -174,7 +175,7 @@ abstract class Ap21Resource
     }
 
     /**
-     * Return Ap21Resource instance for the child resource or call a custom action for the resource
+     * Return HTTPResource instance for the child resource or call a custom action for the resource
      *
      * @example $ap21->Product($productID)->Image($imageID)->get(); //Here Product is the parent resource and Image is a child resource
      * Called like an object method (with parenthesis) optionally with the resource ID as the first argument
@@ -187,7 +188,7 @@ abstract class Ap21Resource
      *
      * @throws SdkException if the $name is not a valid child resource or custom action method.
      *
-     * @return mixed / Ap21Resource
+     * @return mixed / HTTPResource
      */
     public function __call($name, $arguments)
     {
@@ -292,7 +293,7 @@ abstract class Ap21Resource
      *
      * @return string
      */
-    protected function pluralizeKey()
+    public function pluralizeKey()
     {
         return $this->resourceKey . 's';
     }
@@ -305,7 +306,7 @@ abstract class Ap21Resource
      *
      * @return string
      */
-    protected function getResourcePath()
+    public function getResourcePath()
     {
         return $this->pluralizeKey();
     }
@@ -313,18 +314,22 @@ abstract class Ap21Resource
     /**
      * Generate the custom url for api request based on the params and custom action (if any)
      *
-     * @param array $urlParams
+     * @param array $param
      * @param string $customAction
      *
      * @return string
      */
-    public function generateUrl($urlParams = array(), $customAction = null)
+    public function generateUrl($param = null, $customAction = null)
     {
         $urlParams['CountryCode'] = Ap21SDK::$config['CountryCode'];
-        Log::info("urlParams", $urlParams);
-        Log::info(sprintf("%s->customAction", __METHOD__), [$customAction]);
-        $url = $this->resourceUrl . ($customAction ? "/$customAction" : '') . (!empty($urlParams) ? '?' . http_build_query($urlParams) : '');
-        Log::info(sprintf("%s->url", __METHOD__), [$url]);
+        //Log::debug(sprintf("%s->params", __METHOD__), [$this->resourceUrl, $param, $customAction, $urlParams]);
+        $url = sprintf("%s%s%s%s",
+            $this->resourceUrl,
+            ($param ? "/" . $param : ''),
+            ($customAction ? "/$customAction" : '') ,
+            (!empty($urlParams) ? '?' . http_build_query($urlParams) : '')
+        );
+        Log::debug(sprintf("%s->url", __METHOD__), [$url]);
         return $url;
     }
 
@@ -481,7 +486,7 @@ abstract class Ap21Resource
      *
      * @return array
      */
-    protected function wrapData($dataArray, $dataKey = null)
+    public function wrapData($dataArray, $dataKey = null)
     {
         if (!$dataKey) $dataKey = $this->getResourcePostKey();
 
@@ -497,7 +502,7 @@ abstract class Ap21Resource
      *
      * @return string
      */
-    protected function castString($array)
+    public function castString($array)
     {
         if ( ! is_array($array)) return (string) $array;
 
@@ -528,8 +533,10 @@ abstract class Ap21Resource
      *
      * @return array
      */
-    public function processResponse($responseArray, $dataKey = null)
-    {
+    abstract public function processResponse($responseArray, $dataKey = null);
+
+    /*
+    public function processResponse($responseArray, $dataKey = null) {
         self::$lastHttpResponseHeaders = CurlRequest::$lastHttpResponseHeaders;
 
         $lastResponseHeaders = CurlRequest::$lastHttpResponseHeaders;
@@ -537,21 +544,20 @@ abstract class Ap21Resource
 
         if (isset($responseArray['errors'])) {
             $message = $this->castString($responseArray['errors']);
-
-            //check account already enabled or not
-            if($message=='account already enabled'){
-                return array('account_activation_url'=>false);
+            // check account already enabled or not
+            if ($message == 'account already enabled') {
+                return ['account_activation_url' => false];
             }
-
             throw new ApiException($message, CurlRequest::$lastHttpCode);
         }
-        Log::info(sprintf("%s->responseArray", __METHOD__), [$responseArray]);
         if ($dataKey && isset($responseArray[$dataKey])) {
             return $responseArray[$dataKey];
-        } else {
+        }
+        else {
             return $responseArray;
         }
     }
+    */
 
     public function getLinks($responseHeaders){
         $this->nextLink = $this->getLink($responseHeaders,'next');

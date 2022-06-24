@@ -1,11 +1,11 @@
 <?php
 /**
- * class Products_FuturePrices
+ * class Product_FuturePrices
  */
 
 namespace PHPAP21\Products;
 
-class Products_FuturePrices extends Products
+class Product_FuturePrices extends Products
 {
     protected $resourceKey = 'FuturePrices';
 }
