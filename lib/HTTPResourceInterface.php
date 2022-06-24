@@ -17,12 +17,12 @@ interface HTTPResourceInterface {
      *
      * @param string $childName
      *
-     * @return Ap21Resource
+     * @return HTTPResource
      */
     public function __get($childName);
 
     /**
-     * Return Ap21Resource instance for the child resource or call a custom action for the resource
+     * Return HTTPResource instance for the child resource or call a custom action for the resource
      *
      * @example $ap21->Product($productID)->Image($imageID)->get(); //Here Product is the parent resource and Image is a child resource
      * Called like an object method (with parenthesis) optionally with the resource ID as the first argument
@@ -35,7 +35,7 @@ interface HTTPResourceInterface {
      *
      * @throws SdkException if the $name is not a valid child resource or custom action method.
      *
-     * @return mixed / Ap21Resource
+     * @return mixed / HTTPResource
      */
     public function __call($name, $arguments);
 
