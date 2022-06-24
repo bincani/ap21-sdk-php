@@ -1,11 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * @author Tareq Mahmood <tareqtms@yahoo.com>
- * Created at: 9/9/16 12:38 PM UTC+06:00
+ * class TestSimpleResource
  */
 
-namespace PHPShopify;
+namespace PHPAP21;
 
 class TestSimpleResource extends TestResource
 {
@@ -48,7 +46,7 @@ class TestSimpleResource extends TestResource
     public function testPost()
     {
         if ($this->postArray) {
-            $result = static::$shopify->{$this->resourceName}->post($this->postArray);
+            $result = static::$ap21->{$this->resourceName}->post($this->postArray);
             $this->assertTrue(is_array($result));
             $this->assertNotEmpty($result);
             return $result['id'];
@@ -62,7 +60,7 @@ class TestSimpleResource extends TestResource
      */
     public function testGet()
     {
-        $resource = static::$shopify->{$this->resourceName};
+        $resource = static::$ap21->{$this->resourceName};
         $result = $resource->get();
 
         $this->assertTrue(is_array($result));
@@ -72,7 +70,7 @@ class TestSimpleResource extends TestResource
         }
         if($resource->countEnabled) {
             //Count should match the result array count
-            $count = static::$shopify->{$this->resourceName}->count();
+            $count = static::$ap21->{$this->resourceName}->count();
             $this->assertEquals($count, count($result));
         }
     }
@@ -85,7 +83,7 @@ class TestSimpleResource extends TestResource
     public function testGetSelf($id)
     {
         if ($id) {
-            $product = static::$shopify->{$this->resourceName}($id)->get();
+            $product = static::$ap21->{$this->resourceName}($id)->get();
 
             $this->assertTrue(is_array($product));
             $this->assertNotEmpty($product);
@@ -101,7 +99,7 @@ class TestSimpleResource extends TestResource
     public function testPut($id)
     {
         if ($this->putArray) {
-            $result = static::$shopify->{$this->resourceName}($id)->put($this->putArray);
+            $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
             $this->assertTrue(is_array($result));
             $this->assertNotEmpty($result);
             foreach($this->putArray as $key => $value) {
@@ -118,15 +116,15 @@ class TestSimpleResource extends TestResource
     public function testDelete($id)
     {
         if ($id) {
-            $result = static::$shopify->{$this->resourceName}($id)->delete();
+            $result = static::$ap21->{$this->resourceName}($id)->delete();
             $this->assertEmpty($result);
         }
     }
 
     public function testPostError() {
         if ($this->errorPostArray) {
-            $this->expectException('PHPShopify\\Exception\\ApiException');
-            static::$shopify->{$this->resourceName}->post($this->errorPostArray);
+            $this->expectException('PHPAP21\\Exception\\ApiException');
+            static::$ap21->{$this->resourceName}->post($this->errorPostArray);
         }
     }
 }

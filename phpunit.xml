@@ -2,7 +2,7 @@
 
 <phpunit bootstrap="vendor/autoload.php" colors="true">
     <testsuites>
-        <testsuite name="PHPShopify Test Suite">
+        <testsuite name="PHPAP21 Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

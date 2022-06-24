@@ -1,40 +1,38 @@
 <?php
 /**
- * Created by PhpStorm.
- * @author Tareq Mahmood <tareqtms@yahoo.com>
- * Created at: 9/9/16 12:28 PM UTC+06:00
+ * class SimpleResource
  */
 
-namespace PHPShopify;
+namespace PHPAP21;
 
 class TestResource extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ShopifySDK $shopify;
+     * @var Ap21SDK $ap21;
      */
-    public static $shopify;
+    public static $ap21;
 
     /**
-     * @inheritDoc
+     * setUpBeforeClass
      */
     public static function setUpBeforeClass()
     {
         $config = array(
-            'ShopUrl' => getenv('SHOPIFY_SHOP_URL'), //Your shop URL
-            'ApiKey' => getenv('SHOPIFY_API_KEY'), //Your Private API Key
-            'Password' => getenv('SHOPIFY_API_PASSWORD'), //Your Private API Password
-            'AccessToken' => getenv('SHOPIFY_API_PASSWORD'), //Your Access Token(Private API Password)
+            'ApiUrl'       => getenv('ApiUrl'),
+            'ApiUser'      => getenv('ApiUser'),
+            'ApiPassword'  => getenv('ApiPassword'),
+            'CountryCode'  => getenv('CountryCode')
         );
 
-        self::$shopify = ShopifySDK::config($config);
-        ShopifySDK::checkApiCallLimit();
+        self::$ap21 = Ap21SDK::config($config);
+        //Ap21SDK::checkApiCallLimit();
     }
 
     /**
-     * @inheritDoc
+     * tearDownAfterClass
      */
     public static function tearDownAfterClass()
     {
-        self::$shopify = null;
+        self::$ap21 = null;
     }
 }
