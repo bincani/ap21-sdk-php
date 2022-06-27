@@ -22,7 +22,7 @@ $config = array(
     'ApiUser'      => $_ENV['ApiUser'],
     'ApiPassword'  => $_ENV['ApiPassword'],
     'CountryCode'  => $_ENV['CountryCode'],
-    //'useCache'     => true
+    'useCache'     => true
 );
 
 // Create the ap21 client object
@@ -32,7 +32,9 @@ try {
     $info = $ap21->Info->get();
     Log::info("info", [$info]);
 
-    // reference types
+    /**
+     * reference types
+     */
     /*
     //$rTypes = $ap21->ReferenceType()->get();
     //Log::debug("referenceTypes", [count($rTypes)]);
@@ -41,6 +43,16 @@ try {
     $rTypes = $ap21->ReferenceType(1)->get();
     echo sprintf(print_r($rTypes, true));
     */
+
+    /**
+     * product colour references
+     */
+    $pColRef = $ap21->ProductColourReference()->get();
+    Log::debug("ProductColourReferences", [count($pColRef)]);
+    //$rTypes = $ap21->ReferenceType()->getByCode('brand');
+    //echo sprintf(print_r($rTypes, true));
+    //$rTypes = $ap21->ReferenceType(1)->get();
+    //echo sprintf(print_r($rTypes, true));
 
     // products
     /*
@@ -71,9 +83,16 @@ try {
     $person = $ap21->Person()->post($personDataXml);
     */
 
-    $dataFile = sprintf("%s/data/post/person-update.xml", __DIR__);
+    /**
+     * update a person
+     *
+     * requires the correct UpdateTimeStamp value
+     */
+    /*
+    $dataFile = sprintf("%s/data/put/person-update.xml", __DIR__);
     $personDataXml = file_get_contents($dataFile);
     $person = $ap21->Person(1149)->put($personDataXml);
+    */
 
     /*
     $people = $ap21->Person()->get();

@@ -50,7 +50,7 @@ abstract class HTTPXMLResource extends HTTPResource
             $this->config['useCache']
         ) {
             Log::debug(sprintf("%s->readCache: %s", __METHOD__, $dataKey) );
-            $cacheFile = sprintf("%s/../data/get/%s.xml", __DIR__, strtolower($dataKey));
+            $cacheFile = sprintf("%s/../data/get/%s.xml", __DIR__, lcfirst($dataKey));
             if (!file_exists($cacheFile)) {
                 throw new \Exception(sprintf("cannot open cache file '%s'!", $cacheFile));
             }
@@ -58,9 +58,9 @@ abstract class HTTPXMLResource extends HTTPResource
             $response = file_get_contents(
                 $cacheFile,
                 $use_include_path = false,
-                $context = null,
-                $offset = 0,
-                $length = 10000
+                $context = null
+                //$offset = 0,
+                //$length = 10000
             );
         }
         else {

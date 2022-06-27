@@ -40,6 +40,20 @@ class HttpRequestXml extends HttpRequest
     }
 
     /**
+     * Implement a GET request
+     *
+     * @param string $url
+     * @param array $httpHeaders
+     *
+     * @return array
+     */
+    public static function get($url, $httpHeaders = array())
+    {
+        self::prepareRequest($httpHeaders);
+        return self::processRequest('GET', $url);
+    }
+
+    /**
      * Implement a POST request
      *
      * @param string $url
