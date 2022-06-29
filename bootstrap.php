@@ -22,7 +22,7 @@ $config = array(
     'ApiUser'      => $_ENV['ApiUser'],
     'ApiPassword'  => $_ENV['ApiPassword'],
     'CountryCode'  => $_ENV['CountryCode'],
-    'useCache'     => true
+    //'useCache'     => true
 );
 
 // Create the ap21 client object

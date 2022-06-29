@@ -5,6 +5,8 @@
 
 namespace PHPAP21;
 
+use PHPAP21\Exception\ApiException;
+
 class Info extends HTTPResource
 {
     protected $info = [];
@@ -35,11 +37,14 @@ class Info extends HTTPResource
     public function processResponse($responseArray, $dataKey = null)
     {
         $lastResponseHeaders = CurlRequest::$lastHttpResponseHeaders;
-
-        if (!$responseArray) {
-            $message = "no response";
-            throw new ApiException($message, CurlRequest::$lastHttpCode);
+        //Log::debug(__METHOD__, $lastResponseHeaders);
+        if (!$responseArray || CurlRequest::$lastHttpCode != 200) {
+            if (!CurlRequest::$lastHttpResponse) {
+                CurlRequest::$lastHttpResponse = "no response";
+            }
+            throw new ApiException(sprintf("%s - %s", CurlRequest::$lastHttpCode, CurlRequest::$lastHttpResponse));
         }
+        //Log::debug(__METHOD__, [$responseArray->saveXML()]);
         $paras = $responseArray->getElementsByTagName('p');
         $getPayloads = false;
         foreach ($paras as $para) {

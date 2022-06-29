@@ -2,3 +2,6 @@ data/
 log/
 vendor/
 .env
+.env.test
+.env.prod
+.env.*

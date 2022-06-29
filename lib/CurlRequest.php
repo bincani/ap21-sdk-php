@@ -9,6 +9,7 @@ namespace PHPAP21;
 
 use PHPAP21\Exception\CurlException;
 use PHPAP21\Exception\ResourceRateLimitException;
+use PHPAP21\Http\Status;
 
 class CurlRequest
 {
@@ -18,6 +19,8 @@ class CurlRequest
      * @var integer
      */
     public static $lastHttpCode;
+
+    public static $lastHttpResponse;
 
     /**
      * HTTP response headers of last executed request
@@ -173,6 +176,12 @@ class CurlRequest
 
             self::$lastHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if (self::$lastHttpCode != 429) {
+                if (Status::httpResponse(self::$lastHttpCode)) {
+                    self::$lastHttpResponse = Status::httpResponse(self::$lastHttpCode);
+                }
+                else if (http_response_code(CurlRequest::$lastHttpCode)) {
+                    self::$lastHttpResponse = http_response_code(CurlRequest::$lastHttpCode);
+                }
                 break;
             }
 
