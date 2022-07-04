@@ -1,6 +1,8 @@
 <?php
 namespace PHPAP21;
 
+use PHPAP21\Exception\ApiException;
+
 /**
  * Class HttpRequestXml
  *
@@ -11,7 +13,7 @@ namespace PHPAP21;
  *
  * @package PHPAP21
  */
-class HttpRequestXml extends HttpRequest
+class HttpRequestXml  extends HttpRequest
 {
     /**
      * Prepare the data and request headers before making the call
@@ -91,7 +93,7 @@ class HttpRequestXml extends HttpRequest
      *
      * @throws CurlException if response received with unexpected HTTP code.
      *
-     * @return array
+     * @return mixed
      */
     public static function processRequest($method, $url, $useCache = false) {
         $retry = 0;
@@ -102,8 +104,8 @@ class HttpRequestXml extends HttpRequest
                     case 'GET':
                         Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
                         $raw = CurlRequest::get($url, self::$httpHeaders);
-                        Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));
-                        die();
+                        Log::debug(sprintf("%s->raw: %s", __METHOD__, is_string($raw)));
+                        //Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));
                         break;
                     case 'POST':
                         Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
@@ -127,5 +129,51 @@ class HttpRequestXml extends HttpRequest
                 }
             }
         }
+    }
+
+    /**
+     * Decode response
+     *
+     * @param string $response
+     *
+     * @return SimpleXMLElement
+     */
+    protected static function processResponse($response)
+    {
+        //return parent::processResponse($response);
+
+        if (!$response) {
+            $message = "no response";
+            throw new ApiException($message, CurlRequest::$lastHttpCode);
+        }
+
+        // parse xml
+        if (!$xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)) {
+            throw new \Exception("invalid xml!");
+        }
+
+        // check for errors
+        // @var $dom DOMDocument
+        $dom = new \DOMDocument;
+        $dom->loadXML($response);
+        if (
+            get_class($dom) == "DOMDocument"
+            &&
+            preg_match("/DOCTYPE html/", $dom->saveHTML())
+        ) {
+            Log::debug(__METHOD__, ["html", $dom->saveHTML()]);
+            $errCode = $this->innerHTML($dom->getElementsByTagName('errorcode')[0]);
+            $errDesc = $this->innerHTML($dom->getElementsByTagName('description')[0]);
+            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
+        }
+
+        if (preg_match("/Ap21Error/i", $xml->getName()) ) {
+            $errCode = (string)$xml->ErrorCode;
+            $errDesc = (string)$xml->Description;
+            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
+        }
+
+        Log::debug(__METHOD__, [get_class($xml)]);
+        return $xml;
     }
 }

@@ -117,12 +117,13 @@ class HttpRequest
     public static function processRequest($method, $url) {
         $retry = 0;
         $raw = null;
-
         while(true) {
             try {
                 switch($method) {
                     case 'GET':
+                        Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
                         $raw = CurlRequest::get($url, self::$httpHeaders);
+                        //Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));
                         break;
                     case 'POST':
                         $raw = CurlRequest::post($url, self::$postData, self::$httpHeaders);
@@ -136,9 +137,9 @@ class HttpRequest
                     default:
                         throw new \Exception("unexpected request method '$method'");
                 }
-
                 return self::processResponse($raw);
-            } catch(\Exception $e) {
+            }
+            catch(\Exception $e) {
                 if (!self::shouldRetry($raw, $e, $retry++)) {
                     throw $e;
                 }

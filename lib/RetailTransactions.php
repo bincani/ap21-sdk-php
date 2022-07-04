@@ -20,15 +20,11 @@ class RetailTransactions extends HTTPXMLResource
      */
     public function processResponse($response, $dataKey = null) {
 
-        // check response
-        if (!$response) {
-            throw new ApiException($message = "no response", CurlRequest::$lastHttpCode);
-        }
-        // parse xml
-        if (!$this->xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)) {
-            throw new \Exception("invalid xml!");
-        }
+        // Convert SimpleXML to DOMDocument
+        $this->dom = new \DOMDocument;
+        $this->dom->loadXML($xml->asXML());
 
+        //Log::debug(__METHOD__, [get_class($this->dom)]);
         //Log::debug(__METHOD__, [$dataKey, $this->xml->getName(), $this->pluralizeKey() ]);
 
         // sanity check

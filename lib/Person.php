@@ -5,8 +5,6 @@
 
 namespace PHPAP21;
 
-use PHPAP21\Exception\ApiException;
-
 class Person extends HTTPXMLResource
 {
     /**
@@ -32,56 +30,33 @@ class Person extends HTTPXMLResource
     /**
      * processResponse
      *
-     * @param [type] $responseArray
-     * @param [type] $dataKey
+     * @param SimpleXML $xml
+     * @param string $dataKey
+     *
      * @return [] $people
      */
-    public function processResponse($response, $dataKey = null) {
+    public function processResponse($xml, $dataKey = null) {
 
-        // check response
-        if (!$response) {
-            throw new ApiException($message = "no response", CurlRequest::$lastHttpCode);
-        }
+        // Convert SimpleXML to DOMDocument
+        $this->dom = new \DOMDocument;
+        $this->dom->loadXML($xml->asXML());
 
-        // @todo move to generic process
-        if (
-            get_class($response) == "DOMDocument"
-            &&
-            preg_match("/DOCTYPE html/", $response->saveHTML())
-        ) {
-            //Log::debug(__METHOD__, ["html", $html]);
-            $errCode = $this->innerHTML($response->getElementsByTagName('errorcode')[0]);
-            $errDesc = $this->innerHTML($response->getElementsByTagName('description')[0]);
-            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
-        }
-
-        // parse xml
-        if (!$this->xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)) {
-            throw new \Exception("invalid xml!");
-        }
-
-        //$this->xml->getName()
-        if (preg_match("/Ap21Error/i", $this->xml->getName()) ) {
-            $errCode = (string)$this->xml->ErrorCode;
-            $errDesc = (string)$this->xml->Description;
-            throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
-        }
-
-        //Log::debug(__METHOD__, [$dataKey, $this->xml->getName(), $this->pluralizeKey() ]);
+        //Log::debug(__METHOD__, [get_class($this->dom)]);
+        //Log::debug(__METHOD__, [$dataKey, $xml->getName(), $this->pluralizeKey() ]);
 
         // sanity check
-        if (strcasecmp($dataKey, $this->xml->getName()) !== 0) {
-            throw new Exception(sprintf("invalid response %s! expecting %s", $this->xml->getName(), $dataKey));
+        if (strcasecmp($dataKey, $xml->getName()) !== 0) {
+            throw new Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
         }
 
         // process collection
-        if (strcasecmp($this->pluralizeKey(), $this->xml->getName()) === 0) {
-            $att = $this->xml->attributes();
+        if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
+            $att = $xml->attributes();
             $this->productCnt = $att['TotalRows'];
             return $this->processCollection();
         }
         else {
-            return $this->processEntity($this->xml);
+            return $this->processEntity($xml);
         }
     }
 
@@ -138,7 +113,7 @@ class Person extends HTTPXMLResource
      */
     protected function processCollection() {
         // loop SimpleXMLElements
-        foreach($this->xml->children() as $person) {
+        foreach($xml->children() as $person) {
             $id = $person->Id;
             $persons["$id"] = $this->processEntity($person);
         }

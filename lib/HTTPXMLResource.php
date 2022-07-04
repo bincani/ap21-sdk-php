@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface;
 
 abstract class HTTPXMLResource extends HTTPResource
 {
+    protected $xml;
+
     protected $count = 0;
 
     public function __construct($id = null, $parentResourceUrl = '') {
@@ -65,9 +67,10 @@ abstract class HTTPXMLResource extends HTTPResource
         }
         else {
             $response = HttpRequestXml::get($url, $this->httpHeaders);
-            //Log::debug(sprintf("%s->response", __METHOD__), [$response]);
         }
-        return $this->processResponse($response, $dataKey);
+        Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [get_class($response)]);
+        $this->xml = $this->processResponse($response, $dataKey);
+        return $this->xml;
     }
 
     /**

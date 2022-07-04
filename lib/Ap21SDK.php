@@ -18,8 +18,9 @@ class Ap21SDK
         'Info',
         'Person',
         'Product',
-        'ReferenceType',
-        'ProductColourReference'
+        'ProductColourReference',
+        'Reference',
+        'ReferenceType'
     );
 
     /**

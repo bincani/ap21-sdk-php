@@ -29,6 +29,9 @@ $config = array(
 $ap21 = new Ap21SDK($config);
 
 try {
+    /**
+     * API info
+     */
     $info = $ap21->Info->get();
     Log::info("info", [$info]);
 
@@ -36,8 +39,8 @@ try {
      * reference types
      */
     /*
-    //$rTypes = $ap21->ReferenceType()->get();
-    //Log::debug("referenceTypes", [count($rTypes)]);
+    $rTypes = $ap21->ReferenceType()->get();
+    Log::debug("referenceTypes", [count($rTypes)]);
     $rTypes = $ap21->ReferenceType()->getByCode('brand');
     echo sprintf(print_r($rTypes, true));
     $rTypes = $ap21->ReferenceType(1)->get();
@@ -45,21 +48,47 @@ try {
     */
 
     /**
+     * reference
+     */
+    /*
+    $ref = $ap21->Reference(1)->get();
+    Log::debug("Reference", [count($ref->references)]);
+    //echo sprintf("Reference[%s]=%s", $ref->name, print_r($ref->references, true));
+    $val = $ap21->Reference(1)->getValue($id = 5025);
+    Log::debug("Reference", [$id, $val]);
+    */
+
+    /**
      * product colour references
      */
-    $pColRef = $ap21->ProductColourReference()->get();
-    Log::debug("ProductColourReferences", [count($pColRef)]);
-    //$rTypes = $ap21->ReferenceType()->getByCode('brand');
-    //echo sprintf(print_r($rTypes, true));
-    //$rTypes = $ap21->ReferenceType(1)->get();
-    //echo sprintf(print_r($rTypes, true));
-
-    // products
     /*
-    $id = 1344;
-    $product = $ap21->Product($id)->get(['CustomData' => "true"]);
+    //$pColRef = $ap21->ProductColourReference()->get();
+    $pColRef = $ap21->ProductColourReference(1242)->get();
+    Log::debug("ProductColourReferences", [count($pColRef)]);
+    */
+
+    //list($code, $val) = $ap21->Reference($id)->getValue();
+
+    /**
+     * product
+     */
+    /*
+    $id = 4332;
+    $product = $ap21->Product($id)->get(['CustomData' => "true", "ExtendedRefs" => "true"]);
     Log::debug("product", [count($product)]);
-    //echo sprintf(print_r($product, true));
+    echo sprintf(print_r($product, true));
+    */
+
+    // populate references
+    /*
+    foreach($product['references'] as $id => $ref) {
+        Log::debug("ref", [$id, $ref['key']]);
+        list($code, $val) = $ap21->Reference($id)->getValue($ref['key']);
+        Log::debug("ref", [$id, $ref['key'], $val]);
+        $product['references'][$id]['code'] = $code;
+        $product['references'][$id]['val'] = $val;
+    }
+    echo sprintf(print_r($product, true));
     */
 
     /*
@@ -69,13 +98,12 @@ try {
     */
 
     // persons
-    /*
     $id = 1146;
     $person = $ap21->Person($id)->get();
     Log::debug("person", [count($person)]);
     echo sprintf(print_r($person, true));
     $transactions = $ap21->Person($id)->RetailTransactions->get();
-    */
+
     // add a new person
     /*
     $dataFile = sprintf("%s/data/post/person.xml", __DIR__);

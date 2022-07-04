@@ -17,8 +17,8 @@ use PHPAP21\Exception\ApiException;
 
 class Product extends HTTPXMLResource
 {
-    protected $xml;
     protected $products = [];
+
     protected $productCnt = 0;
 
     protected $resourceKey = 'product';
@@ -37,36 +37,28 @@ class Product extends HTTPXMLResource
     /**
      * processResponse
      *
-     * @param [type] $responseArray
-     * @param [type] $dataKey
+     * @param SimpleXML $xml
+     * @param string $dataKey
+     *
      * @return [] $products
      */
-    public function processResponse($response, $dataKey = null) {
-
-        // check response
-        if (!$response) {
-            throw new ApiException($message = "no response", CurlRequest::$lastHttpCode);
-        }
-        // parse xml
-        if (!$this->xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)) {
-            throw new \Exception("invalid xml!");
-        }
+    public function processResponse($xml, $dataKey = null) {
 
         //Log::debug(__METHOD__, [$dataKey, $this->xml->getName(), $this->pluralizeKey() ]);
 
         // sanity check
-        if (strcasecmp($dataKey, $this->xml->getName()) !== 0) {
-            throw new Exception(sprintf("invalid response %s! expecting %s", $this->xml->getName(), $dataKey));
+        if (strcasecmp($dataKey, $xml->getName()) !== 0) {
+            throw new Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
         }
 
         // process collection
-        if (strcasecmp($this->pluralizeKey(), $this->xml->getName()) === 0) {
-            $att = $this->xml->attributes();
+        if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
+            $att = $xml->attributes();
             $this->productCnt = $att['TotalRows'];
-            return $this->processCollection();
+            return $this->processCollection($xml);
         }
         else {
-            return $this->processEntity($this->xml);
+            return $this->processEntity($xml);
         }
     }
 
@@ -78,6 +70,18 @@ class Product extends HTTPXMLResource
     protected function processEntity($product) {
         $id = $product->Id;
         Log::debug(sprintf("%s->%s|%s|%s", __METHOD__, $id, $product->Code, $product->Name));
+
+        $references = [];
+        foreach($product->References->children() as $reference) {
+            $rTypeId = (string)$reference->ReferenceTypeId;
+            $rId = (string)$reference->Id;
+            //Log::debug(sprintf("%s->rId->%s|%s", __METHOD__, $rTypeId, $rId));
+            $references[$rTypeId] = [
+                'id'    => $rTypeId,
+                'key'   => $rId
+            ];
+        }
+
         $children = [];
         foreach($product->Clrs->children() as $colour) {
             $cCode = (string)$colour->Code;
@@ -97,7 +101,8 @@ class Product extends HTTPXMLResource
         $product = [
             'code'     => (string)$product->Code,
             'name'     => (string)$product->Name,
-            'children' => $children
+            'references'    => $references,
+            'children'      => $children
         ];
         return $product;
     }
@@ -107,9 +112,9 @@ class Product extends HTTPXMLResource
      *
      * @return array
      */
-    protected function processCollection() {
+    protected function processCollection($xml) {
         // loop SimpleXMLElements
-        foreach($this->xml->children() as $product) {
+        foreach($xml->children() as $product) {
             $id = $product->Id;
             $products["$id"] = $this->processEntity($product);
         }
