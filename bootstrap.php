@@ -21,7 +21,7 @@ $config = array(
     'ApiUrl'       => $_ENV['ApiUrl'],
     'ApiUser'      => $_ENV['ApiUser'],
     'ApiPassword'  => $_ENV['ApiPassword'],
-    'CountryCode'  => $_ENV['CountryCode'],
+    'CountryCode'  => $_ENV['CountryCode']
     //'useCache'     => true
 );
 
@@ -72,12 +72,17 @@ try {
     /**
      * product
      */
-    /*
-    $id = 4332;
-    $product = $ap21->Product($id)->get(['CustomData' => "true", "ExtendedRefs" => "true"]);
+    $id = 1933; // AGFR001741
+    //$id = 4332;
+    //$id = 1486;
+    //$id = 16017;
+
+    $product = $ap21->Product($id)->get([
+        'CustomData' => "true"
+        //"ExtendedRefs" => "true"
+    ]);
     Log::debug("product", [count($product)]);
     echo sprintf(print_r($product, true));
-    */
 
     // populate references
     /*
@@ -98,11 +103,13 @@ try {
     */
 
     // persons
+    /*
     $id = 1146;
     $person = $ap21->Person($id)->get();
     Log::debug("person", [count($person)]);
     echo sprintf(print_r($person, true));
     $transactions = $ap21->Person($id)->RetailTransactions->get();
+    */
 
     // add a new person
     /*

@@ -66,6 +66,10 @@ abstract class HTTPXMLResource extends HTTPResource
             );
         }
         else {
+            if (array_key_exists("CustomData", $urlParams)) {
+                $this->httpHeaders['Accept'] = sprintf("version_4.0");
+            }
+            Log::debug(sprintf("%s->httpHeaders", __METHOD__), $this->httpHeaders);
             $response = HttpRequestXml::get($url, $this->httpHeaders);
         }
         Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [get_class($response)]);

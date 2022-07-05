@@ -82,6 +82,18 @@ class Product extends HTTPXMLResource
             ];
         }
 
+        $customData = [];
+        foreach($product->CustomData->children() as $cards) {
+            $cardName = (string)$cards->Card['Name'];
+            //Log::debug(sprintf("%s->%s|%s", __METHOD__, $cards->getName(), $cardName ));
+            $customData[$cardName] = [];
+            foreach($cards->Card->Fields->children() as $field) {
+                $key = (string)$field['Name'];
+                $val = (string)$field;
+                $customData[$cardName][$key] = $val;
+            }
+        }
+
         $children = [];
         foreach($product->Clrs->children() as $colour) {
             $cCode = (string)$colour->Code;
@@ -101,8 +113,10 @@ class Product extends HTTPXMLResource
         $product = [
             'code'     => (string)$product->Code,
             'name'     => (string)$product->Name,
+            'range'    => (string)$product->SizeRange,
             'references'    => $references,
-            'children'      => $children
+            'children'      => $children,
+            'customData'    => $customData
         ];
         return $product;
     }
