@@ -83,14 +83,16 @@ class Product extends HTTPXMLResource
         }
 
         $customData = [];
-        foreach($product->CustomData->children() as $cards) {
-            $cardName = (string)$cards->Card['Name'];
-            //Log::debug(sprintf("%s->%s|%s", __METHOD__, $cards->getName(), $cardName ));
-            $customData[$cardName] = [];
-            foreach($cards->Card->Fields->children() as $field) {
-                $key = (string)$field['Name'];
-                $val = (string)$field;
-                $customData[$cardName][$key] = $val;
+        if ($product->CustomData) {
+            foreach($product->CustomData->children() as $cards) {
+                $cardName = (string)$cards->Card['Name'];
+                //Log::debug(sprintf("%s->%s|%s", __METHOD__, $cards->getName(), $cardName ));
+                $customData[$cardName] = [];
+                foreach($cards->Card->Fields->children() as $field) {
+                    $key = (string)$field['Name'];
+                    $val = (string)$field;
+                    $customData[$cardName][$key] = $val;
+                }
             }
         }
 
@@ -106,14 +108,19 @@ class Product extends HTTPXMLResource
                 $children[$cCode][(string)$sku->Barcode] = [
                     'colour' => (string)$colour->Name,
                     'size'   => (string)$sku->SizeCode,
-                    'price'  => (float)$sku->Price
+                    // prices
+                    'originalPrice' => (float)$sku->OriginalPrice,
+                    'retailPrice'   => (float)$sku->RetailPrice,
+                    'price'         => (float)$sku->Price
                 ];
             }
         }
         $product = [
+            'id'       => $id,
             'code'     => (string)$product->Code,
             'name'     => (string)$product->Name,
             'range'    => (string)$product->SizeRange,
+            // references
             'references'    => $references,
             'children'      => $children,
             'customData'    => $customData
