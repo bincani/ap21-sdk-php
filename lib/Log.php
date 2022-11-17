@@ -18,6 +18,26 @@ class Log {
     protected static $mkLogDir = true;
     protected static $rotateLog = true;
 
+    protected static $logLevels = [
+        Logger::EMERGENCY,
+        Logger::ALERT,
+        Logger::CRITICAL,
+        Logger::ERROR,
+        Logger::WARNING,
+        Logger::NOTICE,
+        Logger::INFO,
+        Logger::DEBUG
+    ];
+
+    /**
+     * getLogLevel
+     *
+     * @return string
+     */
+    public static function getLogLevel() {
+        return self::$defaultLevel;
+    }
+
     /**
      * Get the Monolog instance
      *
@@ -26,7 +46,7 @@ class Log {
     static public function getLogger()
     {
         if (!self::$instance) {
-            self::configureInstance();
+            self::configureInstance($logLevel = Logger::INFO);
         }
         return self::$instance;
     }
@@ -36,8 +56,11 @@ class Log {
      *
      * @return \Monolog\Logger
      */
-    protected static function configureInstance()
+    protected static function configureInstance($logLevel = false)
     {
+        if ($logLevel && in_array($logLevel, self::$logLevels)) {
+            self::$defaultLevel = $logLevel;
+        }
         $logDir = sprintf("%s%s%s", dirname(__DIR__), DIRECTORY_SEPARATOR, 'log');
         if (!file_exists($logDir)) {
             if (self::$mkLogDir) {
@@ -53,20 +76,20 @@ class Log {
         if (self::$debug) {
             $handler = new StreamHandler(
                 'php://stdout',
-                self::$defaultLevel
+                self::getLogLevel()
             );
         }
         else if (self::$rotateLog) {
             $handler = new RotatingFileHandler(
                 $logFilename,
                 $maxFiles = 5,
-                self::$defaultLevel
+                self::getLogLevel()
             );
         }
         else {
             $handler = new StreamHandler(
                 $logFilename,
-                self::$defaultLevel
+                self::getLogLevel()
             );
         }
         $logger->pushHandler($handler);
