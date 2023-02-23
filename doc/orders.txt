@@ -1,0 +1,12 @@
+Payments -> PaymentDetail -> Origin
+
+CreditCard,
+DirectDebit (only if not pick up in store or if no payments to be posted)
+Zip (required for Zip payments)
+GiftVoucher
+Other values will be rejected by the API.
+For SecurePay, PayPal, Adyen and AfterPay, this should be "CreditCard"
+
+
+/Persons/4881/Orders/?countryCode=AU&startRow=1&pageRows=20&updatedAfter=2020-12-01T11:33:07
+/Persons/{personId}/Orders/?countryCode={countryCode}
