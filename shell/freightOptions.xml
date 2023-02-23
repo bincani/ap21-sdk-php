@@ -1,0 +1,102 @@
+<FreightOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="Array">
+    <FreightOption>
+      <Id>263</Id>
+      <Name>Freight</Name>
+      <Carrier>
+        <Id>228</Id>
+        <Code>No Carrier</Code>
+        <Name>No Carrier</Name>
+        <Url />
+      </Carrier>
+      <ServiceType>
+        <Id>160</Id>
+        <Code>General</Code>
+        <Name>General</Name>
+      </ServiceType>
+      <SLA>
+        <Id />
+        <Code />
+        <Name />
+      </SLA>
+    </FreightOption>
+    <FreightOption>
+      <Id>984</Id>
+      <Name>AUSTPOST STANDARD</Name>
+      <Carrier>
+        <Id>5994</Id>
+        <Code>AustPost</Code>
+        <Name>Australia Post</Name>
+        <Url>https://auspost.com.au/mypost/track/#/</Url>
+      </Carrier>
+      <ServiceType>
+        <Id>160</Id>
+        <Code>General</Code>
+        <Name>General</Name>
+      </ServiceType>
+      <SLA>
+        <Id />
+        <Code />
+        <Name />
+      </SLA>
+    </FreightOption>
+    <FreightOption>
+      <Id>985</Id>
+      <Name>DHL INTERNATIONAL</Name>
+      <Carrier>
+        <Id>5995</Id>
+        <Code>DHL INT</Code>
+        <Name>DHL International Express</Name>
+        <Url />
+      </Carrier>
+      <ServiceType>
+        <Id>6634</Id>
+        <Code>Standard</Code>
+        <Name>Standard</Name>
+      </ServiceType>
+      <SLA>
+        <Id />
+        <Code />
+        <Name />
+      </SLA>
+    </FreightOption>
+    <FreightOption>
+      <Id>1241</Id>
+      <Name>AUSTPOST EXPRESS</Name>
+      <Carrier>
+        <Id>5994</Id>
+        <Code>AustPost</Code>
+        <Name>Australia Post</Name>
+        <Url>https://auspost.com.au/mypost/track/#/</Url>
+      </Carrier>
+      <ServiceType>
+        <Id>6635</Id>
+        <Code>Express</Code>
+        <Name>Express</Name>
+      </ServiceType>
+      <SLA>
+        <Id />
+        <Code />
+        <Name />
+      </SLA>
+    </FreightOption>
+    <FreightOption>
+      <Id>1242</Id>
+      <Name>NZ POST</Name>
+      <Carrier>
+        <Id>6630</Id>
+        <Code>NZPOST</Code>
+        <Name>NZ POST</Name>
+        <Url />
+      </Carrier>
+      <ServiceType>
+        <Id>6634</Id>
+        <Code>Standard</Code>
+        <Name>Standard</Name>
+      </ServiceType>
+      <SLA>
+        <Id />
+        <Code />
+        <Name />
+      </SLA>
+    </FreightOption>
+  </FreightOptions>
