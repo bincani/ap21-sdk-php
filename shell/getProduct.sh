@@ -7,8 +7,14 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
-curl --insecure --silent \
-  -X GET "$ApiUrl/Products/1933?CountryCode=$CountryCode&CustomData=true" \
+productId="14484"
+
+#curl --insecure --silent \
+curl --insecure \
+  -X GET "$ApiUrl/Products/$productId?CountryCode=$CountryCode&CustomData=true" \
   -u "$ApiUser:$ApiPassword" \
   -H "Accept: version_4.0" \
-  -H "Content-Type: application/xml" > product-1933.xml &
+  -H "Content-Type: application/xml" > "product-${productId}.xml" &
+
+cat "product-${productId}.xml
+
