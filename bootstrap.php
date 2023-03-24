@@ -111,19 +111,23 @@ try {
     //echo sprintf("products: %s", print_r($products, true));
     foreach($products as $product) {
         //echo sprintf("product: %s", print_r($product, true));
-        //echo sprintf("product: %s", print_r($product, true));
-        echo sprintf("product['customData']: %s", print_r($product['customData'], true));
-
-        $keys = array_keys($product['customData']['Web Data']);
-        //echo sprintf("product['customData']['Web Data']: %s\n", print_r($keys, true));
-
-        $attSetName = $product['customData']['Web Data']['Magento Attribute Set Name'];
-        //echo sprintf("product['customData']: %s\n", $attSetName);
-
-        $images = $product['customData']['Web Data']['Images'];
-        //echo sprintf("product['customData']['Web Data']['Images']: %s\n", $images);
-        $json = json_decode($images);
-        //echo sprintf("product['customData']['Web Data']['Images']: %s\n", print_r($json, true));
+        if (array_key_exists('customData', $product)) {
+            echo sprintf("product['customData']: %s", print_r($product['customData'], true));
+            if (array_key_exists('Web Data', $product['customData'])) {
+                //echo sprintf("product['customData']['Web Data']: %s\n", print_r($keys, true));
+                $keys = array_keys($product['customData']['Web Data']);
+                if (array_key_exists('Magento Attribute Set Name', $product['customData']['Web Data'])) {
+                    $attSetName = $product['customData']['Web Data']['Magento Attribute Set Name'];
+                    //echo sprintf("product['customData']: %s\n", $attSetName);
+                }
+                if (array_key_exists('Images', $product['customData']['Web Data'])) {
+                    $images = $product['customData']['Web Data']['Images'];
+                    //echo sprintf("product['customData']['Web Data']['Images']: %s\n", $images);
+                    $json = json_decode($images);
+                    //echo sprintf("product['customData']['Web Data']['Images']: %s\n", print_r($json, true));
+                }
+            }
+        }
     }
 
     // persons
