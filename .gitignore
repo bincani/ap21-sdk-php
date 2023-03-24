@@ -5,3 +5,7 @@ vendor/
 .env.test
 .env.prod
 .env.*
+
+# any data files
+*.xml
+*.csv
