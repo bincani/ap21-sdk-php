@@ -13,8 +13,9 @@ class Log {
 
     protected static $instance;
 
-    protected static $debug = true;
-    protected static $defaultLevel = Logger::DEBUG;
+    protected static $debugStdout = true;
+    //protected static $defaultLevel = Logger::DEBUG;
+    protected static $defaultLevel = Logger::INFO;
     protected static $mkLogDir = true;
     protected static $rotateLog = true;
 
@@ -46,7 +47,7 @@ class Log {
     static public function getLogger()
     {
         if (!self::$instance) {
-            self::configureInstance($logLevel = Logger::INFO);
+            self::configureInstance($logLevel = self::$defaultLevel);
         }
         return self::$instance;
     }
@@ -73,7 +74,7 @@ class Log {
         $logger = new Logger('ap21sdk');
         $logFilename = sprintf("%s%s%s", $logDir, DIRECTORY_SEPARATOR, 'ap21sdk.log');
 
-        if (self::$debug) {
+        if (self::$debugStdout) {
             $handler = new StreamHandler(
                 'php://stdout',
                 self::getLogLevel()

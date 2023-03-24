@@ -13,7 +13,7 @@ use PHPAP21\Exception\ApiException;
  *
  * @package PHPAP21
  */
-class HttpRequestXml  extends HttpRequest
+class HttpRequestXml extends HttpRequest
 {
     /**
      * Prepare the data and request headers before making the call
@@ -102,7 +102,7 @@ class HttpRequestXml  extends HttpRequest
             try {
                 switch($method) {
                     case 'GET':
-                        Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
+                        Log::debug(sprintf("%s->url: %s", __METHOD__, $url), self::$httpHeaders);
                         $raw = CurlRequest::get($url, self::$httpHeaders);
                         Log::debug(sprintf("%s->raw: %s", __METHOD__, is_string($raw)));
                         Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));

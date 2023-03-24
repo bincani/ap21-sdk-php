@@ -22,6 +22,15 @@ abstract class HTTPXMLResource extends HTTPResource
     }
 
     /**
+     * getResourceKey
+     *
+     * @return void
+     */
+    public function getResourceKey() {
+        return $this->resourceKey;
+    }
+
+    /**
      * Generate a HTTP GET request and return results as an array
      *
      * @param array $urlParams Check Ap21 API reference of the specific resource for the list of URL parameters
@@ -45,29 +54,37 @@ abstract class HTTPXMLResource extends HTTPResource
             $dataKey = $this->id ? $this->resourceKey : $this->pluralizeKey();
         }
         Log::debug(sprintf("%s->dataKey: %s", __METHOD__, $dataKey), [$this->id]);
-
         if (
             array_key_exists('useCache', $this->config)
             &&
             $this->config['useCache']
         ) {
-            Log::debug(sprintf("%s->readCache: %s", __METHOD__, $dataKey) );
-            $cacheFile = sprintf("%s/../data/get/%s.xml", __DIR__, lcfirst($dataKey));
+            $cacheFile = $this->_dataKeyFile($dataKey);
             if (!file_exists($cacheFile)) {
                 throw new \Exception(sprintf("cannot open cache file '%s'!", $cacheFile));
             }
             Log::debug(sprintf("%s->read[%d]: %s", __METHOD__, filesize($cacheFile), $cacheFile));
-            $response = file_get_contents(
+            /*
+            $data = file_get_contents(
                 $cacheFile,
                 $use_include_path = false,
                 $context = null
                 //$offset = 0,
                 //$length = 10000
             );
+            $response = simplexml_load_string($data);
+            */
+            $response = simplexml_load_file(
+                $cacheFile
+            );
         }
         else {
+            // implement versions
             if (array_key_exists("CustomData", $urlParams)) {
                 $this->httpHeaders['Accept'] = sprintf("version_4.0");
+            }
+            if (preg_match("/freestock/i", $dataKey)) {
+                $this->httpHeaders['Accept'] = sprintf("version_2.0");
             }
             Log::debug(sprintf("%s->httpHeaders", __METHOD__), $this->httpHeaders);
             $response = HttpRequestXml::get($url, $this->httpHeaders);
@@ -75,6 +92,27 @@ abstract class HTTPXMLResource extends HTTPResource
         Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [get_class($response)]);
         $this->xml = $this->processResponse($response, $dataKey);
         return $this->xml;
+    }
+
+    /**
+     * _dataKeyFile
+     *
+     * convert the dataKey to a filename
+     *
+     * @param string $dataKey
+     * @return string
+     */
+    private function _dataKeyFile($dataKey) {
+        $fileName = lcfirst($dataKey);
+        // e.g. freeStock/AllStyles
+        if (preg_match("/\//", $dataKey)) {
+            $data = preg_split("/\//", $dataKey);
+            $fileName = lcfirst(implode("-", $data));
+
+        }
+        $filePath = sprintf("%s/../data/get/%s.xml", __DIR__, $fileName);
+        //Log::debug(sprintf("%s->%s:%s", __METHOD__, $dataKey, $filePath) );
+        return $filePath;
     }
 
     /**

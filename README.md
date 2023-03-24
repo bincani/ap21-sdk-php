@@ -75,6 +75,12 @@ $productID = 23564666666;
 $product = $ap21->Product($productID)->get();
 ```
 
+-- Get all the styles and freestock
+```php
+$styles = $ap21->FreeStock()->get();
+```
+
+
 ## Reference
 - [Ap21 API Reference](doc/Retail API Guide - latest.pdf)
 - [seldaek/monolog](https://github.com/seldaek/monolog)

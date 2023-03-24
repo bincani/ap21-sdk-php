@@ -20,7 +20,8 @@ class Ap21SDK
         'Product',
         'ProductColourReference',
         'Reference',
-        'ReferenceType'
+        'ReferenceType',
+        'Freestock'
     );
 
     /**
@@ -108,7 +109,6 @@ class Ap21SDK
 
         $resourceClassName = __NAMESPACE__ . "\\$resourceName";
         Log::debug(sprintf("%s->resourceClassName: %s", __METHOD__, $resourceClassName));
-
         //If first argument is provided, it will be considered as the ID of the resource.
         $resourceID = !empty($arguments) ? $arguments[0] : null;
 
