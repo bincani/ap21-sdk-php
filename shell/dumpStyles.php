@@ -1,5 +1,7 @@
 <?php
 /**
+ * php -f dumpStyles.php
+ *
 # get all styles from ap21
 
 php -f dumpStyles.php > 20221109_x02_ap21_styles.txt &
@@ -9,7 +11,8 @@ php -f dumpStyles.php > 20221109_x05_ap21_styles.txt &
 php -f dumpStyles.php > 20221109_x06_ap21_styles.txt &
 php -f dumpStyles.php > 20221110_x08_ap21_styles.txt &
  */
-require_once __DIR__ . '/vendor/autoload.php';
+
+require_once __DIR__ . './../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
@@ -17,7 +20,7 @@ use PHPAP21\Ap21SDK as Ap21SDK;
 use PHPAP21\Log as Log;
 
 // load .env config
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__ . './../');
 $dotenv->safeLoad();
 
 Log::debug("env", $_ENV);

@@ -14,7 +14,7 @@ grep -i -v -f 20220804_x02_ap21_skus.txt 20220804_x02_order_skus.txt > 20220804_
 grep -i -v -f 20220804_x04_ap21_skus.txt 20220804_x04_order_skus.txt > 20220804_x04_missing_skus.txt
 
  */
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . './../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
