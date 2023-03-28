@@ -16,7 +16,7 @@ grep -i -v -f 20220804_x02_ap21_skus.txt 20220804_x02_order_skus.txt > 20220804_
 grep -i -v -f 20220804_x04_ap21_skus.txt 20220804_x04_order_skus.txt > 20220804_x04_missing_skus.txt
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
@@ -24,7 +24,7 @@ use PHPAP21\Ap21SDK as Ap21SDK;
 use PHPAP21\Log as Log;
 
 // load .env config
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__ . './../');
 $dotenv->safeLoad();
 
 Log::debug("env", $_ENV);

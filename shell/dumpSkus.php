@@ -22,7 +22,7 @@ use PHPAP21\Ap21SDK as Ap21SDK;
 use PHPAP21\Log as Log;
 
 // load .env config
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__ . './../');
 $dotenv->safeLoad();
 
 Log::debug("env", $_ENV);

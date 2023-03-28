@@ -1,6 +1,7 @@
 <?php
 /**
  * php -f dumpStockByStyle.php > 20230324_x04_ap21_freestock.csv &
+ * php -f dumpStockByStyle.php > 20230324_x04_ap21_freestock_total.csv &
  *
 RETRIEVE FREESTOCK By style or sku
 /Freestock/style/{styleid}?countryCode={countryCode}
@@ -29,7 +30,7 @@ $config = array(
     'ApiUser'      => $_ENV['ApiUser'],
     'ApiPassword'  => $_ENV['ApiPassword'],
     'CountryCode'  => $_ENV['CountryCode'],
-    'useCache'     => true
+    'useCache'     => false
 );
 
 // Create the ap21 client object
