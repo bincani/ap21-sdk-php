@@ -9,3 +9,6 @@ vendor/
 # any data files
 *.xml
 *.csv
+*.txt
+*.html
+*.log
