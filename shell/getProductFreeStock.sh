@@ -7,9 +7,11 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
+productId="7752"
+
 #curl --insecure --silent \
 curl --insecure \
-  -X GET "$ApiUrl/Freestock/style/19050?CountryCode=$CountryCode" \
+  -X GET "$ApiUrl/Freestock/style/$productId?CountryCode=$CountryCode" \
   -u "$ApiUser:$ApiPassword" \
   -H "Accept: version_4.0" \
   -H "Content-Type: application/xml"

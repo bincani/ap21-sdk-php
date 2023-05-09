@@ -1,7 +1,7 @@
 <?php
 /**
  * php -f dumpStockByStyle.php > 20230324_x04_ap21_freestock.csv &
- * php -f dumpStockByStyle.php > 20230324_x04_ap21_freestock_total.csv &
+ * php -f dumpStockByStyle.php > 20230405_x03_ap21_freestock.csv &
  *
 RETRIEVE FREESTOCK By style or sku
 /Freestock/style/{styleid}?countryCode={countryCode}
@@ -80,8 +80,8 @@ try {
         $totalFreestock += $style['freestock'];
         $cnt++;
     }
-    //echo sprintf("%s->product.count: %d\n", __METHOD__, $cnt);
-    //echo sprintf("%s->total.stock: %d\n", __METHOD__, $totalFreestock);
+    echo sprintf("%s->product.count: %d\n", __METHOD__, $cnt);
+    echo sprintf("%s->total.stock: %d\n", __METHOD__, $totalFreestock);
 }
 catch(Exception $ex) {
     Log::error($ex->getMessage());
