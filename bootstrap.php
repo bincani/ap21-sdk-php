@@ -103,15 +103,28 @@ try {
     echo sprintf(print_r($product, true));
     */
 
-    $products = $ap21->Product()->get([
-        'CustomData' => "true"
-        //"ExtendedRefs" => "true"
-    ]);
-    Log::debug("products", [count($products)]);
+    $urlParams = [
+        //'CustomData' => "true"
+        "ExtendedRefs" => "true",
+        "startRow"  => 1,
+        "pageRows"  => 10000,
+        "limit"     => 0
+    ];
+    $products = $ap21->Product()->get($urlParams);
     //echo sprintf("products: %s", print_r($products, true));
+    $brands = [];
     foreach($products as $product) {
+        echo sprintf("%s,%s\n", $product['id'], $product['code']);
+        $brand = substr($product['code'], 0, 1);
+        if (!array_key_exists($brand, $brands)) {
+            $brands[$brand] = [
+                'enabled' => 0,
+                'disabled' => 0
+            ];
+        }
+
         //echo sprintf("product: %s", print_r($product, true));
-        if (array_key_exists('customData', $product)) {
+        if (array_key_exists('customData', $product) && !empty($product['customData'])) {
             echo sprintf("product['customData']: %s", print_r($product['customData'], true));
             if (array_key_exists('Web Data', $product['customData'])) {
                 //echo sprintf("product['customData']['Web Data']: %s\n", print_r($keys, true));
@@ -128,7 +141,27 @@ try {
                 }
             }
         }
+        if (array_key_exists('references', $product) && !empty($product['references'])) {
+            //echo sprintf("product['references']: %s", print_r($product['references'], true));
+            if ($product['references'][1521]['key']) {
+                $brands[$brand]['enabled']++;
+            }
+            else {
+                $brands[$brand]['disabled']++;
+            }
+            /*
+            foreach($product['references'] as $id => $ref) {
+                Log::debug("1.ref", [$id, $ref['key']]);
+                list($code, $val) = $ap21->Reference($id)->getValue($ref['key']);
+                Log::debug("2.ref", [$id, $ref['key'], $val]);
+                $product['references'][$id]['code'] = $code;
+                $product['references'][$id]['val'] = $val;
+            }
+            */
+        }
     }
+    Log::info("products", [count($products)]);
+    Log::info("apienabled", [$brands]);
 
     // persons
     /*
