@@ -17,9 +17,12 @@ use PHPAP21\Exception\ApiException;
 
 class Product extends HTTPXMLResource
 {
-    protected $products = [];
+    const PAGE_LIMIT = 0;
+    const DEFAULT_PAGE_ROWS = 500;
 
+    protected $products = [];
     protected $productCnt = 0;
+    protected $productLimit = 0;
 
     protected $resourceKey = 'product';
 
@@ -43,7 +46,6 @@ class Product extends HTTPXMLResource
      * @return [] $products
      */
     public function processResponse($xml, $dataKey = null) {
-
         //Log::debug(__METHOD__, [$dataKey, $this->xml->getName(), $this->pluralizeKey() ]);
 
         // sanity check
@@ -60,6 +62,113 @@ class Product extends HTTPXMLResource
         else {
             return $this->processEntity($xml);
         }
+    }
+
+    /**
+     * Generate a HTTP GET request and return results as an array
+     *
+     * @param array $urlParams Check Ap21 API reference of the specific resource for the list of URL parameters
+     * @param string $url
+     * @param string $dataKey Keyname to fetch data from response array
+     *
+     * @uses HttpRequestXml::get() to send the HTTP request
+     *
+     * @throws ApiException if the response has an error specified
+     * @throws CurlException if response received with unexpected HTTP code.
+     *
+     * @return array
+     */
+    public function get($urlParams = array(), $url = null, $dataKey = null)
+    {
+        // limit
+        if (array_key_exists('limit', $urlParams)) {
+            $this->productLimit = $urlParams['limit'];
+            unset($urlParams['limit']);
+        }
+
+        if (!$url) {
+            $url  = $this->generateUrl($urlParams);
+        }
+        Log::debug(sprintf("%s->url: %s", __METHOD__, $url) );
+        if (!$dataKey) {
+            $dataKey = $this->id ? $this->resourceKey : $this->pluralizeKey();
+        }
+        Log::debug(sprintf("%s->dataKey: %s", __METHOD__, $dataKey), [$this->id]);
+
+        // implement versions
+        if (array_key_exists("CustomData", $urlParams)) {
+            $this->httpHeaders['Accept'] = sprintf("version_4.0");
+        }
+        if (preg_match("/freestock/i", $dataKey)) {
+            $this->httpHeaders['Accept'] = sprintf("version_2.0");
+        }
+        Log::debug(sprintf("%s->httpHeaders", __METHOD__), $this->httpHeaders);
+
+        $response = HttpRequestXml::get($url, $this->httpHeaders);
+        Log::debug(sprintf("%s->response.length: %d", __METHOD__, strlen($response)), []);
+
+        // implement paging
+        if (array_key_exists('startRow', $urlParams)) {
+            // set up paging
+            $page = 1;
+            $startRow = $urlParams['startRow'];
+            $urlParams['pageRows'] = array_key_exists('pageRows', $urlParams) ? $urlParams['pageRows'] : self::DEFAULT_PAGE_ROWS;
+            // set to limit if greater than limit
+            if ($this->productLimit != 0 && $urlParams['pageRows'] > $this->productLimit) {
+                $urlParams['pageRows'] = $this->productLimit;
+            }
+
+            $this->xml = $this->processResponse($response, $dataKey);
+            // calculate the total number of pages
+            $totalPages = ceil($this->productCnt / $urlParams['pageRows']);
+
+            Log::info(sprintf("%s->processNextPage", __METHOD__), [
+                sprintf('page: %d/%d', $page, $totalPages),
+                'startRow:' . $urlParams['startRow'],
+                'pageRows:' . $urlParams['pageRows'],
+                'total:' . $this->productCnt
+            ]);
+
+            do {
+                // set startRow to the next amount
+                $urlParams['startRow'] = ($urlParams['pageRows'] * $page) + 1;
+                $url = $this->generateUrl($urlParams);
+
+                $response = HttpRequestXml::get($url, $this->httpHeaders);
+                Log::info(sprintf("%s->response.length: %d", __METHOD__, strlen($response)), []);
+
+                if (empty($response) || strlen($response) == 0) {
+                    Log::debug(sprintf("%s->end reached!", __METHOD__), []);
+                    break;
+                }
+                if (self::PAGE_LIMIT != 0 && $page < self::PAGE_LIMIT) {
+                    Log::debug(sprintf("%s->page limit %d reached!", __METHOD__, self::PAGE_LIMIT), []);
+                    break;
+                }
+                $page++;
+                Log::info(sprintf("%s->processNextPage", __METHOD__), [
+                    sprintf('page: %d/%d', $page, $totalPages),
+                    'startRow:' . $urlParams['startRow'],
+                    'pageRows:' . $urlParams['pageRows'],
+                    'total:' . $this->productCnt
+                ]);
+                $products = $this->processResponse($response, $dataKey);
+
+                if ($products && is_array($products)) {
+                    $this->xml = array_merge($this->xml, $products);
+                }
+                if ($this->productLimit != 0 && count($this->xml) >= $this->productLimit) {
+                    Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
+                    break;
+                }
+            }
+            while($response);
+        }
+        else {
+            Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [get_class($response)]);
+            $this->xml = $this->processResponse($response, $dataKey);
+        }
+        return $this->xml;
     }
 
     /**
