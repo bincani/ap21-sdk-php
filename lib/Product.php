@@ -225,10 +225,11 @@ class Product extends HTTPXMLResource
             }
         }
         $product = [
-            'id'       => $id,
-            'code'     => (string)$product->Code,
-            'name'     => (string)$product->Name,
-            'range'    => (string)$product->SizeRange,
+            'id'            => $id,
+            'code'          => (string)$product->Code,
+            'name'          => (string)$product->Name,
+            'size_range'    => (string)$product->SizeRange,
+            'update_time_stamp' => strtotime((string)$product->UpdateTimeStamp),
             // references
             'references'    => $references,
             'children'      => $children,
