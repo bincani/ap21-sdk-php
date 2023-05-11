@@ -15,13 +15,15 @@ class Ap21SDK
      * @var string[]
      */
     protected $resources = array(
+        'Colour',
+        'Freestock',
         'Info',
         'Person',
         'Product',
         'ProductColourReference',
         'Reference',
         'ReferenceType',
-        'Freestock'
+        'Size'
     );
 
     /**
