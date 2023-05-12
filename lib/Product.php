@@ -226,8 +226,8 @@ class Product extends HTTPXMLResource
                     'colour_code'       => $cCode,
                     'size_code'         => (string)$sku->SizeCode,
                     // prices
-                    'originalPrice'     => (float)$sku->OriginalPrice,
-                    'retailPrice'       => (float)$sku->RetailPrice,
+                    'price_org'         => (float)$sku->OriginalPrice,
+                    'price_rrp'         => (float)$sku->RetailPrice,
                     'price'             => (float)$sku->Price,
                     'freestock'         => (int)$sku->FreeStock
                 ];
