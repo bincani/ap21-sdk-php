@@ -177,8 +177,8 @@ class Product extends HTTPXMLResource
      * @return array
      */
     protected function processEntity($product) {
-        $id = $product->Id;
-        Log::debug(sprintf("%s->%s|%s|%s", __METHOD__, $id, $product->Code, $product->Name));
+        $productId = (int)$product->Id;
+        Log::debug(sprintf("%s->%s|%s|%s", __METHOD__, $productId, $product->Code, $product->Name));
 
         $references = [];
         foreach($product->References->children() as $reference) {
@@ -214,18 +214,27 @@ class Product extends HTTPXMLResource
                 if (!array_key_exists($cCode, $children)) {
                     $children[$cCode] = [];
                 }
-                $children[$cCode][(string)$sku->Barcode] = [
-                    'colour' => (string)$colour->Name,
-                    'size'   => (string)$sku->SizeCode,
+                $barcode = (string)$sku->Barcode;
+                $children[$cCode][$barcode] = [
+                    'sku_id'            => (int)$sku->Id,
+                    'barcode'           => $barcode,
+                    'product_id'        => $productId,
+                    'colour_id'         => (string)$colour->Id,
+                    'sequence_sku'      => (int)$sku->Sequence,
+                    'sequence_colour'   => (int)$colour->Sequence,
+                    'colour_desc'       => $cName,
+                    'colour_code'       => $cCode,
+                    'size_code'         => (string)$sku->SizeCode,
                     // prices
-                    'originalPrice' => (float)$sku->OriginalPrice,
-                    'retailPrice'   => (float)$sku->RetailPrice,
-                    'price'         => (float)$sku->Price
+                    'originalPrice'     => (float)$sku->OriginalPrice,
+                    'retailPrice'       => (float)$sku->RetailPrice,
+                    'price'             => (float)$sku->Price,
+                    'freestock'         => (int)$sku->FreeStock
                 ];
             }
         }
         $product = [
-            'id'            => $id,
+            'id'            => $productId,
             'code'          => (string)$product->Code,
             'name'          => (string)$product->Name,
             'size_range'    => (string)$product->SizeRange,
