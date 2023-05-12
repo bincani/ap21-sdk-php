@@ -23,7 +23,8 @@ class Ap21SDK
         'ProductColourReference',
         'Reference',
         'ReferenceType',
-        'Size'
+        'Size',
+        'Store'
     );
 
     /**
