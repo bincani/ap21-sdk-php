@@ -9,21 +9,30 @@
 
 namespace PHPAP21;
 
-use PHPAP21\Exception\ApiException;
-
 class Freestock extends HTTPXMLResource
 {
     protected $styles = [];
 
     protected $styleCnt = 0;
 
-    protected $resource = 'FreeStock';
-    protected $resourceKey = 'Freestock/AllStyle';
+    protected $resourceKey = 'Freestock';
 
     protected $childResource = array(
-        'Style' => 'Clr',
-        'Clr'   => 'Sku'
+        'AllStyles',
+        'Style',
+        'Clr',
+        'Sku'
     );
+
+    /**
+     * @return array
+     */
+    public function get($urlParams = array(), $url = null, $dataKey = null)
+    {
+        // implement version
+        $this->httpHeaders['Accept'] = sprintf("version_4.0");
+        return parent::get($urlParams, $url, $dataKey);
+    }
 
     /**
      * processResponse
@@ -34,24 +43,14 @@ class Freestock extends HTTPXMLResource
      * @return [] $styles
      */
     public function processResponse($xml, $dataKey = null) {
-        $dataKey = $this->resource;
+        //$dataKey = $this->resource;
         Log::debug(__METHOD__, [$dataKey, $xml->getName()]);
         // sanity check
         if (strcasecmp($dataKey, $xml->getName()) !== 0) {
             throw new \Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
         }
-        // process collection
-        if (strcasecmp($dataKey, $xml->getName()) === 0) {
-            $att = $xml->attributes();
-            $this->styleCnt = $att['TotalRows'];
-            // $att['PageStartRow'];
-            // $att['PageRows'];
-            Log::debug(sprintf("%s->styleCnt: %d", __METHOD__, $this->styleCnt), []);
-            return $this->processCollection($xml);
-        }
-        else {
-            return $this->processEntity($xml);
-        }
+        // no nothing
+        return ["please select a resource", $childResource];
     }
 
     /**
@@ -62,58 +61,84 @@ class Freestock extends HTTPXMLResource
     protected function processEntity($style) {
         $colours = [];
         $skus = [];
-        $children = [];
 
         //echo $style->asXML();
         $styleFreestock = 0;
         $id = (int)$style['StyleIdx'];
         foreach($style->Clr as $colour) {
-            //echo $colour->asXML();
-            $colourFreestock = 0;
             $cCode = (string)$colour['ClrIdx'];
-            if (!array_key_exists($cCode, $children)) {
-                $children[$cCode] = [];
-            }
-            foreach($colour->children() as $sku) {
-                //echo $sku->asXML();
-                $skuFreestock = 0;
-                $sCode = (string)$sku['SkuIdx'];
-                if (!array_key_exists($sCode, $children[$cCode])) {
-                    $children[$cCode][$sCode] = [];
-                }
-                foreach($sku->children() as $store) {
-                    //echo $store->asXML();
-                    $storeId = (string)$store['StoreId'];
-                    $storeFreestock = (int)$store['FreeStock'];
-                    //Log::debug(sprintf("%s", __METHOD__), [$cCode, $cCode, $sCode, $storeId, $storeFreestock]);
-                    $styleFreestock += $storeFreestock;
-                    $colourFreestock += $storeFreestock;
-                    $skuFreestock += $storeFreestock;
-                    $children[$cCode][$sCode][$storeId] = [
-                        'store'         => $store['name'],
-                        'freestock'     => $storeFreestock
-                    ];
-                }
-                $skus[$sCode] = [
-                    'name'      => (string)$sku['Name'],
-                    'freestock' => $skuFreestock
-                ];
-            }
-            $colours[$cCode] = [
-                'name'      => (string)$colour['Name'],
-                'freestock' => $colourFreestock
-            ];
+            $colours[$cCode] = $this->processClr($colour);
+            $styleFreestock += $colours[$cCode]['freestock'];
         }
         $style = [
             'id'        => $id,
             'name'      => (string)$style['Name'],
             'freestock' => $styleFreestock,
             'colours'   => $colours,
-            'skus'      => $skus,
-            'stores'    => $children
         ];
+        // flatten skus
+        /*
+        $skus = [];
+        foreach($colours as $colour) {
+            $skus = array_merge($skus, $colour['skus']);
+        }
+        $style = [
+            'id'        => $id,
+            'name'      => (string)$style['Name'],
+            'freestock' => $styleFreestock,
+            'skus'      => $skus
+        ];
+        */
+
         //echo sprintf(sprintf("%s->%s", __METHOD__, print_r($style, true)));
         return $style;
+    }
+
+    /**
+     * processClr
+     *
+     * @return array
+     */
+    protected function processClr($colour) {
+        //echo $colour->asXML();
+        $skus = [];
+        foreach($colour->children() as $sku) {
+            $sCode = (string)$sku['SkuIdx'];
+            $skus[$sCode] = $this->processSku($sku);
+            $colourFreestock += $skus[$sCode]['freestock'];
+        }
+        return [
+            'name'      => (string)$colour['Name'],
+            'freestock' => $colourFreestock,
+            'skus'      => $skus
+        ];
+    }
+
+    /**
+     * processSku
+     *
+     * @return array
+     */
+    protected function processSku($sku) {
+        //echo $sku->asXML();
+        $stores = [];
+        $skuFreestock = 0;
+        foreach($sku->children() as $store) {
+            //echo $store->asXML();
+            $storeId = (string)$store['StoreId'];
+            $storeFreestock = (int)$store['FreeStock'];
+            //Log::debug(sprintf("%s", __METHOD__), [$cCode, $cCode, $sCode, $storeId, $storeFreestock]);
+            $skuFreestock += $storeFreestock;
+            $stores[$storeId] = [
+                'store'     => (string)$store['Name'],
+                'freestock' => $storeFreestock
+            ];
+        }
+        return [
+            'name'      => (string)$sku['Name'],
+            'freestock' => $skuFreestock,
+            'stores'    => $stores
+        ];
     }
 
     /**
@@ -130,5 +155,11 @@ class Freestock extends HTTPXMLResource
             $styles["$id"] = $this->processEntity($style);
         }
         return $styles;
+    }
+
+    public function pluralizeKey()
+    {
+        // no pluralize
+        return $this->resourceKey;
     }
 }
