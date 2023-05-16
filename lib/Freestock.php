@@ -102,6 +102,7 @@ class Freestock extends HTTPXMLResource
     protected function processClr($colour) {
         //echo $colour->asXML();
         $skus = [];
+        $colourFreestock = 0;
         foreach($colour->children() as $sku) {
             $sCode = (string)$sku['SkuIdx'];
             $skus[$sCode] = $this->processSku($sku);
