@@ -24,13 +24,13 @@ class Product extends HTTPXMLResource
     protected $productCnt = 0;
     protected $productLimit = 0;
 
-    protected $resourceKey = 'product';
+    protected $totalPages = 0;
+
+    protected $resourceKey = 'Product';
 
     protected $childResource = array(
-        'ProductImage'      => 'Image',
-        'ProductVariant'    => 'Variant',
-        'Metafield',
-        'Event'
+        'FuturePrice',
+        'CustomDataTemplate'
     );
 
     protected $customGetActions = array (
@@ -120,10 +120,10 @@ class Product extends HTTPXMLResource
 
             $this->xml = $this->processResponse($response, $dataKey);
             // calculate the total number of pages
-            $totalPages = ceil($this->productCnt / $urlParams['pageRows']);
+            $this->totalPages = ceil($this->productCnt / $urlParams['pageRows']);
 
             Log::info(sprintf("%s->processNextPage", __METHOD__), [
-                sprintf('page: %d/%d', $page, $totalPages),
+                sprintf('page: %d/%d', $page, $this->totalPages),
                 'startRow:' . $urlParams['startRow'],
                 'pageRows:' . $urlParams['pageRows'],
                 'total:' . $this->productCnt
@@ -147,7 +147,7 @@ class Product extends HTTPXMLResource
                 }
                 $page++;
                 Log::info(sprintf("%s->processNextPage", __METHOD__), [
-                    sprintf('page: %d/%d', $page, $totalPages),
+                    sprintf('page: %d/%d', $page, $this->totalPages),
                     'startRow:' . $urlParams['startRow'],
                     'pageRows:' . $urlParams['pageRows'],
                     'total:' . $this->productCnt
