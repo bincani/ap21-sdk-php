@@ -36,11 +36,32 @@ try {
     Log::info("info", [$info]);
 
     /**
-     * reference types
+     * reference types + references
      */
     /*
-    $rTypes = $ap21->ReferenceType()->get();
-    Log::debug("referenceTypes", [count($rTypes)]);
+    try {
+        $rTypes = $ap21->ReferenceType()->get();
+        Log::info("referenceTypes", [count($rTypes)]);
+        foreach ($rTypes as $rType) {
+            Log::info("ReferenceType", [$rType['code'], $rType['name']]);
+            try {
+                $ref = $ap21->Reference($rType['id'])->get();
+                Log::debug("Reference", [$rType['name'], count($ref->references)]);
+            }
+            catch(Exception $ex) {
+                echo sprintf("Error: %s\n", $ex->getMessage());
+            }
+        }
+    }
+    catch(Exception $ex) {
+        echo sprintf("Error: %s\n", $ex->getMessage());
+    }
+    */
+
+    /**
+     * reference type by code or id
+     */
+    /*
     $rTypes = $ap21->ReferenceType()->getByCode('brand');
     echo sprintf(print_r($rTypes, true));
     $rTypes = $ap21->ReferenceType(1)->get();
@@ -54,8 +75,41 @@ try {
     $ref = $ap21->Reference(1)->get();
     Log::debug("Reference", [count($ref->references)]);
     //echo sprintf("Reference[%s]=%s", $ref->name, print_r($ref->references, true));
-    $val = $ap21->Reference(1)->getValue($id = 5025);
-    Log::debug("Reference", [$id, $val]);
+    list($code, $val) = $ap21->Reference($id = 1)->getValue($id = 5025);
+    Log::debug("Reference", [$id, $code, $val]);
+    */
+
+    /**
+     * colours
+     */
+    /*
+    $colours = $ap21->Colour()->get();
+    Log::debug("colours.count:", [count($colours)]);
+    foreach($colours as $colourCode => $colour) {
+        Log::debug("colour:", [$colourCode, $colour['name']]);
+    }
+    */
+
+    /**
+     * sizes
+     */
+    /*
+    $sizes = $ap21->Size()->get();
+    Log::debug("sizes.count:", [count($sizes)]);
+    foreach($sizes as $sizeCode => $size) {
+        Log::debug("size:", [$sizeCode]);
+    }
+    */
+
+    /**
+     * stores
+     */
+    /*
+    $stores = $ap21->Store()->get();
+    Log::debug("stores.count:", [count($stores)]);
+    foreach($stores as $storeCode => $store) {
+        Log::debug("store:", [$store]);
+    }
     */
 
     /**
@@ -67,20 +121,42 @@ try {
     Log::debug("ProductColourReferences", [count($pColRef)]);
     */
 
-    //list($code, $val) = $ap21->Reference($id)->getValue();
-
     /**
-     * product
+     * get free stock by Style, Clr, Sku & AllStyles
      */
-    //$productId = 1933;
-    //$productId = 4332;
-    //$productId = 1486;
-    //$productId = 26183;     // GGFU083214
-    $productId = 1344; // AGF2562747
-    //$productId = 147859; // GHFS644199
-    //$productId = 18349; // GHFS644199
+    /*
+    $productId = 7752;
+    $freestock = $ap21->Freestock->Style($productId)->get();
+    echo sprintf("freestock.style(%d): %s\n", $productId, print_r($freestock, true));
+    */
 
     /*
+    $skuId = 57611;
+    $freestock = $ap21->Freestock->Sku($skuId)->get();
+    echo sprintf("freestock.sku(%d): %s\n", $skuId, print_r($freestock, true));
+    */
+
+    /*
+    $clrId = 16850;
+    $freestock = $ap21->Freestock->Clr($clrId)->get();
+    echo sprintf("freestock.clr(%d): %s\n", $clrId, print_r($freestock, true));
+    */
+
+    $freestock = $ap21->Freestock->AllStyles->get();
+    foreach($freestock as $styleId => $style) {
+        echo sprintf("%s - %s\n", $styleId, $style['freestock']);
+    }
+
+    /**
+     * Product->FuturePrices
+     */
+    //$product = $ap21->Product->FuturePrice()->get();
+
+    /**
+     * get a product
+     */
+    /*
+    $productId = 1344; // AGF2562747
     if ($productId) {
         $product = $ap21->Product($productId)->get([
             'CustomData' => "true"
@@ -91,7 +167,9 @@ try {
     }
     */
 
-    // populate references
+    /**
+     * add reference data to product
+     */
     /*
     foreach($product['references'] as $id => $ref) {
         Log::debug("ref", [$id, $ref['key']]);
@@ -103,18 +181,24 @@ try {
     echo sprintf(print_r($product, true));
     */
 
+    /**
+     * get all products
+     */
+    /*
     $urlParams = [
         //'CustomData' => "true"
         "ExtendedRefs" => "true",
         "startRow"  => 1,
-        "pageRows"  => 10000,
-        "limit"     => 0
+        "pageRows"  => 10,
+        "limit"     => 1
     ];
     $products = $ap21->Product()->get($urlParams);
     //echo sprintf("products: %s", print_r($products, true));
     $brands = [];
     foreach($products as $product) {
         echo sprintf("%s,%s\n", $product['id'], $product['code']);
+        echo sprintf("product: %s", print_r($product, true));
+
         $brand = substr($product['code'], 0, 1);
         if (!array_key_exists($brand, $brands)) {
             $brands[$brand] = [
@@ -122,8 +206,6 @@ try {
                 'disabled' => 0
             ];
         }
-
-        //echo sprintf("product: %s", print_r($product, true));
         if (array_key_exists('customData', $product) && !empty($product['customData'])) {
             echo sprintf("product['customData']: %s", print_r($product['customData'], true));
             if (array_key_exists('Web Data', $product['customData'])) {
@@ -149,19 +231,16 @@ try {
             else {
                 $brands[$brand]['disabled']++;
             }
-            /*
-            foreach($product['references'] as $id => $ref) {
-                Log::debug("1.ref", [$id, $ref['key']]);
-                list($code, $val) = $ap21->Reference($id)->getValue($ref['key']);
-                Log::debug("2.ref", [$id, $ref['key'], $val]);
-                $product['references'][$id]['code'] = $code;
-                $product['references'][$id]['val'] = $val;
+        }
+        if (array_key_exists('children', $product) && !empty($product['children'])) {
+            foreach($product['children'] as $child) {
+                echo sprintf("child: %s", print_r($child, true));
             }
-            */
         }
     }
     Log::info("products", [count($products)]);
     Log::info("apienabled", [$brands]);
+    */
 
     // persons
     /*
