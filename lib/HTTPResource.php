@@ -194,18 +194,33 @@ abstract class HTTPResource implements HTTPResourceInterface
     {
         //If the $name starts with an uppercase letter, it's considered as a child class
         //Otherwise it's a custom action
-        Log::debug(__METHOD__, [$name[0], ctype_upper($name[0])]);
+        Log::debug(__METHOD__, ["name[0]:" . $name[0] . "|" . $name, "ctype_upper:" . ctype_upper($name[0])]);
+
         if (ctype_upper($name[0])) {
             //Get the array key of the childResource in the childResource array
             $childKey = array_search($name, $this->childResource);
             if ($childKey === false) {
-                throw new SdkException("Child Resource $name is not available for " . $this->getResourceName());
+                throw new SdkException(
+                    sprintf("Child Resource %s is not available for %s", $name, $this->getResourceName())
+                );
             }
-            //If any associative key is given to the childname, then it will be considered as the class name,
-            //otherwise the childname will be the class name
+            // If any associative key is given to the childname, then it will be considered as the class name,
+            // otherwise the childname will be the class name
             $childClassName = !is_numeric($childKey) ? $childKey : $name;
-            $childClass = __NAMESPACE__ . "\\" . $childClassName;
-            //If first argument is provided, it will be considered as the ID of the resource.
+            $childClass = sprintf(
+                "%s\%s\%s",
+                __NAMESPACE__,
+                $this->getResourceName(),
+                $childClassName
+            );
+            Log::debug(__METHOD__, ["childClass:" . $childClass]);
+
+            if (!class_exists($childClass)) {
+                throw new SdkException(
+                    sprintf("Child class %s is not defined", $childClass)
+                );
+            }
+            // If first argument is provided, it will be considered as the ID of the resource.
             $resourceID = !empty($arguments) ? $arguments[0] : null;
             $api = new $childClass($resourceID, $this->resourceUrl);
             return $api;
@@ -224,7 +239,9 @@ abstract class HTTPResource implements HTTPResourceInterface
             }
 
             if ($actionKey === false) {
-                throw new SdkException("No action named $name is defined for " . $this->getResourceName());
+                throw new SdkException(
+                    sprintf("No action named '%s' is defined for '%s'", $name, $this->getResourceName())
+                );
             }
 
             //If any associative key is given to the action, then it will be considered as the method name,
