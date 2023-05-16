@@ -14,6 +14,7 @@ use PHPAP21\Log;
 
 class AllStyles extends Freestock
 {
+    protected $resource = 'FreeStock';
     protected $resourceKey = 'AllStyles';
 
     /**
@@ -25,7 +26,7 @@ class AllStyles extends Freestock
      * @return [] $allStyles
      */
     public function processResponse($xml, $dataKey = null) {
-        //$dataKey = $this->resource;
+        $dataKey = $this->resource;
         Log::debug(__METHOD__, [$dataKey, $xml->getName()]);
         // sanity check
         if (strcasecmp($dataKey, $xml->getName()) !== 0) {
