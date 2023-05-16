@@ -1,15 +1,7 @@
 <?php
 /**
 # get all skus from ap21
-
-php -f dumpSkusPrices.php > 20221115_ahau_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221115_goau_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221115_gonz_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221115_jlau_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221216_dfau_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221117_dfnz_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221115_phau_ap21_skus+prices.txt &
-php -f dumpSkusPrices.php > 20221115_lvau_ap21_skus+prices.txt &
+php -f dumpSkusPrices.php > 20230510_goau_ap21_skus+prices.txt &
 
 # get missing skus from orders
 grep -i -v -f 20220804_x02_ap21_skus.txt 20220804_x02_order_skus.txt > 20220804_x02_missing_skus.txt

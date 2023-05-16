@@ -16,10 +16,4 @@ curl --insecure \
   -H "Accept: version_4.0" \
   -H "Content-Type: application/xml"
 
-# > product-free-stock-19050.xml &
-
-#curl --insecure \
-#  -X GET "$ApiUrl/Freestock/AllStyles?CountryCode=$CountryCode" \
-#  -u "$ApiUser:$ApiPassword" \
-#  -H "Accept: version_4.0" \
-#  -H "Content-Type: application/xml"
+# > product-free-stock-$productId.xml &
