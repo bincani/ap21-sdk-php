@@ -142,10 +142,12 @@ try {
     echo sprintf("freestock.clr(%d): %s\n", $clrId, print_r($freestock, true));
     */
 
-    $freestock = $ap21->Freestock->AllStyles->get();
+    //$freestock = $ap21->Freestock->AllStyles->get();
+    /*
     foreach($freestock as $styleId => $style) {
         echo sprintf("%s - %s\n", $styleId, $style['freestock']);
     }
+    */
 
     /**
      * Product->FuturePrices
@@ -184,15 +186,34 @@ try {
     /**
      * get all products
      */
+    $products = [];
+    $cnt = 0;
+    $limit = 10;
+    $startPage = 1;
+    $pageRows = 10;
+    $maxPages = 10;
+    do {
+        $cnt++;
+        $urlParams = [
+            //'CustomData' => "true"
+            "ExtendedRefs" => "true",
+            "startRow"  => $startPage,
+            "pageRows"  => $pageRows,
+            "limit"     => $limit
+        ];
+        $products = array_merge($products, $ap21->Product()->get($urlParams));
+        echo sprintf("=========> pages %d of %d (%d)\n", $cnt, $maxPages, count($products));
+        $startPage += $pageRows;
+    } while($cnt < $maxPages);
+
+    foreach($products as $product) {
+        echo sprintf("%s,%s\n", $product['id'], $product['code']);
+    }
+
+    //echo sprintf("products: %s", print_r($products, true));
+    //echo sprintf("totalPages: %d\n", $totalPages);
+
     /*
-    $urlParams = [
-        //'CustomData' => "true"
-        "ExtendedRefs" => "true",
-        "startRow"  => 1,
-        "pageRows"  => 10,
-        "limit"     => 1
-    ];
-    $products = $ap21->Product()->get($urlParams);
     //echo sprintf("products: %s", print_r($products, true));
     $brands = [];
     foreach($products as $product) {
