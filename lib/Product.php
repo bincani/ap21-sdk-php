@@ -56,7 +56,14 @@ class Product extends HTTPXMLResource
         // process collection
         if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
             $att = $xml->attributes();
-            $this->productCnt = $att['TotalRows'];
+            $this->productCnt = (int)$att['TotalRows'];
+            /*
+            return [
+                'totalRows' => $this->productCnt,
+                'totalPages' => ceil($this->productCnt / (int)$att['PageRows']),
+                'products' => $this->processCollection($xml)
+            ];
+            */
             return $this->processCollection($xml);
         }
         else {
@@ -126,43 +133,54 @@ class Product extends HTTPXMLResource
                 sprintf('page: %d/%d', $page, $this->totalPages),
                 'startRow:' . $urlParams['startRow'],
                 'pageRows:' . $urlParams['pageRows'],
-                'total:' . $this->productCnt
+                'total:' . $this->productCnt,
+                'limit:' . $this->productLimit
             ]);
 
-            do {
-                // set startRow to the next amount
-                $urlParams['startRow'] = ($urlParams['pageRows'] * $page) + 1;
-                $url = $this->generateUrl($urlParams);
-
-                $response = HttpRequestXml::get($url, $this->httpHeaders);
-                Log::info(sprintf("%s->response.length: %d", __METHOD__, strlen($response)), []);
-
-                if (empty($response) || strlen($response) == 0) {
-                    Log::debug(sprintf("%s->end reached!", __METHOD__), []);
-                    break;
-                }
-                if (self::PAGE_LIMIT != 0 && $page < self::PAGE_LIMIT) {
-                    Log::debug(sprintf("%s->page limit %d reached!", __METHOD__, self::PAGE_LIMIT), []);
-                    break;
-                }
-                $page++;
-                Log::info(sprintf("%s->processNextPage", __METHOD__), [
-                    sprintf('page: %d/%d', $page, $this->totalPages),
-                    'startRow:' . $urlParams['startRow'],
-                    'pageRows:' . $urlParams['pageRows'],
-                    'total:' . $this->productCnt
-                ]);
-                $products = $this->processResponse($response, $dataKey);
-
-                if ($products && is_array($products)) {
-                    $this->xml = array_merge($this->xml, $products);
-                }
-                if ($this->productLimit != 0 && count($this->xml) >= $this->productLimit) {
-                    Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
-                    break;
-                }
+            // check we arent already at our limit
+            Log::debug(sprintf("%s->check limit %d >= %d", __METHOD__, count($this->xml), $this->productLimit), []);
+            if ($this->productLimit != 0 && count($this->xml) >= $this->productLimit) {
+                Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
             }
-            while($response);
+            else {
+                do {
+                    // set startRow to the next amount
+                    $urlParams['startRow'] = ($urlParams['pageRows'] * $page) + 1;
+                    $url = $this->generateUrl($urlParams);
+
+                    $response = HttpRequestXml::get($url, $this->httpHeaders);
+                    Log::info(sprintf("%s->response.length: %d", __METHOD__, strlen($response)), []);
+
+                    if (empty($response) || strlen($response) == 0) {
+                        Log::debug(sprintf("%s->end reached!", __METHOD__), []);
+                        break;
+                    }
+                    if (self::PAGE_LIMIT != 0 && $page < self::PAGE_LIMIT) {
+                        Log::debug(sprintf("%s->page limit %d reached!", __METHOD__, self::PAGE_LIMIT), []);
+                        break;
+                    }
+                    $page++;
+                    Log::info(sprintf("%s->processNextPage", __METHOD__), [
+                        sprintf('page: %d/%d', $page, $this->totalPages),
+                        'startRow:' . $urlParams['startRow'],
+                        'pageRows:' . $urlParams['pageRows'],
+                        'total:' . $this->productCnt,
+                        'limit:' . $this->productLimit,
+                        'count:' . count($this->xml),
+                        sprintf("yes: %d", (count($this->xml) >= $this->productLimit))
+                    ]);
+                    $products = $this->processResponse($response, $dataKey);
+
+                    if ($products && is_array($products)) {
+                        $this->xml = array_merge($this->xml, $products);
+                    }
+                    if ($this->productLimit != 0 && count($this->xml) >= $this->productLimit) {
+                        Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
+                        break;
+                    }
+                }
+                while($response);
+            }
         }
         else {
             Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [get_class($response)]);
@@ -259,5 +277,14 @@ class Product extends HTTPXMLResource
             $products["$id"] = $this->processEntity($product);
         }
         return $products;
+    }
+
+    /**
+     * getTotalPages
+     *
+     * @return int
+     */
+    public function getTotalPages() {
+        return $this->totalPages;
     }
 }
