@@ -21,9 +21,9 @@ class Product extends HTTPXMLResource
     const DEFAULT_PAGE_ROWS = 500;
 
     protected $products = [];
-    protected $productCnt = 0;
     protected $productLimit = 0;
 
+    protected $totalProducts = 0;
     protected $totalPages = 0;
 
     protected $resourceKey = 'Product';
@@ -56,11 +56,11 @@ class Product extends HTTPXMLResource
         // process collection
         if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
             $att = $xml->attributes();
-            $this->productCnt = (int)$att['TotalRows'];
+            $this->totalProducts = (int)$att['TotalRows'];
             /*
             return [
-                'totalRows' => $this->productCnt,
-                'totalPages' => ceil($this->productCnt / (int)$att['PageRows']),
+                'totalRows' => $this->totalProducts,
+                'totalPages' => ceil($this->totalProducts / (int)$att['PageRows']),
                 'products' => $this->processCollection($xml)
             ];
             */
@@ -127,13 +127,13 @@ class Product extends HTTPXMLResource
 
             $this->xml = $this->processResponse($response, $dataKey);
             // calculate the total number of pages
-            $this->totalPages = ceil($this->productCnt / $urlParams['pageRows']);
+            $this->totalPages = ceil($this->totalProducts / $urlParams['pageRows']);
 
             Log::info(sprintf("%s->processNextPage", __METHOD__), [
                 sprintf('page: %d/%d', $page, $this->totalPages),
                 'startRow:' . $urlParams['startRow'],
                 'pageRows:' . $urlParams['pageRows'],
-                'total:' . $this->productCnt,
+                'total:' . $this->totalProducts,
                 'limit:' . $this->productLimit
             ]);
 
@@ -164,7 +164,7 @@ class Product extends HTTPXMLResource
                         sprintf('page: %d/%d', $page, $this->totalPages),
                         'startRow:' . $urlParams['startRow'],
                         'pageRows:' . $urlParams['pageRows'],
-                        'total:' . $this->productCnt,
+                        'total:' . $this->totalProducts,
                         'limit:' . $this->productLimit,
                         'count:' . count($this->xml),
                         sprintf("yes: %d", (count($this->xml) >= $this->productLimit))
@@ -287,4 +287,14 @@ class Product extends HTTPXMLResource
     public function getTotalPages() {
         return $this->totalPages;
     }
+
+    /**
+     * getTotalProducts
+     *
+     * @return int
+     */
+    public function getTotalProducts() {
+        return $this->totalProducts;
+    }
+
 }
