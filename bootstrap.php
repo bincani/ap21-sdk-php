@@ -124,11 +124,15 @@ try {
     /**
      * get free stock by Style, Clr, Sku & AllStyles
      */
-    /*
-    $productId = 7752;
-    $freestock = $ap21->Freestock->Style($productId)->get();
-    echo sprintf("freestock.style(%d): %s\n", $productId, print_r($freestock, true));
-    */
+    $productId = 25192;
+    //$productId = 7752;
+    try {
+        $freestock = $ap21->Freestock->Style($productId)->get();
+        echo sprintf("freestock.style(%d): %s\n", $productId, print_r($freestock, true));
+    }
+    catch(\Exception $ex) {
+        echo sprintf("%s.Error: %s\n", get_class($ex), $ex->getMessage());
+    }
 
     /*
     $skuId = 57611;
@@ -186,12 +190,13 @@ try {
     /**
      * get all products
      */
+    /*
     $products = [];
     $cnt = 0;
     $limit = 10;
     $startPage = 1;
     $pageRows = 10;
-    $maxPages = 10;
+    $maxPages = 1;
     do {
         $cnt++;
         $urlParams = [
@@ -201,14 +206,16 @@ try {
             "pageRows"  => $pageRows,
             "limit"     => $limit
         ];
-        $products = array_merge($products, $ap21->Product()->get($urlParams));
-        echo sprintf("=========> pages %d of %d (%d)\n", $cnt, $maxPages, count($products));
+        $productApi = $ap21->Product();
+        $products = array_merge($products, $productApi->get($urlParams));
+        echo sprintf("=========> pages %d of %d (%d|%d)\n", $cnt, $maxPages, count($products), $productApi->getTotalProducts());
         $startPage += $pageRows;
     } while($cnt < $maxPages);
 
     foreach($products as $product) {
         echo sprintf("%s,%s\n", $product['id'], $product['code']);
     }
+    */
 
     //echo sprintf("products: %s", print_r($products, true));
     //echo sprintf("totalPages: %d\n", $totalPages);
