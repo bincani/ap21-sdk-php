@@ -53,8 +53,8 @@ class CurlRequest
         curl_setopt($ch, CURLOPT_URL, $url);
 
         // used for dev - stop cURL from verifying the peers certificate.
-        //curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         //Return the transfer as a string
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
