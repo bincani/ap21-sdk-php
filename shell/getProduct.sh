@@ -7,7 +7,7 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
-productId="14484"
+productId="34562"
 
 #curl --insecure --silent \
 curl --insecure \
@@ -17,4 +17,3 @@ curl --insecure \
   -H "Content-Type: application/xml" > "product-${productId}.xml" &
 
 cat "product-${productId}.xml
-

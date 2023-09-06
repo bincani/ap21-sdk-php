@@ -7,10 +7,10 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
-#curl --insecure --silent
-skuId=57607
 
-curl \
+skuId=106342
+
+curl --insecure --silent \
   -X GET "$ApiUrl/Freestock/sku/$skuId?CountryCode=$CountryCode" \
   -u "$ApiUser:$ApiPassword" \
   -H "Accept: version_2.0" \

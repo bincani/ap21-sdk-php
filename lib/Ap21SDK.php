@@ -24,6 +24,7 @@ class Ap21SDK
         'Reference',
         'ReferenceType',
         'Size',
+        'StockChanged',
         'Store'
     );
 

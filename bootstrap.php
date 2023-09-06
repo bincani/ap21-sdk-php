@@ -122,8 +122,26 @@ try {
     */
 
     /**
+     * get stock changed since
+     */
+    $storeId = 7052;
+    $changedSince = '2023-09-06T11:00:00';
+    try {
+        $urlParams = [
+            "storeId"       => $storeId,
+            "ChangedSince"  => $changedSince
+        ];
+        $stockChanged = $ap21->StockChanged()->get($urlParams);
+        echo sprintf("StockChanged.storeId(%d): %s\n", $storeId, print_r($stockChanged, true));
+    }
+    catch(\Exception $ex) {
+        echo sprintf("%s.Error: %s\n", get_class($ex), $ex->getMessage());
+    }
+
+    /**
      * get free stock by Style, Clr, Sku & AllStyles
      */
+    /*
     $productId = 25192;
     //$productId = 7752;
     try {
@@ -133,6 +151,7 @@ try {
     catch(\Exception $ex) {
         echo sprintf("%s.Error: %s\n", get_class($ex), $ex->getMessage());
     }
+    */
 
     /*
     $skuId = 57611;
@@ -150,6 +169,36 @@ try {
     /*
     foreach($freestock as $styleId => $style) {
         echo sprintf("%s - %s\n", $styleId, $style['freestock']);
+    }
+    */
+
+    /**
+     * get all freestock - with paging
+     */
+    /*
+    $freestock = [];
+    $cnt = 0;
+    $limit = 10;
+    $startPage = 1;
+    $pageRows = 10;
+    $maxPages = 10;
+    do {
+        $cnt++;
+        $urlParams = [
+            //'CustomData' => "true"
+            "ExtendedRefs" => "true",
+            "startRow"  => $startPage,
+            "pageRows"  => $pageRows,
+            "limit"     => $limit
+        ];
+        $freestockApi = $ap21->Freestock->AllStyles();
+        $freestock = array_merge($freestock, $freestockApi->get($urlParams));
+        echo sprintf("=========> pages %d of %d (%d|%d)\n", $cnt, $maxPages, count($freestock), $freestockApi->getTotalProducts());
+        $startPage += $pageRows;
+    } while($cnt < $maxPages);
+    $cnt = 0;
+    foreach($freestock as $styleId => $style) {
+        echo sprintf("%04d. %s - %s\n", ++$cnt, $styleId, $style['freestock']);
     }
     */
 
@@ -188,7 +237,7 @@ try {
     */
 
     /**
-     * get all products
+     * get all products - with paging
      */
     /*
     $products = [];
@@ -305,10 +354,42 @@ try {
     $person = $ap21->Person(1149)->put($personDataXml);
     */
 
+    /**
+     * get all persons
+     */
     /*
     $people = $ap21->Person()->get();
     Log::debug("people", [count($people)]);
     echo sprintf(print_r($people, true));
+    */
+
+    /**
+     * get all persons - with paging
+     */
+    /*
+    $persons = [];
+    $cnt = 0;
+    $limit = 10;
+    $startPage = 1;
+    $pageRows = 10;
+    $maxPages = 10;
+    do {
+        $cnt++;
+        $urlParams = [
+            "ExtendedRefs" => "true",
+            "startRow"  => $startPage,
+            "pageRows"  => $pageRows,
+            "limit"     => $limit
+        ];
+        $personApi = $ap21->Person();
+        $persons = array_merge($persons, $personApi->get($urlParams));
+        echo sprintf("=========> pages %d of %d (%d|%d)\n", $cnt, $maxPages, count($persons), $personApi->getTotalProducts());
+        $startPage += $pageRows;
+    } while($cnt < $maxPages);
+
+    foreach($persons as $person) {
+        echo sprintf("%s,%s\n", $person['id'], $person['email']);
+    }
     */
 }
 catch(Exception $ex) {

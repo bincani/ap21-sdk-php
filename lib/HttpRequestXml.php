@@ -104,8 +104,8 @@ class HttpRequestXml extends HttpRequest
                     case 'GET':
                         Log::debug(sprintf("%s->url: %s", __METHOD__, $url), self::$httpHeaders);
                         $raw = CurlRequest::get($url, self::$httpHeaders);
-                        Log::debug(sprintf("%s->raw: %s", __METHOD__, is_string($raw)));
-                        Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));
+                        //Log::debug(sprintf("%s->raw: %s", __METHOD__, is_string($raw)));
+                        //Log::debug(sprintf("%s->raw: %s", __METHOD__, $raw));
                         break;
                     case 'POST':
                         Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
