@@ -40,6 +40,16 @@ class StockChanged extends HTTPXMLResource
      * @return [] $stores
      */
     public function processResponse($xml, $dataKey = null) {
+
+        $lastResponseHeaders = CurlRequest::$lastHttpResponseHeaders;
+        //Log::debug(__METHOD__, $lastResponseHeaders);
+        if (!$xml || CurlRequest::$lastHttpCode != 200) {
+            if (!CurlRequest::$lastHttpResponse) {
+                CurlRequest::$lastHttpResponse = "no response";
+            }
+            throw new ApiException(sprintf("%s - %s", CurlRequest::$lastHttpCode, CurlRequest::$lastHttpResponse));
+        }
+
         // Convert SimpleXML to DOMDocument
         $this->dom = new \DOMDocument;
         $this->dom->loadXML($xml->asXML());
