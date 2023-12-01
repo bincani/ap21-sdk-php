@@ -162,8 +162,14 @@ class HttpRequestXml extends HttpRequest
             preg_match("/DOCTYPE html/", $dom->saveHTML())
         ) {
             Log::debug(__METHOD__, ["html", $dom->saveHTML()]);
-            $errCode = $this->innerHTML($dom->getElementsByTagName('errorcode')[0]);
-            $errDesc = $this->innerHTML($dom->getElementsByTagName('description')[0]);
+            $title = self::innerHTML($dom->getElementsByTagName('title')[0]);
+            if ($title) {
+                list($errCode, $errDesc) = preg_split("/ - /", $title);
+            }
+            else {
+                $errCode = self::innerHTML($dom->getElementsByTagName('errorcode')[0]);
+                $errDesc = self::innerHTML($dom->getElementsByTagName('description')[0]);
+            }
             throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
         }
 
@@ -175,5 +181,20 @@ class HttpRequestXml extends HttpRequest
 
         Log::debug(__METHOD__, [get_class($xml)]);
         return $xml;
+    }
+
+    /**
+     * innerHTML
+     *
+     * @param \DOMElement $element
+     * @return void
+     */
+    public static function innerHTML(\DOMElement $element) {
+        $doc = $element->ownerDocument;
+        $html = '';
+        foreach ($element->childNodes as $node) {
+            $html .= $doc->saveHTML($node);
+        }
+        return $html;
     }
 }
