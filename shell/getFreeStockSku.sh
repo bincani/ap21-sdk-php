@@ -8,7 +8,7 @@ if [ -f ./../.env ]; then
 fi
 
 
-skuId=106342
+skuId=261771
 
 curl --insecure --silent \
   -X GET "$ApiUrl/Freestock/sku/$skuId?CountryCode=$CountryCode" \
