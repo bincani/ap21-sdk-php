@@ -113,6 +113,7 @@ class AllStyles extends Freestock
                 'total:' . $this->totalProducts,
                 'limit:' . $this->freestockLimit
             ]);
+            $this->currentPage++; // enter the do while on page 2
 
             // check we arent already at our limit
             Log::debug(sprintf("%s->check limit %d >= %d", __METHOD__, count($this->xml), $this->freestockLimit), []);
