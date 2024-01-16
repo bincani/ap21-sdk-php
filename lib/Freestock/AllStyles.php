@@ -23,6 +23,7 @@ class AllStyles extends Freestock
 
     protected $totalProducts = 0;
     protected $totalPages = 0;
+    protected $currentPage = 1;
 
     protected $resource = 'FreeStock';
     protected $resourceKey = 'AllStyles';
@@ -94,7 +95,6 @@ class AllStyles extends Freestock
         // implement paging
         if (array_key_exists('startRow', $urlParams)) {
             // set up paging
-            $page = 1;
             $startRow = $urlParams['startRow'];
             $urlParams['pageRows'] = array_key_exists('pageRows', $urlParams) ? $urlParams['pageRows'] : self::DEFAULT_PAGE_ROWS;
             // set to limit if greater than limit
@@ -106,8 +106,8 @@ class AllStyles extends Freestock
             // calculate the total number of pages
             $this->totalPages = ceil($this->totalProducts / $urlParams['pageRows']);
 
-            Log::info(sprintf("%s->processNextPage", __METHOD__), [
-                sprintf('page: %d/%d', $page, $this->totalPages),
+            Log::info(sprintf("%s->processNextPage1", __METHOD__), [
+                sprintf('page: %d/%d', $this->currentPage, $this->totalPages),
                 'startRow:' . $urlParams['startRow'],
                 'pageRows:' . $urlParams['pageRows'],
                 'total:' . $this->totalProducts,
@@ -122,7 +122,7 @@ class AllStyles extends Freestock
             else {
                 do {
                     // set startRow to the next amount
-                    $urlParams['startRow'] = ($urlParams['pageRows'] * $page) + 1;
+                    $urlParams['startRow'] = ($urlParams['pageRows'] * $this->currentPage) + 1;
                     $url = $this->generateUrl($urlParams);
 
                     $response = HttpRequestXml::get($url, $this->httpHeaders);
@@ -132,13 +132,13 @@ class AllStyles extends Freestock
                         Log::debug(sprintf("%s->end reached!", __METHOD__), []);
                         break;
                     }
-                    if (self::PAGE_LIMIT != 0 && $page < self::PAGE_LIMIT) {
+                    if (self::PAGE_LIMIT != 0 && $this->currentPage < self::PAGE_LIMIT) {
                         Log::debug(sprintf("%s->page limit %d reached!", __METHOD__, self::PAGE_LIMIT), []);
                         break;
                     }
-                    $page++;
-                    Log::info(sprintf("%s->processNextPage", __METHOD__), [
-                        sprintf('page: %d/%d', $page, $this->totalPages),
+                    $this->currentPage++;
+                    Log::info(sprintf("%s->processNextPage2", __METHOD__), [
+                        sprintf('page: %d/%d', $this->currentPage, $this->totalPages),
                         'startRow:' . $urlParams['startRow'],
                         'pageRows:' . $urlParams['pageRows'],
                         'total:' . $this->totalProducts,
