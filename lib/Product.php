@@ -140,7 +140,19 @@ class Product extends HTTPXMLResource
 
             // check we arent already at our limit
             Log::debug(sprintf("%s->check limit %d >= %d", __METHOD__, count($this->xml), $this->productLimit), []);
-            if ($this->productLimit != 0 && count($this->xml) >= $this->productLimit) {
+            // check we have reached the end
+            Log::debug(sprintf("%s->check end %d >= %d", __METHOD__, ($urlParams['startRow'] + $urlParams['pageRows']), $this->totalProducts), []);
+            if (
+                (
+                    $this->productLimit != 0
+                    &&
+                    count($this->xml) >= $this->productLimit
+                )
+                ||
+                (
+                    ($urlParams['startRow'] + $urlParams['pageRows']) >= $this->totalProducts
+                )
+            ) {
                 Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
             }
             else {
