@@ -120,17 +120,16 @@ class AllStyles extends Freestock
             // check we have reached the end
             Log::debug(sprintf("%s->check end %d >= %d", __METHOD__, ($urlParams['startRow'] + $urlParams['pageRows']), $this->totalProducts), []);
             if (
-                (
-                    $this->freestockLimit != 0
-                    &&
-                    count($this->xml) >= $this->freestockLimit
-                )
-                ||
-                (
-                    ($urlParams['startRow'] + $urlParams['pageRows']) >= $this->totalProducts
-                )
+                $this->freestockLimit != 0
+                &&
+                count($this->xml) >= $this->freestockLimit
             ) {
-                Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->freestockLimit), []);
+                Log::info(sprintf("%s->stock limit %d reached!", __METHOD__, $this->freestockLimit), []);
+            }
+            else if(
+                ($urlParams['startRow'] + $urlParams['pageRows']) >= $this->totalProducts
+            ) {
+                Log::info(sprintf("%s->stock end reached %d >= %d", __METHOD__, ($urlParams['startRow'] + $urlParams['pageRows']), $this->totalProducts), []);
             }
             else {
                 do {
