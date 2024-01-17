@@ -26,6 +26,8 @@ class Product extends HTTPXMLResource
     protected $totalProducts = 0;
     protected $totalPages = 0;
     protected $currentPage = 1;
+    protected $currentVirtualPage = 1; // virtual page is used when paging is done externally
+    protected $startRow = 1;
 
     protected $resourceKey = 'Product';
 
@@ -118,7 +120,7 @@ class Product extends HTTPXMLResource
         // implement paging
         if (array_key_exists('startRow', $urlParams)) {
             // set up paging
-            $startRow = $urlParams['startRow'];
+            $this->startRow = $urlParams['startRow'];
             $urlParams['pageRows'] = array_key_exists('pageRows', $urlParams) ? $urlParams['pageRows'] : self::DEFAULT_PAGE_ROWS;
             // set to limit if greater than limit
             if ($this->productLimit != 0 && $urlParams['pageRows'] > $this->productLimit) {
@@ -130,18 +132,18 @@ class Product extends HTTPXMLResource
             $this->totalPages = ceil($this->totalProducts / $urlParams['pageRows']);
 
             Log::info(sprintf("%s->processNextPage1", __METHOD__), [
-                sprintf('page: %d/%d', $this->currentPage, $this->totalPages),
-                'startRow:' . $urlParams['startRow'],
+                sprintf('page: %d/%d', $this->currentVirtualPage, $this->totalPages),
+                'startRow:' . $this->startRow,
                 'pageRows:' . $urlParams['pageRows'],
                 'total:' . $this->totalProducts,
                 'limit:' . $this->productLimit
             ]);
-            $this->currentPage++; // enter the do while on page 2
+            $this->currentVirtualPage++;
 
             // check we arent already at our limit
             Log::debug(sprintf("%s->check limit %d >= %d", __METHOD__, count($this->xml), $this->productLimit), []);
             // check we have reached the end
-            Log::debug(sprintf("%s->check end %d >= %d", __METHOD__, ($urlParams['startRow'] + $urlParams['pageRows']), $this->totalProducts), []);
+            Log::debug(sprintf("%s->check end %d >= %d", __METHOD__, ($this->startRow + $urlParams['pageRows']), $this->totalProducts), []);
             if (
                 $this->productLimit != 0
                 &&
@@ -150,14 +152,14 @@ class Product extends HTTPXMLResource
                 Log::info(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
             }
             else if(
-                ($urlParams['startRow'] + $urlParams['pageRows']) >= $this->totalProducts
+                ($this->startRow + $urlParams['pageRows']) >= $this->totalProducts
             ) {
-                Log::info(sprintf("%s->product end reached %d >= %d", __METHOD__, ($urlParams['startRow'] + $urlParams['pageRows']), $this->totalProducts), []);
+                Log::info(sprintf("%s->product end reached %d >= %d", __METHOD__, ($this->startRow + $urlParams['pageRows']), $this->totalProducts), []);
             }
             else {
                 do {
                     // set startRow to the next amount
-                    $urlParams['startRow'] = ($urlParams['pageRows'] * $this->currentPage) + 1;
+                    $urlParams['startRow'] = ($urlParams['pageRows'] * $this->currentPage) + $this->startRow;
                     $url = $this->generateUrl($urlParams);
 
                     $response = HttpRequestXml::get($url, $this->httpHeaders);
