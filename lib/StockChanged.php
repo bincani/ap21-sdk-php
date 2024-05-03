@@ -11,6 +11,8 @@ namespace PHPAP21;
 
 class StockChanged extends HTTPXMLResource
 {
+    protected $dom;
+
     protected $stores = [];
 
     protected $storeCnt = 0;
