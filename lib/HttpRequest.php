@@ -218,7 +218,14 @@ class HttpRequest
      */
     protected static function loadHtml($response) {
         // converts all special characters to utf-8
-        $response = mb_convert_encoding($response, 'HTML-ENTITIES', 'UTF-8');
+        //$response = mb_convert_encoding($response, 'HTML-ENTITIES', 'UTF-8');
+        $response = mb_encode_numericentity(
+            htmlspecialchars_decode(
+                htmlentities($response, ENT_NOQUOTES, 'UTF-8', false), ENT_NOQUOTES
+            ), [0x80, 0x10FFFF, 0, ~0],
+            'UTF-8'
+        );
+
         $dom = new \DOMDocument('1.0', 'utf-8');
         // turning off some errors
         libxml_use_internal_errors(true);
