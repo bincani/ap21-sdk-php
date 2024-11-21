@@ -62,6 +62,8 @@ class CurlRequest
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, 'PHPAP21/ap21-sdk-php');
 
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
         foreach (self::$config as $option => $value) {
             curl_setopt($ch, $option, $value);
         }
