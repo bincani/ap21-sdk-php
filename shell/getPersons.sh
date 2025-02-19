@@ -8,7 +8,7 @@ if [ -f ./../.env ]; then
 fi
 
 #Query=&surname={surname}&firstname={firstname}&phone={phone}&email={email}&code={code}&password={password}
-Query="&surname=Incani"
+#Query="&surname=Incani"
 
 #curl --insecure --silent \
 #  -X GET "$ApiUrl/Persons?CountryCode=$CountryCode$Query" \
@@ -26,24 +26,31 @@ Query="&surname=Incani"
 # -u "$ApiUser:$ApiPassword" \
 #  -H "Content-Type: application/xml" > "people.xml" &
 
-Query="&email=kateandnick2009@gmail.com"
+#Query="&email=kateandnick2009@gmail.com"
+#Query="&email=ben.incani%2B1%40factoryx.com.au"
+#Query="&email=ben.incani%2B2%40factoryx.com.au"
+#Query="&email=ben.incani%2B4%40factoryx.com.au"
+#Query="&email=ben.incani%2B6%40factoryx.com.au"
+#Query="&email=ben.incani@factoryx.com.au"
+#Query="&email=hayley.carstensen@gmail.com"
+Query="&email=georgiaomeara87@gmail.com"
 
 curl --insecure \
-  -X GET "$ApiUrl/Persons?CountryCode=$CountryCode&CustomData=false$Query" \
+  -X GET "${ApiUrl}Persons?CountryCode=$CountryCode&CustomData=false${Query}" \
   -u "$ApiUser:$ApiPassword" \
-  -H "Content-Type: application/xml" > "people.xml"
+  -H "Content-Type: application/xml"
 
 # &startRow={startRow}&pageRows={pageRows}&updatedAfter={timestamp}
-PersonId=803607
+#PersonId=803607
 
-curl --insecure \
-  -X GET "$ApiUrl/Persons/$PersonId/Orders/?countryCode=$CountryCode" \
-  -u "$ApiUser:$ApiPassword" \
-  -H "Content-Type: application/xml" > "orders.xml"
+#curl --insecure \
+#  -X GET "$ApiUrl/Persons/$PersonId/Orders/?countryCode=$CountryCode" \
+#  -u "$ApiUser:$ApiPassword" \
+#  -H "Content-Type: application/xml" > "orders.xml"
 
-OrderId=1667576
+#OrderId=1667576
 
-curl --insecure \
-  -X GET "$ApiUrl/Persons/$PersonId/Shipments/$OrderId?countryCode=$CountryCode" \
-  -u "$ApiUser:$ApiPassword" \
-  -H "Content-Type: application/xml" > "shipments.xml"
+#curl --insecure \
+#  -X GET "$ApiUrl/Persons/$PersonId/Shipments/$OrderId?countryCode=$CountryCode" \
+#  -u "$ApiUser:$ApiPassword" \
+#  -H "Content-Type: application/xml" > "shipments.xml"

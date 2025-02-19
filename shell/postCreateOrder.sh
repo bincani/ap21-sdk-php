@@ -7,10 +7,14 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
-PathToXml=../data/post/person2.xml
+PersonId=1215452
+PathToXml=../data/post/order.xml
 
-curl --insecure --silent \
-  -X POST "$ApiUrl/Persons/?CountryCode=$CountryCode" \
+# --silent
+# -X POST "$ApiUrl/Order/?CountryCode=$CountryCode"
+
+curl --insecure \
+  -X POST "$ApiUrl/Persons/$PersonId/Orders/?CountryCode=$CountryCode" \
   -u "$ApiUser:$ApiPassword" \
   -H "Content-Type: text/xml" \
   -H "Accept:version_2.0" \

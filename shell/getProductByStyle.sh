@@ -7,12 +7,12 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
-productId="39499"
+StyleCode=BWFY120
 
 curl --silent \
-  -X GET "$ApiUrl/Products/$productId?CountryCode=$CountryCode&CustomData=true" \
+  -X GET "${ApiUrl}Products?CountryCode=${CountryCode}&styleCode=${StyleCode}" \
   -u "$ApiUser:$ApiPassword" \
   -H "Accept: version_4.0" \
-  -H "Content-Type: application/xml" > product-${productId}.xml
+  -H "Content-Type: application/xml" > product-${StyleCode}.xml
 
-cat product-${productId}.xml
+cat product-${StyleCode}.xml

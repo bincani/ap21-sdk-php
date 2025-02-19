@@ -7,16 +7,17 @@ if [ -f ./../.env ]; then
     export $(cat ./../.env | grep -v '#' | sed 's/\r$//' | awk '/=/ {print $1}' )
 fi
 
-PersonId=1793938
-OrderId=2999863
+#VoucherNumber=20200015
+#Pin=1966
 
-#PersonId=1792922
-#OrderId=2996714
+#VoucherNumber=50084937
+#Pin=5135
 
-curl --silent \
-  -X GET "${ApiUrl}Persons/${PersonId}/Orders/${OrderId}?countryCode=$CountryCode" \
+VoucherNumber=20200022
+Pin=4005
+
+curl --insecure -v \
+  -X GET "${ApiUrl}Voucher/${VoucherNumber}?pin=${Pin}&CountryCode=$CountryCode" \
   -u "$ApiUser:$ApiPassword" \
-  -H "Accept: version_4.0" \
+  -H "Accept: version_2.0" \
   -H "Content-Type: application/xml"
-
-#  > order-3334.xml &
