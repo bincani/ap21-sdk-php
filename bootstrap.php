@@ -106,9 +106,9 @@ try {
      */
     /*
     $stores = $ap21->Store()->get();
-    Log::debug("stores.count:", [count($stores)]);
+    Log::info("stores.count:", [count($stores)]);
     foreach($stores as $storeCode => $store) {
-        Log::debug("store:", [$store]);
+        Log::info("store:", [$store]);
     }
     */
 
@@ -124,26 +124,32 @@ try {
     /**
      * get stock changed since
      */
-    $storeId = 7052;
-    $changedSince = '2023-09-06T11:00:00';
+    /*
+    $storeId = 5507; // x04
+    $changedSince = '2024-04-19T11:00:00';
     try {
         $urlParams = [
             "storeId"       => $storeId,
             "ChangedSince"  => $changedSince
         ];
         $stockChanged = $ap21->StockChanged()->get($urlParams);
-        echo sprintf("StockChanged.storeId(%d): %s\n", $storeId, print_r($stockChanged, true));
+        if (!empty($stockChanged)) {
+            echo sprintf("StockChanged.storeId(%d): %s\n", $storeId, print_r($stockChanged, true));
+        }
+        else {
+            echo sprintf("no StockChanged\n");
+        }
     }
     catch(\Exception $ex) {
         echo sprintf("%s.Error: %s\n", get_class($ex), $ex->getMessage());
     }
+     */
 
     /**
      * get free stock by Style, Clr, Sku & AllStyles
      */
-    /*
-    $productId = 25192;
-    //$productId = 7752;
+
+    $productId = 37273;
     try {
         $freestock = $ap21->Freestock->Style($productId)->get();
         echo sprintf("freestock.style(%d): %s\n", $productId, print_r($freestock, true));
@@ -151,10 +157,9 @@ try {
     catch(\Exception $ex) {
         echo sprintf("%s.Error: %s\n", get_class($ex), $ex->getMessage());
     }
-    */
 
     /*
-    $skuId = 57611;
+    $skuId = 109133;
     $freestock = $ap21->Freestock->Sku($skuId)->get();
     echo sprintf("freestock.sku(%d): %s\n", $skuId, print_r($freestock, true));
     */
@@ -165,11 +170,14 @@ try {
     echo sprintf("freestock.clr(%d): %s\n", $clrId, print_r($freestock, true));
     */
 
-    //$freestock = $ap21->Freestock->AllStyles->get();
     /*
+    $cnt = 0;
+    $freestock = $ap21->Freestock->AllStyles->get();
     foreach($freestock as $styleId => $style) {
         echo sprintf("%s - %s\n", $styleId, $style['freestock']);
+        $cnt++;
     }
+    echo sprintf("count: %d\n", $cnt);
     */
 
     /**
@@ -210,17 +218,16 @@ try {
     /**
      * get a product
      */
-    /*
-    $productId = 1344; // AGF2562747
+
+    $productId = 39010; // PGFX455
     if ($productId) {
         $product = $ap21->Product($productId)->get([
-            'CustomData' => "true"
-            //"ExtendedRefs" => "true"
+            'CustomData' => "true",
+            "ExtendedRefs" => "true"
         ]);
         Log::debug("product", [count($product)]);
         echo sprintf("product: %s", print_r($product, true));
     }
-    */
 
     /**
      * add reference data to product
