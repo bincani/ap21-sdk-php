@@ -25,6 +25,7 @@ class Person extends HTTPXMLResource
         //'CustomerAddress' => 'Address',
         'RetailTransactions',
         'Shipment',
+        'Orders',
         'Order'
     );
 
@@ -44,6 +45,7 @@ class Person extends HTTPXMLResource
 
         //Log::debug(__METHOD__, [get_class($this->dom)]);
         //Log::debug(__METHOD__, [$dataKey, $xml->getName(), $this->pluralizeKey() ]);
+        //Log::debug(__METHOD__, [$xml->asXML()]);
 
         // sanity check
         if (strcasecmp($dataKey, $xml->getName()) !== 0) {
@@ -54,7 +56,7 @@ class Person extends HTTPXMLResource
         if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
             $att = $xml->attributes();
             $this->personCnt = $att['TotalRows'];
-            return $this->processCollection();
+            return $this->processCollection($xml);
         }
         else {
             return $this->processEntity($xml);
@@ -223,7 +225,7 @@ class Person extends HTTPXMLResource
      *
      * @return array
      */
-    protected function processCollection() {
+    protected function processCollection($xml) {
         // loop SimpleXMLElements
         foreach($xml->children() as $person) {
             $id = $person->Id;
