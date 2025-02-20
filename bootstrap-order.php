@@ -28,25 +28,8 @@ $config = array(
 // Create the ap21 client object
 $ap21 = new Ap21SDK($config);
 
-$email = 'ben.incani+1@factoryx.com.au';
-
-try {
-    // add a new person
-    $dataFile = sprintf("%s/data/post/person.xml", __DIR__);
-    $personDataXml = file_get_contents($dataFile);
-    //echo sprintf("Person()->post: %s\n", $personDataXml);
-    $person = $ap21->Person()->post($personDataXml);
-    echo sprintf("person: %s\n", print_r($person, true));
-}
-catch(Exception $ex) {
-    if (preg_match("/email already exists for another person/i", $ex->getMessage())) {
-        // ok error
-    }
-    else {
-        echo sprintf("Error: %s\n", $ex->getMessage());
-        Log::error($ex->getMessage());
-    }
-}
+$createCustomer = false;
+$email = 'ben.incani+9@factoryx.com.au';
 
 try {
     // get a person
@@ -56,7 +39,38 @@ try {
     echo sprintf("person: %s\n", print_r($person, true));
     $personId = array_key_first($person);
     echo sprintf("person with email %s has id %s\n", $email, $personId);
+}
+catch(Exception $ex) {
+    if (preg_match("/5008 - No data found/i", $ex->getMessage())) {
+        $createCustomer = true;
+    }
+    else {
+        echo sprintf("Error: %s\n", $ex->getMessage());
+        Log::error($ex->getMessage());
+    }
+}
 
+try {
+    // add a new person
+    $dataFile = sprintf("%s/data/post/person.xml", __DIR__);
+    $personDataXml = file_get_contents($dataFile);
+    $personDataXml = preg_replace("/%Email%/", $email, $personDataXml);
+    echo sprintf("Person()->post: %s\n", $personDataXml);
+    $person = $ap21->Person()->post($personDataXml);
+    echo sprintf("person: %s\n", print_r($person, true));
+}
+catch(Exception $ex) {
+    if (preg_match("/email already exists for another person/i", $ex->getMessage())) {
+        // ok error
+        echo sprintf("Person Error: %s\n", $ex->getMessage());
+    }
+    else {
+        echo sprintf("Error: %s\n", $ex->getMessage());
+        Log::error($ex->getMessage());
+    }
+}
+
+try {
     // get a persons orders
     $personOrders = $ap21->Person($personId)->Orders->get();
     echo sprintf("personOrders: %s\n", print_r($personOrders, true));

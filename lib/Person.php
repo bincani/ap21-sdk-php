@@ -39,6 +39,16 @@ class Person extends HTTPXMLResource
      */
     public function processResponse($xml, $dataKey = null) {
 
+        if (empty($xml)) {
+            if (in_array($this->getMethod(), ['GET'])) {
+                $message = sprintf("%s->no response for method %s", __METHOD__, $this->getMethod());
+                throw new ApiException($message, CurlRequest::$lastHttpCode);
+            }
+            else {
+                return '';
+            }
+        }
+
         // Convert SimpleXML to DOMDocument
         $this->dom = new \DOMDocument;
         $this->dom->loadXML($xml->asXML());

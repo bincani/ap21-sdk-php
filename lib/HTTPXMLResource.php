@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface;
 
 abstract class HTTPXMLResource extends HTTPResource
 {
+    protected $method;
+
     protected $xml;
 
     protected $count = 0;
@@ -46,6 +48,7 @@ abstract class HTTPXMLResource extends HTTPResource
      */
     public function get($urlParams = array(), $url = null, $dataKey = null)
     {
+        $this->method = 'GET';
         if (!$url) {
             $url  = $this->generateUrl($urlParams);
         }
@@ -174,6 +177,7 @@ abstract class HTTPXMLResource extends HTTPResource
      */
     public function post($dataArray, $url = null, $wrapData = false)
     {
+        $this->method = 'POST';
         if (!$url) {
             $url = $this->generateUrl();
         }
@@ -200,6 +204,7 @@ abstract class HTTPXMLResource extends HTTPResource
      */
     public function put($dataArray, $url = null, $wrapData = false)
     {
+        $this->method = 'PUT';
         if (!$url) {
             $url = $this->generateUrl();
         }
@@ -225,6 +230,7 @@ abstract class HTTPXMLResource extends HTTPResource
      */
     public function delete($urlParams = array(), $url = null)
     {
+        $this->method = 'DELETE';
         if (!$url) {
             $url = $this->generateUrl($urlParams);
         }
@@ -346,7 +352,8 @@ abstract class HTTPXMLResource extends HTTPResource
     public function validateResponse($response) {
         // check response
         if (!$response) {
-            throw new ApiException($message = "no response", CurlRequest::$lastHttpCode);
+            $message = sprintf("%s->no response", __METHOD__);
+            throw new ApiException($message, CurlRequest::$lastHttpCode);
         }
 
         // see if there are errors inside a HTML document
@@ -380,5 +387,14 @@ abstract class HTTPXMLResource extends HTTPResource
             throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
         }
 
+    }
+
+    /**
+     * getMethod
+     *
+     * @return $method string
+     */
+    public function getMethod():string {
+        return $this->method ?? 'UNDEF';
     }
 }

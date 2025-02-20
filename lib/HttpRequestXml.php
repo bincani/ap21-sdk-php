@@ -121,7 +121,20 @@ class HttpRequestXml extends HttpRequest
                     default:
                         throw new \Exception("unexpected request method '$method'");
                 }
-                return self::processResponse($raw);
+                // handle empty responses
+                //Log::debug(sprintf("%s->response[%d]: %s", __METHOD__, empty($raw), $raw));
+                if (empty($raw)) {
+                    if (in_array($method, ['GET'])) {
+                        $message = sprintf("%s->no response", __METHOD__);
+                        throw new ApiException($message, CurlRequest::$lastHttpCode);
+                    }
+                    else {
+                        return '';
+                    }
+                }
+                else {
+                    return self::processResponse($raw);
+                }
             }
             catch(\Exception $e) {
                 if (!self::shouldRetry($raw, $e, $retry++)) {
@@ -140,13 +153,6 @@ class HttpRequestXml extends HttpRequest
      */
     protected static function processResponse($response)
     {
-        //return parent::processResponse($response);
-
-        if (!$response) {
-            $message = "no response";
-            throw new ApiException($message, CurlRequest::$lastHttpCode);
-        }
-
         // parse xml
         if (!$xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOERROR |  LIBXML_ERR_NONE)) {
             throw new \Exception("invalid xml!");
