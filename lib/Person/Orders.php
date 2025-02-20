@@ -24,6 +24,17 @@ class Orders extends Person
      * @return [] $style
      */
     public function processResponse($xml, $dataKey = null) {
+
+        if (empty($xml)) {
+            if (in_array($this->getMethod(), ['GET'])) {
+                $message = sprintf("%s->no response for method %s", __METHOD__, $this->getMethod());
+                throw new ApiException($message, CurlRequest::$lastHttpCode);
+            }
+            else {
+                return '';
+            }
+        }
+
         //$dataKey = $this->resource;
         Log::debug(__METHOD__, ["dataKey:" . $dataKey, "xml->getName:" . $xml->getName()]);
         // sanity check
