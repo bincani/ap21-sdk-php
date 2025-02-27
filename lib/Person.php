@@ -12,11 +12,11 @@ class Person extends HTTPXMLResource
 
     protected $persons = [];
     protected $personLimit = 0;
-
-    protected $totalProducts = 0;
+    protected $totalPersons = 0;
     protected $totalPages = 0;
 
     protected $resourceKey = 'person';
+    protected $dom;
 
     /**
      * @inheritDoc
@@ -65,7 +65,7 @@ class Person extends HTTPXMLResource
         // process collection
         if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
             $att = $xml->attributes();
-            $this->personCnt = $att['TotalRows'];
+            $this->totalPersons = $att['TotalRows'];
             return $this->processCollection($xml);
         }
         else {
@@ -122,13 +122,13 @@ class Person extends HTTPXMLResource
 
             $this->xml = $this->processResponse($response, $dataKey);
             // calculate the total number of pages
-            $this->totalPages = ceil($this->totalProducts / $urlParams['pageRows']);
+            $this->totalPages = ceil($this->totalPersons / $urlParams['pageRows']);
 
             Log::info(sprintf("%s->processNextPage", __METHOD__), [
                 sprintf('page: %d/%d', $page, $this->totalPages),
                 'startRow:' . $urlParams['startRow'],
                 'pageRows:' . $urlParams['pageRows'],
-                'total:' . $this->totalProducts,
+                'total:' . $this->totalPersons,
                 'limit:' . $this->personLimit
             ]);
 
@@ -159,7 +159,7 @@ class Person extends HTTPXMLResource
                         sprintf('page: %d/%d', $page, $this->totalPages),
                         'startRow:' . $urlParams['startRow'],
                         'pageRows:' . $urlParams['pageRows'],
-                        'total:' . $this->totalProducts,
+                        'total:' . $this->totalPersons,
                         'limit:' . $this->personLimit,
                         'count:' . count($this->xml),
                         sprintf("yes: %d", (count($this->xml) >= $this->personLimit))
@@ -242,6 +242,24 @@ class Person extends HTTPXMLResource
             $persons["$id"] = $this->processEntity($person);
         }
         return $persons;
+    }
+
+    /**
+     * getTotalPages
+     *
+     * @return int
+     */
+    public function getTotalPages() {
+        return $this->totalPages;
+    }
+
+    /**
+     * getTotalPersons
+     *
+     * @return int
+     */
+    public function getTotalPersons() {
+        return $this->totalPersons;
     }
 
 }
