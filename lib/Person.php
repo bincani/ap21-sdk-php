@@ -239,9 +239,9 @@ class Person extends HTTPXMLResource
         // loop SimpleXMLElements
         foreach($xml->children() as $person) {
             $id = $person->Id;
-            $persons["$id"] = $this->processEntity($person);
+            $this->persons["$id"] = $this->processEntity($person);
         }
-        return $persons;
+        return $this->persons;
     }
 
     /**
