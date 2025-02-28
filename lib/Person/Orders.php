@@ -6,15 +6,48 @@
 
 namespace PHPAP21\Person;
 
+use PHPAP21\HttpRequestXml;
 use PHPAP21\Person as Person;
 use PHPAP21\Log;
 
 class Orders extends Person
 {
+    protected $orderId = null;
     protected $totalOrders = 0;
     protected $orders = [];
 
     protected $resourceKey = 'Order';
+
+    public function __construct($orderId = null, $parentResourceUrl = '') {
+        $this->orderId = $orderId;
+        parent::__construct(...func_get_args());
+    }
+
+    /**
+     * Generate a HTTP GET request and return result as an array
+     *
+     * @throws ApiException if the response has an error specified
+     * @throws CurlException if response received with unexpected HTTP code.
+     *
+     * @return array
+     */
+    public function get($urlParams = array(), $url = null, $dataKey = null)
+    {
+        // limit
+        if (array_key_exists('limit', $urlParams)) {
+            $this->personLimit = $urlParams['limit'];
+            unset($urlParams['limit']);
+        }
+        if (!$url) {
+            $url  = $this->generateUrl($urlParams);
+        }
+        if (!$dataKey) {
+            $dataKey = $this->orderId ? $this->resourceKey : $this->pluralizeKey();
+        }
+        $response = HttpRequestXml::get($url, $this->httpHeaders);
+        $this->xml = $this->processResponse($response, $dataKey);
+        return $this->xml;
+    }
 
     /**
      * processResponse
@@ -36,8 +69,6 @@ class Orders extends Person
             }
         }
 
-        //$dataKey = $this->resource;
-        Log::debug(__METHOD__, ["dataKey:" . $dataKey, "xml->getName:" . $xml->getName()]);
         // sanity check
         if (strcasecmp($dataKey, $xml->getName()) !== 0) {
             throw new \Exception(
@@ -45,10 +76,9 @@ class Orders extends Person
             );
         }
 
-        //Log::debug(__METHOD__, [$xml->asXML()]);
-
         // process collection
-        if (strcasecmp($dataKey, $xml->getName()) === 0) {
+        //Log::debug(__METHOD__, [sprintf("strcasecmp(%s, %s)=%d", $this->pluralizeKey(), $xml->getName(), strcasecmp($this->pluralizeKey(), $xml->getName()))]);
+        if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
             $att = $xml->attributes();
             $this->totalOrders = (int)$att['TotalRows'];
             //Log::debug(sprintf("%s->totalOrders: %d", __METHOD__, $this->totalOrders), []);
@@ -72,7 +102,6 @@ class Orders extends Person
     protected function processEntity($order) {
         $orderId = $order->Id;
         //Log::debug(__METHOD__, ["id:" . $orderId, "xml:" . print_r($order, true)]);
-
         // addresses
         $addresses = [];
         foreach($order->Addresses->children() as $address) {
