@@ -10,6 +10,7 @@ class Person extends HTTPXMLResource
     const PAGE_LIMIT = 0;
     const DEFAULT_PAGE_ROWS = 500;
 
+    protected $personId = null;
     protected $persons = [];
     protected $personLimit = 0;
     protected $totalPersons = 0;
@@ -29,48 +30,9 @@ class Person extends HTTPXMLResource
         'Order'
     );
 
-    /**
-     * processResponse
-     *
-     * @param SimpleXML $xml
-     * @param string $dataKey
-     *
-     * @return [] $people
-     */
-    public function processResponse($xml, $dataKey = null) {
-
-        if (empty($xml)) {
-            if (in_array($this->getMethod(), ['GET'])) {
-                $message = sprintf("%s->no response for method %s", __METHOD__, $this->getMethod());
-                throw new ApiException($message, CurlRequest::$lastHttpCode);
-            }
-            else {
-                return '';
-            }
-        }
-
-        // Convert SimpleXML to DOMDocument
-        $this->dom = new \DOMDocument;
-        $this->dom->loadXML($xml->asXML());
-
-        //Log::debug(__METHOD__, [get_class($this->dom)]);
-        //Log::debug(__METHOD__, [$dataKey, $xml->getName(), $this->pluralizeKey() ]);
-        //Log::debug(__METHOD__, [$xml->asXML()]);
-
-        // sanity check
-        if (strcasecmp($dataKey, $xml->getName()) !== 0) {
-            throw new Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
-        }
-
-        // process collection
-        if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
-            $att = $xml->attributes();
-            $this->totalPersons = $att['TotalRows'];
-            return $this->processCollection($xml);
-        }
-        else {
-            return $this->processEntity($xml);
-        }
+    public function __construct($personId = null, $parentResourceUrl = '') {
+        $this->personId = $personId;
+        parent::__construct(...func_get_args());
     }
 
     /**
@@ -182,6 +144,50 @@ class Person extends HTTPXMLResource
             $this->xml = $this->processResponse($response, $dataKey);
         }
         return $this->xml;
+    }
+
+    /**
+     * processResponse
+     *
+     * @param SimpleXML $xml
+     * @param string $dataKey
+     *
+     * @return [] $people
+     */
+    public function processResponse($xml, $dataKey = null) {
+
+        if (empty($xml)) {
+            if (in_array($this->getMethod(), ['GET'])) {
+                $message = sprintf("%s->no response for method %s", __METHOD__, $this->getMethod());
+                throw new ApiException($message, CurlRequest::$lastHttpCode);
+            }
+            else {
+                return '';
+            }
+        }
+
+        // Convert SimpleXML to DOMDocument
+        $this->dom = new \DOMDocument;
+        $this->dom->loadXML($xml->asXML());
+
+        //Log::debug(__METHOD__, [get_class($this->dom)]);
+        //Log::debug(__METHOD__, [$dataKey, $xml->getName(), $this->pluralizeKey() ]);
+        //Log::debug(__METHOD__, [$xml->asXML()]);
+
+        // sanity check
+        if (strcasecmp($dataKey, $xml->getName()) !== 0) {
+            throw new Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
+        }
+
+        // process collection
+        if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
+            $att = $xml->attributes();
+            $this->totalPersons = $att['TotalRows'];
+            return $this->processCollection($xml);
+        }
+        else {
+            return $this->processEntity($xml);
+        }
     }
 
     /**
