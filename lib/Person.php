@@ -25,6 +25,7 @@ class Person extends HTTPXMLResource
     protected $childResource = array(
         //'CustomerAddress' => 'Address',
         'RetailTransactions',
+        'Shipments',
         'Shipment',
         'Orders',
         'Order'

@@ -1,9 +1,7 @@
 <?php
 /**
  * class Orders
- *
  */
-
 namespace PHPAP21\Person;
 
 use PHPAP21\HttpRequestXml;
@@ -33,6 +31,14 @@ class Orders extends Person
      */
     public function get($urlParams = array(), $url = null, $dataKey = null)
     {
+        // implement versions
+        if ($urlParams) {
+            $lowerUrlParams = array_change_key_case($urlParams, CASE_LOWER);
+            if (array_key_exists("updatedafter", $lowerUrlParams)) {
+                $this->httpHeaders['Accept'] = sprintf("version_2.0");
+            }
+        }
+
         // limit
         if (array_key_exists('limit', $urlParams)) {
             $this->personLimit = $urlParams['limit'];
@@ -46,6 +52,7 @@ class Orders extends Person
         }
         $response = HttpRequestXml::get($url, $this->httpHeaders);
         $this->xml = $this->processResponse($response, $dataKey);
+        //Log::debug(__METHOD__, [sprintf("xml: %s", print_r($this->xml, true))]);
         return $this->xml;
     }
 
@@ -140,7 +147,8 @@ class Orders extends Person
                 'colourName'    => (string)$lineItem->ColourName,
                 'sizeCode'      => (int)$lineItem->SizeCode,
                 'barCode'       => (string)$lineItem->BarCode,
-                'quantity'      => (int)$lineItem->Quantity
+                'quantity'      => (int)$lineItem->Quantity,
+                'status'        => (string)$lineItem->Status
             ];
         }
 
