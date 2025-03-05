@@ -18,6 +18,7 @@ class Ap21SDK
         'Colour',
         'Freestock',
         'Info',
+        'Order',
         'Person',
         'Product',
         'ProductColourReference',
