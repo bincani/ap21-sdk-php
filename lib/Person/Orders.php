@@ -171,7 +171,9 @@ class Orders extends Person
          * PointsPartner (currently empty)
          */
         $order = [
+            'id'            => (int)$order->Id,
             'number'        => (string)$order->OrderNumber,
+            'personId'      => (int)$order->PersonId,
             'createdAt'     => (string)$order->OrderDateTime,
             'sourceId'      => (string)$order->PartnerOrderId, // shopify order id
             'itemsOrdered'  => (int)$order->TotalQuantity,
