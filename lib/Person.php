@@ -217,11 +217,11 @@ class Person extends HTTPXMLResource
         }
         $contacts = [];
         foreach($person->Contacts->children() as $contact) {
-            $type = (string)$contact->getName();
+            $type = strtolower((string)$contact->getName());
             //Log::debug(__METHOD__, [$type, get_class($contact)]);
             if (preg_match("/phones/i", $type)) {
                 foreach($contact->children() as $phone) {
-                    $type = (string)$phone->getName();
+                    $type = strtolower((string)$phone->getName());
                     $contacts[$type] = (string)$phone;
                 }
             }
