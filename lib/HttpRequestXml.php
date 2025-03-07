@@ -122,7 +122,7 @@ class HttpRequestXml extends HttpRequest
                         throw new \Exception("unexpected request method '$method'");
                 }
                 // handle empty responses
-                Log::debug(sprintf("%s->response[%d]: %s", __METHOD__, empty($raw), $raw));
+                //Log::debug(sprintf("%s->response[%d]: %s", __METHOD__, empty($raw), $raw));
                 if (empty($raw)) {
                     if (in_array($method, ['GET'])) {
                         $message = sprintf("%s->no response", __METHOD__);
