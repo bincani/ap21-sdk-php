@@ -5,6 +5,8 @@
 
 namespace PHPAP21;
 
+use PHPAP21\CurlRequest;
+
 class Person extends HTTPXMLResource
 {
     const PAGE_LIMIT = 0;

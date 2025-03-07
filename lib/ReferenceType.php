@@ -5,6 +5,8 @@
 
 namespace PHPAP21;
 
+use PHPAP21\CurlRequest;
+
 class ReferenceType extends HTTPResource
 {
     protected $referenceTypes = [];

@@ -9,6 +9,8 @@
 
 namespace PHPAP21;
 
+use PHPAP21\CurlRequest;
+
 class StockChanged extends HTTPXMLResource
 {
     protected $dom;

@@ -1,6 +1,8 @@
 <?php
 namespace PHPAP21;
 
+use PHPAP21\CurlRequest;
+
 /**
  * Class HttpRequestJson
  *

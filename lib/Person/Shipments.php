@@ -4,6 +4,7 @@
  */
 namespace PHPAP21\Person;
 
+use PHPAP21\CurlRequest;
 use PHPAP21\HttpRequestXml;
 use PHPAP21\Person as Person;
 use PHPAP21\Log;

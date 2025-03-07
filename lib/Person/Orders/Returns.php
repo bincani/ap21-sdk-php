@@ -6,6 +6,7 @@
 
 namespace PHPAP21\Person\Orders;
 
+use PHPAP21\CurlRequest;
 use PHPAP21\Person\Orders as Orders;
 use PHPAP21\Log;
 

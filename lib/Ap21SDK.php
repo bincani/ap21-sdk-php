@@ -5,6 +5,7 @@
 
 namespace PHPAP21;
 
+use PHPAP21\CurlRequest;
 use PHPAP21\Exception\SdkException;
 
 class Ap21SDK
