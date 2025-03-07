@@ -39,7 +39,9 @@ class Orders extends Person
                 $this->httpHeaders['Accept'] = sprintf("version_2.0");
             }
         }
-
+        if ($this->orderId) {
+            $this->httpHeaders['Accept'] = sprintf("version_2.0");
+        }
         // limit
         if (array_key_exists('limit', $urlParams)) {
             $this->personLimit = $urlParams['limit'];
