@@ -4,6 +4,7 @@
  */
 namespace PHPAP21\Person;
 
+use PHPAP21\CurlRequest;
 use PHPAP21\HttpRequestXml;
 use PHPAP21\Person as Person;
 use PHPAP21\Log;
@@ -70,6 +71,22 @@ class Orders extends Person
             if (in_array($this->getMethod(), ['GET'])) {
                 $message = sprintf("%s->no response for method %s", __METHOD__, $this->getMethod());
                 throw new ApiException($message, CurlRequest::$lastHttpCode);
+            }
+            // parse POST headers
+            else if (in_array($this->getMethod(), ['POST'])) {
+                /**
+                 * HTTP status code 201 Created means that the request has been successfully processed
+                 * Location Header: Specifies the URL of the newly created resource
+                 */
+                if (CurlRequest::$lastHttpCode === 201) {
+                    foreach(CurlRequest::$lastHttpResponseHeaders as $header => $value) {
+                        if ($header === 'location') {
+                            preg_match("/Orders\/(\d+)/", $value, $matches);
+                            $this->orderId = $matches[1] ?? null;
+                        }
+                    }
+                }
+                return $this->orderId;
             }
             else {
                 return '';
@@ -239,5 +256,14 @@ class Orders extends Person
      */
     public function getTotalOrders():int {
         return $this->totalOrders;
+    }
+
+    /**
+     * getOrderId
+     *
+     * @return int
+     */
+    public function getOrderId():int {
+        return $this->orderId;
     }
 }
