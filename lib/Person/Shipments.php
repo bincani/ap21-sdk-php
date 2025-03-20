@@ -18,7 +18,7 @@ class Shipments extends Person
     protected $resourceKey = 'Shipment';
 
     public function __construct($shipmentId = null, $parentResourceUrl = '') {
-        $this->orderId = $shipmentId;
+        $this->shipmentId = $shipmentId;
         parent::__construct(...func_get_args());
     }
 
