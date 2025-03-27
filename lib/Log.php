@@ -15,8 +15,8 @@ class Log {
 
     protected static $debugStdout = true;
 
-    protected static $defaultLevel = Logger::DEBUG;
-    //protected static $defaultLevel = Logger::INFO;
+    //protected static $defaultLevel = Logger::DEBUG;
+    protected static $defaultLevel = Logger::INFO;
 
     protected static $mkLogDir = true;
     protected static $rotateLog = true;
