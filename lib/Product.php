@@ -285,12 +285,13 @@ class Product extends HTTPXMLResource
      * @return array
      */
     protected function processCollection($xml) {
+        $this->products = [];
         // loop SimpleXMLElements
         foreach($xml->children() as $product) {
             $id = $product->Id;
-            $products["$id"] = $this->processEntity($product);
+            $this->products["$id"] = $this->processEntity($product);
         }
-        return $products;
+        return $this->products;
     }
 
     /**
