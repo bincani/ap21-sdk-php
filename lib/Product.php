@@ -241,6 +241,7 @@ class Product extends HTTPXMLResource
         foreach($product->Clrs->children() as $colour) {
             $cCode = (string)$colour->Code;
             $cName = (string)$colour->Name;
+            $cCustomData = $this->processCustomData($colour->CustomData ?? null);
             //Log::debug(sprintf("col->%s|%s", $cCode, cName));
             foreach($colour->SKUs->children() as $sku) {
                 if (!array_key_exists($cCode, $children)) {
@@ -263,6 +264,9 @@ class Product extends HTTPXMLResource
                     'price'             => (float)$sku->Price,
                     'freestock'         => (int)$sku->FreeStock
                 ];
+                if ($cCustomData) {
+                    $children[$cCode][$barcode]['customData'] = $cCustomData;
+                }
             }
         }
         $product = [
@@ -292,6 +296,66 @@ class Product extends HTTPXMLResource
             $this->products["$id"] = $this->processEntity($product);
         }
         return $this->products;
+    }
+
+    /**
+     * Parse all <CustomData> cards into:
+     * [
+     *   'Card Name' => [
+     *       'Field A' => 'text or [values]',
+     *       'Field B' => [...],
+     *   ],
+     *   ...
+     * ]
+     */
+    function processCustomData($customData): array
+    {
+        $out = [];
+        if (!$customData || !isset($customData->Cards)) {
+            return $out;
+        }
+
+        foreach ($customData->Cards->Card as $card) {
+            $cardName = trim((string)($card['Name'] ?? ''));
+            if ($cardName === '' || !isset($card->Fields)) {
+                continue;
+            }
+            $fields = [];
+            foreach ($card->Fields->Field as $field) {
+                $fname = trim((string)($field['Name'] ?? ''));
+                if ($fname === '') {
+                    continue;
+                }
+                // Prefer <ListValues><Value>...</Value></ListValues> if present
+                $values = [];
+                if (isset($field->ListValues)) {
+                    foreach ($field->ListValues->Value as $v) {
+                        $val = trim((string)$v);
+                        if ($val !== '') {
+                            $values[] = $val;
+                        }
+                    }
+                }
+                $text = trim((string)$field);
+                if (!empty($values)) {
+                    $fields[$fname] = $values;
+                }
+                elseif ($text !== '') {
+                    $fields[$fname] = $text;
+                }
+                else {
+                    // Empty field; skip
+                    continue;
+                }
+            }
+            if (!empty($fields)) {
+                // Merge multiple same-name cards if they exist (later ones override per field)
+                $out[$cardName] = array_key_exists($cardName, $out)
+                    ? array_replace($out[$cardName], $fields)
+                    : $fields;
+            }
+        }
+        return $out;
     }
 
     /**
