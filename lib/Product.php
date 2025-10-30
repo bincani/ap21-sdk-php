@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
+
 /**
  * class Product
  *
  * Clrs
  * The list of colours for this product
  *
- * Addtional query parameters
+ * Additional query parameters
  *  CustomData = true
  *      List of Cards of Custom Data on product level
  *
@@ -14,28 +16,35 @@
 namespace PHPAP21;
 
 use PHPAP21\Exception\ApiException;
+use SimpleXMLElement;
 
 class Product extends HTTPXMLResource
 {
-    const PAGE_LIMIT = 0;
-    const DEFAULT_PAGE_ROWS = 500;
+    public const PAGE_LIMIT = 0;
+    public const DEFAULT_PAGE_ROWS = 500;
 
-    protected $products = [];
-    protected $productLimit = 0;
+    /** @var array<string,mixed> */
+    protected array $products = [];
+    protected int $productLimit = 0;
 
-    protected $totalProducts = 0;
-    protected $totalPages = 0;
-    protected $currentPage = 1;
-    protected $currentVirtualPage = 1; // virtual page is used when paging is done externally
-    protected $startRow = 1;
+    protected int $totalProducts = 0;
+    protected int $totalPages = 0;
+    protected int $currentPage = 1;
+    protected int $currentVirtualPage = 1; // virtual page is used when paging is done externally
+    protected int $startRow = 1;
 
+    // @TODO protected string $resourceKey = 'Product';
     protected $resourceKey = 'Product';
 
+    /** @var string[] */
+    // @TODO protected array $childResource = [
     protected $childResource = array(
         'FuturePrice',
         'CustomDataTemplate'
     );
 
+    /** @var array<string,string> */
+    // @TODO protected array $customGetActions = [
     protected $customGetActions = array (
         'product_ids' => 'productIds',
     );
@@ -43,43 +52,43 @@ class Product extends HTTPXMLResource
     /**
      * processResponse
      *
-     * @param SimpleXML $xml
-     * @param string $dataKey
-     *
-     * @return [] $products
+     * @param SimpleXMLElement|string $xml
+     * @param string|null $dataKey
+     * @return array
      */
-    public function processResponse($xml, $dataKey = null) {
-        //Log::debug(__METHOD__, [$dataKey, $this->xml->getName(), $this->pluralizeKey() ]);
+    public function processResponse($xml, $dataKey = null)
+    // @TODO public function processResponse(SimpleXMLElement|string $xml, ?string $dataKey = null): array
+    {
+        // Allow callers to pass raw XML string or SimpleXMLElement
+        if (is_string($xml)) {
+            $xml = simplexml_load_string($xml);
+            if (!$xml instanceof SimpleXMLElement) {
+                throw new \RuntimeException('Failed to parse XML response.');
+            }
+        }
 
         // sanity check
-        if (strcasecmp($dataKey, $xml->getName()) !== 0) {
-            throw new Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
+        if (strcasecmp((string) $dataKey, $xml->getName()) !== 0) {
+            throw new \Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
         }
 
         // process collection
         if (strcasecmp($this->pluralizeKey(), $xml->getName()) === 0) {
             $att = $xml->attributes();
-            $this->totalProducts = (int)$att['TotalRows'];
-            /*
-            return [
-                'totalRows' => $this->totalProducts,
-                'totalPages' => ceil($this->totalProducts / (int)$att['PageRows']),
-                'products' => $this->processCollection($xml)
-            ];
-            */
+            $this->totalProducts = (int) $att['TotalRows'];
+
             return $this->processCollection($xml);
         }
-        else {
-            return $this->processEntity($xml);
-        }
+
+        return $this->processEntity($xml);
     }
 
     /**
      * Generate a HTTP GET request and return results as an array
      *
      * @param array $urlParams Check Ap21 API reference of the specific resource for the list of URL parameters
-     * @param string $url
-     * @param string $dataKey Keyname to fetch data from response array
+     * @param string|null $url
+     * @param string|null $dataKey Keyname to fetch data from response array
      *
      * @uses HttpRequestXml::get() to send the HTTP request
      *
@@ -88,18 +97,19 @@ class Product extends HTTPXMLResource
      *
      * @return array
      */
+    // @TODO public function get(array $urlParams = [], ?string $url = null, ?string $dataKey = null): array
     public function get($urlParams = array(), $url = null, $dataKey = null)
     {
         // limit
         if (array_key_exists('limit', $urlParams)) {
-            $this->productLimit = $urlParams['limit'];
+            $this->productLimit = (int) $urlParams['limit'];
             unset($urlParams['limit']);
         }
 
         if (!$url) {
             $url  = $this->generateUrl($urlParams);
         }
-        Log::debug(sprintf("%s->url: %s", __METHOD__, $url) );
+        Log::debug(sprintf("%s->url: %s", __METHOD__, $url));
         if (!$dataKey) {
             $dataKey = $this->id ? $this->resourceKey : $this->pluralizeKey();
         }
@@ -107,29 +117,29 @@ class Product extends HTTPXMLResource
 
         // implement versions
         if (array_key_exists("CustomData", $urlParams)) {
-            $this->httpHeaders['Accept'] = sprintf("version_4.0");
+            $this->httpHeaders['Accept'] = 'version_4.0';
         }
-        if (preg_match("/freestock/i", $dataKey)) {
-            $this->httpHeaders['Accept'] = sprintf("version_2.0");
+        if (preg_match("/freestock/i", (string) $dataKey)) {
+            $this->httpHeaders['Accept'] = 'version_2.0';
         }
         Log::debug(sprintf("%s->httpHeaders", __METHOD__), $this->httpHeaders);
 
         $response = HttpRequestXml::get($url, $this->httpHeaders);
-        Log::debug(sprintf("%s->response.length: %d", __METHOD__, strlen($response)), []);
+        Log::debug(sprintf("%s->response.length: %d", __METHOD__, is_string($response) ? strlen($response) : 0), []);
 
         // implement paging
         if (array_key_exists('startRow', $urlParams)) {
             // set up paging
-            $this->startRow = $urlParams['startRow'];
-            $urlParams['pageRows'] = array_key_exists('pageRows', $urlParams) ? $urlParams['pageRows'] : self::DEFAULT_PAGE_ROWS;
+            $this->startRow = (int) $urlParams['startRow'];
+            $urlParams['pageRows'] = array_key_exists('pageRows', $urlParams) ? (int) $urlParams['pageRows'] : self::DEFAULT_PAGE_ROWS;
             // set to limit if greater than limit
-            if ($this->productLimit != 0 && $urlParams['pageRows'] > $this->productLimit) {
+            if ($this->productLimit !== 0 && $urlParams['pageRows'] > $this->productLimit) {
                 $urlParams['pageRows'] = $this->productLimit;
             }
 
             $this->xml = $this->processResponse($response, $dataKey);
             // calculate the total number of pages
-            $this->totalPages = ceil($this->totalProducts / $urlParams['pageRows']);
+            $this->totalPages = (int) ceil($this->totalProducts / $urlParams['pageRows']);
 
             Log::info(sprintf("%s->processNextPage1", __METHOD__), [
                 sprintf('page: %d/%d', $this->currentVirtualPage, $this->totalPages),
@@ -141,35 +151,33 @@ class Product extends HTTPXMLResource
             $this->currentVirtualPage++;
 
             // check we arent already at our limit
-            Log::debug(sprintf("%s->check limit %d >= %d", __METHOD__, count($this->xml), $this->productLimit), []);
+            Log::debug(sprintf("%s->check limit %d >= %d", __METHOD__, is_countable($this->xml) ? count($this->xml) : 0, $this->productLimit), []);
             // check we have reached the end
             Log::debug(sprintf("%s->check end %d >= %d", __METHOD__, ($this->startRow + $urlParams['pageRows']), $this->totalProducts), []);
             if (
-                $this->productLimit != 0
+                $this->productLimit !== 0
                 &&
-                count($this->xml) >= $this->productLimit
+                is_countable($this->xml) && count($this->xml) >= $this->productLimit
             ) {
                 Log::info(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
-            }
-            else if(
+            } elseif (
                 ($this->startRow + $urlParams['pageRows']) >= $this->totalProducts
             ) {
                 Log::info(sprintf("%s->product end reached %d >= %d", __METHOD__, ($this->startRow + $urlParams['pageRows']), $this->totalProducts), []);
-            }
-            else {
+            } else {
                 do {
                     // set startRow to the next amount
-                    $urlParams['startRow'] = ($urlParams['pageRows'] * $this->currentPage) + $this->startRow;
+                    $urlParams['startRow'] = (int) (($urlParams['pageRows'] * $this->currentPage) + $this->startRow);
                     $url = $this->generateUrl($urlParams);
 
                     $response = HttpRequestXml::get($url, $this->httpHeaders);
-                    Log::info(sprintf("%s->response.length: %d", __METHOD__, strlen($response)), []);
+                    Log::info(sprintf("%s->response.length: %d", __METHOD__, is_string($response) ? strlen($response) : 0), []);
 
-                    if (empty($response) || strlen($response) == 0) {
+                    if (empty($response) || (is_string($response) && strlen($response) === 0)) {
                         Log::debug(sprintf("%s->end reached!", __METHOD__), []);
                         break;
                     }
-                    if (self::PAGE_LIMIT != 0 && $this->currentPage < self::PAGE_LIMIT) {
+                    if (self::PAGE_LIMIT !== 0 && $this->currentPage < self::PAGE_LIMIT) {
                         Log::debug(sprintf("%s->page limit %d reached!", __METHOD__, self::PAGE_LIMIT), []);
                         break;
                     }
@@ -180,120 +188,126 @@ class Product extends HTTPXMLResource
                         'pageRows:' . $urlParams['pageRows'],
                         'total:' . $this->totalProducts,
                         'limit:' . $this->productLimit,
-                        'count:' . count($this->xml),
-                        sprintf("yes: %d", (count($this->xml) >= $this->productLimit))
+                        'count:' . (is_countable($this->xml) ? count($this->xml) : 0),
+                        sprintf("yes: %d", (is_countable($this->xml) && $this->productLimit !== 0 && count($this->xml) >= $this->productLimit) ? 1 : 0)
                     ]);
                     $products = $this->processResponse($response, $dataKey);
 
                     if ($products && is_array($products)) {
+                        /** @var array $this->xml */
                         $this->xml = array_merge($this->xml, $products);
                     }
-                    if ($this->productLimit != 0 && count($this->xml) >= $this->productLimit) {
+                    if ($this->productLimit !== 0 && is_countable($this->xml) && count($this->xml) >= $this->productLimit) {
                         Log::debug(sprintf("%s->product limit %d reached!", __METHOD__, $this->productLimit), []);
                         break;
                     }
-                }
-                while($response);
+                } while ($response);
             }
-        }
-        else {
-            Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [get_class($response)]);
+        } else {
+            Log::debug(sprintf("%s->%s->processResponse", __METHOD__, get_class($this)), [is_object($response) ? get_class($response) : gettype($response)]);
             $this->xml = $this->processResponse($response, $dataKey);
         }
+        /** @var array $this->xml */
         return $this->xml;
     }
 
     /**
      * processEntity
      *
+     * @param SimpleXMLElement $product
      * @return array
      */
-    protected function processEntity($product) {
-        $productId = (int)$product->Id;
-        Log::debug(sprintf("%s->%s|%s|%s", __METHOD__, $productId, $product->Code, $product->Name));
+    protected function processEntity(SimpleXMLElement $product): array
+    {
+        $productId = (int) $product->Id;
+        Log::debug(sprintf("%s->%s|%s|%s", __METHOD__, $productId, (string) $product->Code, (string) $product->Name));
 
         $references = [];
-        foreach($product->References->children() as $reference) {
-            $rTypeId = (string)$reference->ReferenceTypeId;
-            $rId = (string)$reference->Id;
-            //Log::debug(sprintf("%s->rId->%s|%s", __METHOD__, $rTypeId, $rId));
-            $references[$rTypeId] = [
-                'id'    => $rTypeId,
-                'key'   => $rId
-            ];
+        if (isset($product->References)) {
+            foreach ($product->References->children() as $reference) {
+                $rTypeId = (string) $reference->ReferenceTypeId;
+                $rId = (string) $reference->Id;
+                $references[$rTypeId] = [
+                    'id'  => $rTypeId,
+                    'key' => $rId
+                ];
+            }
         }
 
         $customData = [];
-        if ($product->CustomData) {
-            foreach($product->CustomData->children() as $cards) {
-                $cardName = (string)$cards->Card['Name'];
-                //Log::debug(sprintf("%s->%s|%s", __METHOD__, $cards->getName(), $cardName ));
+        if (isset($product->CustomData)) {
+            foreach ($product->CustomData->children() as $cards) {
+                $cardName = (string) $cards->Card['Name'];
                 $customData[$cardName] = [];
-                foreach($cards->Card->Fields->children() as $field) {
-                    $key = (string)$field['Name'];
-                    $val = (string)$field;
+                foreach ($cards->Card->Fields->children() as $field) {
+                    $key = (string) $field['Name'];
+                    $val = (string) $field;
                     $customData[$cardName][$key] = $val;
                 }
             }
         }
 
         $children = [];
-        foreach($product->Clrs->children() as $colour) {
-            $cCode = (string)$colour->Code;
-            $cName = (string)$colour->Name;
-            $cCustomData = $this->processCustomData($colour->CustomData ?? null);
-            //Log::debug(sprintf("col->%s|%s", $cCode, cName));
-            foreach($colour->SKUs->children() as $sku) {
-                if (!array_key_exists($cCode, $children)) {
-                    $children[$cCode] = [];
-                }
-                $barcode = (string)$sku->Barcode;
-                $children[$cCode][$barcode] = [
-                    'sku_id'            => (int)$sku->Id,
-                    'barcode'           => $barcode,
-                    'product_id'        => $productId,
-                    'colour_id'         => (string)$colour->Id,
-                    'sequence_sku'      => (int)$sku->Sequence,
-                    'sequence_colour'   => (int)$colour->Sequence,
-                    'colour_desc'       => $cName,
-                    'colour_code'       => $cCode,
-                    'size_code'         => (string)$sku->SizeCode,
-                    // prices
-                    'price_org'         => (float)$sku->OriginalPrice,
-                    'price_rrp'         => (float)$sku->RetailPrice,
-                    'price'             => (float)$sku->Price,
-                    'freestock'         => (int)$sku->FreeStock
-                ];
-                if ($cCustomData) {
-                    $children[$cCode][$barcode]['customData'] = $cCustomData;
+        if (isset($product->Clrs)) {
+            foreach ($product->Clrs->children() as $colour) {
+                $cCode = (string) $colour->Code;
+                $cName = (string) $colour->Name;
+                $cCustomData = $this->processCustomData($colour->CustomData ?? null);
+
+                foreach ($colour->SKUs->children() as $sku) {
+                    if (!isset($children[$cCode])) {
+                        $children[$cCode] = [];
+                    }
+                    $barcode = (string) $sku->Barcode;
+                    $children[$cCode][$barcode] = [
+                        'sku_id'          => (int) $sku->Id,
+                        'barcode'         => $barcode,
+                        'product_id'      => $productId,
+                        'colour_id'       => (string) $colour->Id,
+                        'sequence_sku'    => (int) $sku->Sequence,
+                        'sequence_colour' => (int) $colour->Sequence,
+                        'colour_desc'     => $cName,
+                        'colour_code'     => $cCode,
+                        'size_code'       => (string) $sku->SizeCode,
+                        // prices
+                        'price_org'       => (float) $sku->OriginalPrice,
+                        'price_rrp'       => (float) $sku->RetailPrice,
+                        'price'           => (float) $sku->Price,
+                        'freestock'       => (int) $sku->FreeStock
+                    ];
+                    if ($cCustomData) {
+                        $children[$cCode][$barcode]['customData'] = $cCustomData;
+                    }
                 }
             }
         }
-        $product = [
-            'id'            => $productId,
-            'code'          => (string)$product->Code,
-            'name'          => (string)$product->Name,
-            'size_range'    => (string)$product->SizeRange,
-            'update_time_stamp' => strtotime((string)$product->UpdateTimeStamp),
+
+        return [
+            'id'                => $productId,
+            'code'              => (string) $product->Code,
+            'name'              => (string) $product->Name,
+            'size_range'        => (string) $product->SizeRange,
+            'update_time_stamp' => strtotime((string) $product->UpdateTimeStamp),
             // references
-            'references'    => $references,
-            'children'      => $children,
-            'customData'    => $customData
+            'references'        => $references,
+            'children'          => $children,
+            'customData'        => $customData
         ];
-        return $product;
     }
 
     /**
      * processCollection
      *
+     * @param SimpleXMLElement $xml
      * @return array
      */
-    protected function processCollection($xml) {
+    protected function processCollection(SimpleXMLElement $xml): array
+    {
         $this->products = [];
         // loop SimpleXMLElements
-        foreach($xml->children() as $product) {
-            $id = $product->Id;
-            $this->products["$id"] = $this->processEntity($product);
+        foreach ($xml->children() as $product) {
+            $id = (string) $product->Id;
+            $this->products[$id] = $this->processEntity($product);
         }
         return $this->products;
     }
@@ -307,8 +321,11 @@ class Product extends HTTPXMLResource
      *   ],
      *   ...
      * ]
+     *
+     * @param SimpleXMLElement|null $customData
+     * @return array
      */
-    function processCustomData($customData): array
+    protected function processCustomData(?SimpleXMLElement $customData): array
     {
         $out = [];
         if (!$customData || !isset($customData->Cards)) {
@@ -316,13 +333,13 @@ class Product extends HTTPXMLResource
         }
 
         foreach ($customData->Cards->Card as $card) {
-            $cardName = trim((string)($card['Name'] ?? ''));
+            $cardName = trim((string) ($card['Name'] ?? ''));
             if ($cardName === '' || !isset($card->Fields)) {
                 continue;
             }
             $fields = [];
             foreach ($card->Fields->Field as $field) {
-                $fname = trim((string)($field['Name'] ?? ''));
+                $fname = trim((string) ($field['Name'] ?? ''));
                 if ($fname === '') {
                     continue;
                 }
@@ -330,20 +347,18 @@ class Product extends HTTPXMLResource
                 $values = [];
                 if (isset($field->ListValues)) {
                     foreach ($field->ListValues->Value as $v) {
-                        $val = trim((string)$v);
+                        $val = trim((string) $v);
                         if ($val !== '') {
                             $values[] = $val;
                         }
                     }
                 }
-                $text = trim((string)$field);
+                $text = trim((string) $field);
                 if (!empty($values)) {
                     $fields[$fname] = $values;
-                }
-                elseif ($text !== '') {
+                } elseif ($text !== '') {
                     $fields[$fname] = $text;
-                }
-                else {
+                } else {
                     // Empty field; skip
                     continue;
                 }
@@ -363,7 +378,8 @@ class Product extends HTTPXMLResource
      *
      * @return int
      */
-    public function getTotalPages() {
+    public function getTotalPages(): int
+    {
         return $this->totalPages;
     }
 
@@ -372,8 +388,8 @@ class Product extends HTTPXMLResource
      *
      * @return int
      */
-    public function getTotalProducts() {
+    public function getTotalProducts(): int
+    {
         return $this->totalProducts;
     }
-
 }
