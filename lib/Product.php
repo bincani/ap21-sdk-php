@@ -225,11 +225,15 @@ class Product extends HTTPXMLResource
         $references = [];
         if (isset($product->References)) {
             foreach ($product->References->children() as $reference) {
-                $rTypeId = (string) $reference->ReferenceTypeId;
-                $rId = (string) $reference->Id;
+                $rTypeId = (int) $reference->ReferenceTypeId;
+                $rIdRaw  = trim((string) $reference->Id);
+                if ($rIdRaw === '') {
+                    // skip empty <Id/> entries
+                    continue;
+                }
                 $references[$rTypeId] = [
-                    'id'  => $rTypeId,
-                    'key' => $rId
+                    'type_id' => $rTypeId,
+                    'id'      => (int) $rIdRaw,
                 ];
             }
         }
