@@ -69,7 +69,7 @@ class Product extends HTTPXMLResource
 
         // sanity check
         if (strcasecmp((string) $dataKey, $xml->getName()) !== 0) {
-            throw new \Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
+            throw new ApiException(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
         }
 
         // process collection
@@ -234,18 +234,8 @@ class Product extends HTTPXMLResource
             }
         }
 
-        $customData = [];
-        if (isset($product->CustomData)) {
-            foreach ($product->CustomData->children() as $cards) {
-                $cardName = (string) $cards->Card['Name'];
-                $customData[$cardName] = [];
-                foreach ($cards->Card->Fields->children() as $field) {
-                    $key = (string) $field['Name'];
-                    $val = (string) $field;
-                    $customData[$cardName][$key] = $val;
-                }
-            }
-        }
+        // process parent custom data
+        $pCustomData = $this->processCustomData($product->CustomData ?? null);
 
         $children = [];
         if (isset($product->Clrs)) {
@@ -291,7 +281,7 @@ class Product extends HTTPXMLResource
             // references
             'references'        => $references,
             'children'          => $children,
-            'customData'        => $customData
+            'customData'        => $pCustomData
         ];
     }
 
