@@ -37,7 +37,7 @@ class CurlResponse
         else {
             $body = $response[0];
         }
-
+        Log::debug(__METHOD__, [$body]);
         $this->body = $body;
     }
 
