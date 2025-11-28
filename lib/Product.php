@@ -139,7 +139,10 @@ class Product extends HTTPXMLResource
 
             $this->xml = $this->processResponse($response, $dataKey);
             // calculate the total number of pages
-            $this->totalPages = (int) ceil($this->totalProducts / $urlParams['pageRows']);
+            $this->totalPages = 1;
+            if ($this->totalProducts && array_key_exists('pageRows', $urlParams)) {
+                $this->totalPages = (int) ceil($this->totalProducts / $urlParams['pageRows']);
+            }
 
             Log::info(sprintf("%s->processNextPage1", __METHOD__), [
                 sprintf('page: %d/%d', $this->currentVirtualPage, $this->totalPages),
@@ -267,6 +270,7 @@ class Product extends HTTPXMLResource
                         'price_org'       => (float) $sku->OriginalPrice,
                         'price_rrp'       => (float) $sku->RetailPrice,
                         'price'           => (float) $sku->Price,
+                        'weight'          => (float) $sku->Weight,
                         'freestock'       => (int) $sku->FreeStock
                     ];
                     if ($cCustomData) {
