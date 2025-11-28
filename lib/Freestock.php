@@ -61,11 +61,11 @@ class Freestock extends HTTPXMLResource
     protected function processEntity($style) {
         $colours = [];
         $skus = [];
-
-        //echo $style->asXML();
+        //Log::debug(__METHOD__, [$style->asXML()]);
         $styleFreestock = 0;
         $id = (int)$style['StyleIdx'];
         foreach($style->Clr as $colour) {
+            //Log::debug(__METHOD__, [$colour->asXML()]);
             $cCode = (string)$colour['ClrIdx'];
             $colours[$cCode] = $this->processClr($colour);
             $styleFreestock += $colours[$cCode]['freestock'];
@@ -89,56 +89,85 @@ class Freestock extends HTTPXMLResource
             'skus'      => $skus
         ];
         */
-
-        //echo sprintf(sprintf("%s->%s", __METHOD__, print_r($style, true)));
+        //Log::debug(__METHOD__, $style);
         return $style;
     }
 
     /**
      * processClr
      *
+     * @param \SimpleXMLElement $colour
      * @return array
      */
-    protected function processClr($colour) {
-        //echo $colour->asXML();
-        $skus = [];
+    protected function processClr($colour)
+    {
+        $skus           = [];
+        $stores         = []; // for the "no SKU" case
         $colourFreestock = 0;
-        foreach($colour->children() as $sku) {
-            $sCode = (string)$sku['SkuIdx'];
-            $skus[$sCode] = $this->processSku($sku);
-            $colourFreestock += $skus[$sCode]['freestock'];
+        // Case 2: <Clr> has <Sku> children
+        if ($colour->Sku->count()) {
+            foreach ($colour->Sku as $sku) {
+                $sCode = (string) $sku['SkuIdx'];
+                $skus[$sCode] = $this->processSku($sku);
+
+                if (isset($skus[$sCode]['freestock'])) {
+                    $colourFreestock += (int) $skus[$sCode]['freestock'];
+                }
+            }
+        }
+        // Case 1: <Clr> has <Store> children directly (no <Sku>)
+        elseif ($colour->Store->count()) {
+            foreach ($colour->Store as $store) {
+                $storeId   = (string) $store['StoreId'];
+                $storeData = $this->processStore($store);
+
+                $colourFreestock += $storeData['freestock'];
+                $stores[$storeId] = $storeData;
+            }
         }
         return [
-            'name'      => (string)$colour['Name'],
+            'name'      => (string) $colour['Name'],
             'freestock' => $colourFreestock,
-            'skus'      => $skus
+            'skus'      => $skus,
+            'stores'    => $stores, // populated for case 1; empty for case 2
         ];
     }
 
     /**
      * processSku
      *
+     * @param \SimpleXMLElement $sku
      * @return array
      */
-    protected function processSku($sku) {
-        //echo $sku->asXML();
+    protected function processSku($sku)
+    {
         $stores = [];
         $skuFreestock = 0;
-        foreach($sku->children() as $store) {
-            //echo $store->asXML();
-            $storeId = (string)$store['StoreId'];
-            $storeFreestock = (int)$store['FreeStock'];
-            //Log::debug(sprintf("%s", __METHOD__), [$cCode, $cCode, $sCode, $storeId, $storeFreestock]);
-            $skuFreestock += $storeFreestock;
-            $stores[$storeId] = [
-                'store'     => (string)$store['Name'],
-                'freestock' => $storeFreestock
-            ];
+        // Only iterate over <Store> children
+        foreach ($sku->Store as $store) {
+            $storeId   = (string) $store['StoreId'];
+            $storeData = $this->processStore($store);
+            $skuFreestock += $storeData['freestock'];
+            $stores[$storeId] = $storeData;
         }
         return [
-            'name'      => (string)$sku['Name'],
+            'name'      => (string) $sku['Name'],
             'freestock' => $skuFreestock,
-            'stores'    => $stores
+            'stores'    => $stores,
+        ];
+    }
+
+    /**
+     * processStore
+     *
+     * @param \SimpleXMLElement $store
+     * @return array
+     */
+    protected function processStore($store)
+    {
+        return [
+            'store'     => (string) $store['Name'],
+            'freestock' => (int) $store['FreeStock'],
         ];
     }
 
