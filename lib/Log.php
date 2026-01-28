@@ -65,12 +65,12 @@ class Log {
             self::$defaultLevel = $logLevel;
         }
         $logDir = sprintf("%s%s%s", dirname(__DIR__), DIRECTORY_SEPARATOR, 'log');
-        if (!file_exists($logDir)) {
+        if (!self::$debugStdout && !file_exists($logDir)) {
             if (self::$mkLogDir) {
                 mkdir($logDir, 0777, true) or die(sprintf("cannot mkdir %s!", $logDir));
             }
             else {
-                throw new Exception(sprintf("log directory %s doen't exist!", $logDir));
+                throw new Exception(sprintf("log directory %s doesn't exist!", $logDir));
             }
         }
         $logger = new Logger('ap21sdk');
