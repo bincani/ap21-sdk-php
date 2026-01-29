@@ -49,8 +49,10 @@ class Freestock extends HTTPXMLResource
         if (strcasecmp($dataKey, $xml->getName()) !== 0) {
             throw new \Exception(sprintf("invalid response %s! expecting %s", $xml->getName(), $dataKey));
         }
-        // no nothing
-        return ["please select a resource", $childResource];
+        return [
+            "error" => "Please select a child resource",
+            "available" => $this->childResource
+        ];
     }
 
     /**
