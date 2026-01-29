@@ -178,6 +178,9 @@ class CurlRequest
 
         // Handle 429 rate limit with retry and backoff
         while ($retryCount <= $maxRetries) {
+            // Enforce minimum gap between API calls
+            Ap21SDK::checkApiCallLimit();
+
             $output   = curl_exec($ch);
             $response = new CurlResponse($output);
             $response->getHeaders();

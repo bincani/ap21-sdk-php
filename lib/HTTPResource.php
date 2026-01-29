@@ -586,10 +586,10 @@ abstract class HTTPResource implements HTTPResourceInterface
         }
 
         if(!empty($responseHeaders['link'])) {
-            if (stristr($responseHeaders['link'], '; rel="'.$type.'"') > -1) {
+            if (stristr($responseHeaders['link'], '; rel="'.$type.'"') !== false) {
                 $headerLinks = explode(',', $responseHeaders['link']);
                 foreach ($headerLinks as $headerLink) {
-                    if (stristr($headerLink, '; rel="'.$type.'"') === -1) {
+                    if (stristr($headerLink, '; rel="'.$type.'"') === false) {
                         continue;
                     }
 
