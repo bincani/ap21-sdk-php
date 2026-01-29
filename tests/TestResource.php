@@ -5,7 +5,7 @@
 
 namespace PHPAP21;
 
-class TestResource extends \PHPUnit_Framework_TestCase
+class TestResource extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Ap21SDK $ap21;
@@ -15,7 +15,7 @@ class TestResource extends \PHPUnit_Framework_TestCase
     /**
      * setUpBeforeClass
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $config = array(
             'ApiUrl'       => getenv('ApiUrl'),
@@ -31,7 +31,7 @@ class TestResource extends \PHPUnit_Framework_TestCase
     /**
      * tearDownAfterClass
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$ap21 = null;
     }

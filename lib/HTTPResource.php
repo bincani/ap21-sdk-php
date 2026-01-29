@@ -115,7 +115,7 @@ abstract class HTTPResource implements HTTPResourceInterface
      * @param integer $id
      * @param string $parentResourceUrl
      *
-     * @throws SdkException if Either AccessToken or ApiKey+Password Combination is not found in configuration
+     * @throws SdkException if neither ApiUser+ApiPassword nor AccessToken is found in configuration
      */
 
     /**
@@ -149,8 +149,8 @@ abstract class HTTPResource implements HTTPResourceInterface
         elseif (isset($this->config['AccessToken'])) {
             $this->httpHeaders['X-Ap21-Access-Token'] = $this->config['AccessToken'];
         }
-        elseif (!isset($this->config['ApiKey']) || !isset($this->config['Password'])) {
-            throw new SdkException("Either AccessToken or ApiKey+Password Combination (in case of private API) is required to access the resources. Please check SDK configuration!");
+        else {
+            throw new SdkException("Either ApiUser+ApiPassword or AccessToken is required to access the resources. Please check SDK configuration!");
         }
 
         if (isset($this->config['Ap21ApiFeatures'])) {

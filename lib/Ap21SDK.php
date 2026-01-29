@@ -46,7 +46,7 @@ class Ap21SDK
     public static $defaultApiVersion = '2022.2';
 
     /**
-     * Shop / API configurations
+     * API configurations
      *
      * @var array
      */
@@ -144,11 +144,6 @@ class Ap21SDK
             self::$config[$key] = $value;
         }
 
-        //Re-set the admin url if shop url is changed
-        if(isset($config['ShopUrl'])) {
-            self::setAdminUrl();
-        }
-
         //If want to keep more wait time than .5 seconds for each call
         if (isset($config['AllowedTimePerCall'])) {
             static::$timeAllowedForEachApiCall = $config['AllowedTimePerCall'];
@@ -162,43 +157,7 @@ class Ap21SDK
     }
 
     /**
-     * Set the admin url, based on the configured shop url
-     *
-     * @return string
-     */
-    public static function setAdminUrl()
-    {
-        $shopUrl = self::$config['ShopUrl'];
-
-        //Remove https:// and trailing slash (if provided)
-        $shopUrl = preg_replace('#^https?://|/$#', '', $shopUrl);
-        $apiVersion = self::$config['ApiVersion'];
-
-        if(isset(self::$config['ApiKey']) && isset(self::$config['Password'])) {
-            $apiKey = self::$config['ApiKey'];
-            $apiPassword = self::$config['Password'];
-            $adminUrl = "https://$apiKey:$apiPassword@$shopUrl/admin/";
-        } else {
-            $adminUrl = "https://$shopUrl/admin/";
-        }
-
-        self::$config['AdminUrl'] = $adminUrl;
-        self::$config['ApiUrl'] = $adminUrl . "api/$apiVersion/";
-
-        return $adminUrl;
-    }
-
-    /**
-     * Get the admin url of the configured shop
-     *
-     * @return string
-     */
-    public static function getAdminUrl() {
-        return self::$config['AdminUrl'];
-    }
-
-    /**
-     * Get the api url of the configured shop
+     * Get the API URL from configuration
      *
      * @return string
      */

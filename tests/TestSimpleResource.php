@@ -29,13 +29,10 @@ class TestSimpleResource extends TestResource
     public $errorPostArray;
 
 
-    /**
-     * TestSimpleResource constructor.
-     */
-    public function __construct()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->resourceName = preg_replace('/.+\\\\(\w+)Test$/', '$1', get_called_class());
-        parent::__construct();
     }
 
     /**
