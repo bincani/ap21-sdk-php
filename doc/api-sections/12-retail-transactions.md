@@ -107,9 +107,9 @@ Accept: version_2.0
 | 404 | | Not found |
 | 400 | 5034 | Invalid pagination parameters |
 
-## SDK Notes - ISSUES
-- `resourceKey = 'retailtransactions'` (lowercase)
-- **processResponse() is broken** - references undefined `$xml` variable, returns empty array
-- Needs proper implementation: parse `<Transactions>` > `<Transaction>` > `<Details>` > `<Detail>` > `<Discounts>`
+## SDK Notes
+- `resourceKey = 'retailtransactions'` (lowercase), `pluralizeKey()` overridden to return `'Transactions'`
+- Parses `<Transactions>` > `<Transaction>` > `<Details>` > `<Detail>` > `<Discounts>`
 - Accessed as child of Person: `$ap21->Person($id)->RetailTransactions->get()`
+- `getTotalTransactions()` returns TotalRows from response attributes
 - Transactions NOT included: wholesale orders, debtor sales, customer orders (until paid), account payments

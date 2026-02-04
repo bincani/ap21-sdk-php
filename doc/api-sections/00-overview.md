@@ -65,7 +65,7 @@ Version is specified via Accept header:
 | Freestock/AllStyles | `Freestock/AllStyles` | GET |
 | Order | `Order` | GET |
 | StockChanged | `StockChanged` | GET |
-| RetailTransactions | `RetailTransactions` | GET (broken) |
+| RetailTransactions | `RetailTransactions` | GET |
 | Shipment | `Shipment` | GET (minimal) |
 | ProductColourReference | `ProductColourReference` | GET |
 | Info | `Info` | GET |
