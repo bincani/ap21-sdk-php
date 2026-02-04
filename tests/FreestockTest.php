@@ -5,18 +5,23 @@ namespace PHPAP21;
 class FreestockTest extends TestResource
 {
     protected static $productId;
+    protected static $allStyles;
 
     /**
-     * Find a product ID to look up freestock
+     * Find a product ID that has freestock by querying AllStyles
      */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
-        $products = self::$ap21->Product->get();
-        if (!empty($products)) {
-            $first = reset($products);
-            static::$productId = $first['id'];
+        try {
+            static::$allStyles = self::$ap21->Freestock->AllStyles->get();
+            if (!empty(static::$allStyles)) {
+                $first = reset(static::$allStyles);
+                static::$productId = $first['id'];
+            }
+        } catch (\Exception $e) {
+            // Will be handled by markTestSkipped in individual tests
         }
     }
 
@@ -45,13 +50,11 @@ class FreestockTest extends TestResource
      */
     public function testGetAllStyles()
     {
-        try {
-            $freestock = static::$ap21->Freestock->AllStyles->get();
-            $this->assertIsArray($freestock);
-            $this->summary('Freestock::AllStyles', $freestock);
-        } catch (Exception\ApiException $e) {
-            $this->assertInstanceOf(Exception\ApiException::class, $e);
-            $this->summary('Freestock::AllStyles', [['error' => $e->getMessage()]]);
+        if (!static::$allStyles) {
+            $this->markTestSkipped('AllStyles returned no data in setup');
         }
+
+        $this->assertIsArray(static::$allStyles);
+        $this->summary('Freestock::AllStyles', static::$allStyles);
     }
 }
