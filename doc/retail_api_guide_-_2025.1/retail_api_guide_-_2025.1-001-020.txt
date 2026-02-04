@@ -1,0 +1,822 @@
+Retail API Release
+ Reference Guide
+1     REVISION HISTORY
+
+      Ver#      Reason for change                                                                    Job# /         Author               Date
+                                                                                                     Version
+      1 - 91    Archived details                                                                                 Emma Girschik         07/05/24
+    91 - 120    Archived details                                                                                 Jhona Hidalgo         23/09/24
+        121     Add in GET Products new request parameter for image URLs                             116467      Thida Zaw             16/12/20
+                                                                                                      v2021
+        122     Add a new endpoint for getting valid freight options from Web                        116508      Thida Zaw             16/12/20
+                Freight Options GIT                                                                   v2021
+        123     Add in GET Orders new request parameter updatedAfter to only                         116468      Thida Zaw             16/12/20
+                show orders with recent changes                                                       v2021
+        124     Products – Colours – add in clarity about Colour Type set up                                     Emma Girschik         12/05/21
+        125     New Voucher end point error added (error code 5219) for enquiry                                  Emma Girschik         17/05/21
+                or validation of voucher that has a different currency to the web                    v2021.2
+                store currency
+        126     New error code for Order posting when have variable base                             116664      Emma Girschik         21/06/21
+                currencies, nominating despatch warehouse and not using “omni                        v2021.2
+                channel” feature
+        127     Add a new endpoint for getting future prices of products                             116740      Thida Zaw             20/07/21
+                                                                                                     v2021.2
+        128     Add a new endpoint to return free stock (SOH) of all available                       116791      Thida Zaw             20/07/21
+                styles filtered through the product export of the web store                          v2021.2
+        129     Allow posting of a "non returnable" status on new order items -                      116830      Thida Zaw             20/07/21
+                show status in Web sales monitor screens and GET orders                              v2021.2
+        130     Allow passing a Partner Order Id via order POST and retrieve id via                              Nilusha               10/09/21
+                GET orders end points                                                                v2021.3     Fernando
+        131     Add endpoints for redeeming and unreserving Coupons                                  115907      Nilusha               06/10/21
+                                                                                                     v2021.3     Fernando
+        132     Edit to add in explanation about using Home phone instead of                                     Emma Girschik         09/11/21
+                Mobile for contact so it shows up at POS
+        133     Add Post Orders Need review flag / review notes for flagging                         117219      Emma Girschik         06/12/21
+                orders for manual review before automated processes apply                            v2022.1
+        134     Add endpoints for retrieving person records updated after a                          117291      San Mathew            16/12/21
+                specific timestamp                                                                   v2022.1
+        135     Added two new fields <ThirdPartyCouponCode> and                                      116837      San Mathew            18/03/22
+                <ThirdPartyCouponSource> to Create New Order payload                                 v2022.2
+        136     Clarity on email voucher subject field being mandatory when                                      Emma Girschik         31/03/22
+                buying vouchers that will be emailed but not needed otherwise
+        137     Add in extra gift voucher field for setting future date to send                      117077      Emma Girschik         19/04/22
+                                                                                                     v2022.3
+        138     Add <SpendAmount> to RewardRedemption to validate minimum
+                spend threshold
+        139     Add details of new endpoint for orders to get only orders that                                   Emma Girschik         07/10/22
+                have changed since a specified date / time – no need to specify
+                person in request
+        140     Remove “sandbox” details as this doesn’t work – add in Postman                                   Emma Girschik         16/01/23
+                Collection details instead
+        141     Fix up Openpay information that was missed                                                       Emma Girschik         18/01/23
+        142     Added new Get request to coupon endpoint to retrieve all                                         Amala Mary            21/02/23
+                coupons                                                                                          Chacko
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752     W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                             Page 2 of 221
+       143      Posting orders – company name updated to indicate it CAN be                                      Emma Girschik        29/03/23
+                posted – fix document error
+                Added in Product SKU cost element that can optionally be looked
+                up if retail API is configured to expose this (application setting in
+                Deployment Console)
+       144      Updated products table to include product measures at SKU level                                  Amala Mary           14/04/23
+                Updated the Example Response at product endpoint to include                                      Chacko
+                product measures
+       145      Updated Post orders endpoint to include new element-                                             Amala Mary           16/05/23
+                customisation                                                                                    Chacko
+                Updated the error messages under orders endpoint
+       146      Included details on new endpoints RewardsSimple                                      118240      Julie Foster         20/06/23
+                                                                                                     v2023.3
+       147      Included details on new endpoints VouchersSimple                                     118241      Julie Foster         20/06/23
+                                                                                                     v2023.3
+       148      Update ‘Retrieve Shipment Details’ call to include Carton details                    118339      Julie Foster         18/08/23
+                and tracking number                                                                  v2023.4
+       149      Update ‘Orders Updated Since’ call to include despatch location at                   118493      Julie Foster         11/09/23
+                detail level                                                                        v2023.4a
+       150      Update link to Postman collection after SharePoint move                                          Emma Girschik        16/10/23
+       151      Add clarity to GET Products using UpdatedAfter filter – explain                                  Emma Girschik        12/4/24
+                that this will retrieve products that have NOT been modified but
+                where their price markdown causes a change
+       152      Add new endpoint details for Advanced Returns (Refundid)                             118637      Julie Foster         07/05/24
+                                                                                                     v2024.2
+       153      Update products table and returns table to clarify mandatory                                     Jhona Hidalgo        23/09/24
+                fields
+                                                                                                     119327      Julie Foster
+       154      Include new ‘ExpiredRewardsSimple’ endpoint                                          V2025.1                          29/01/25
+
+                                                                                                                 Julie Foster
+       155      Include details on order IDX fields                                                                                   25/02/25
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752    W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                            Page 3 of 221
+2    CONTENTS
+
+1           Revision History ..................................................................................................................................... 2
+
+2           Contents ................................................................................................................................................ 4
+
+3           Introduction........................................................................................................................................... 5
+
+4           Minimum Requirements ....................................................................................................................... 9
+
+5           Postman Collection ............................................................................................................................. 10
+
+6           Overview ............................................................................................................................................. 11
+
+7           References ........................................................................................................................................... 17
+
+8           Navigation tree .................................................................................................................................... 29
+
+9           Products .............................................................................................................................................. 33
+
+10          Colours ................................................................................................................................................ 66
+
+11          Sizes ..................................................................................................................................................... 68
+
+12          Persons ................................................................................................................................................ 70
+
+13          Carts .................................................................................................................................................... 93
+
+14          Orders ................................................................................................................................................ 100
+
+15          Returns .............................................................................................................................................. 145
+
+16          Sales History ...................................................................................................................................... 154
+
+17          Gift Vouchers ..................................................................................................................................... 161
+
+18          Free Stock .......................................................................................................................................... 168
+
+19          Stock changes .................................................................................................................................... 175
+
+20          Rewards ............................................................................................................................................. 178
+
+21          Stores................................................................................................................................................. 206
+
+22          Shipments .......................................................................................................................................... 208
+
+23          Freight Options .................................................................................................................................. 210
+
+24          Coupons............................................................................................................................................. 213
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121        A C N 0 05 99 7 90 0        P H : 613 841 5 93 00        F A X: 613 9 427 1752          W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                       Apparel21 Reference Guide                                                            Page 4 of 221
+3     INTRODUCTION
+
+The Apparel21 Retail Application Programming Interface (API) is an interface which provides interaction with
+the Apparel21 system for the purpose of online shopping and enquiries. It is used by website developers
+implementing E-tailing applications which interact with Apparel21 resources.
+
+Use of this API requires the purchase of an Apparel21 Retail API license by the retailer. See Further
+Assistance for contacting Apparel21.
+
+1.1       AUDIENCE
+
+This guide is intended for developers who are building web-enabled applications that retrieve information
+from and update details to Apparel21.
+
+This guide will also be used by the retailer who is expected to be the first point of contact for enquiries
+from developers. Many of the data fields and values used in relation to the API will be dependent upon
+configurations specific to that retailer.
+
+1.2       REQUIRED KNOWLEDGE AND SKILLS
+
+Use of this guide assumes
+
+      •     Familiarity with XML
+      •     Basic understanding of web services
+      •     Knowledge of a programming language for developing a web service
+      •     An understanding of retail commerce systems and payment gateways
+      •     Familiarity with the apparel industry.
+
+1.3       ARCHITECTURE
+
+The API is a web service using the REST (Representational State Transfer) architectural style. The following
+verbs are used
+
+      •     GET
+      •     PUT
+      •     POST
+      •     DELETE
+
+The payload for all requests and responses is in XML.
+
+1.4       API VERSIONS AND UPDATES
+
+From time-to-time new versions of the API will be released to provide new or modified functionality. In the
+‘details’ section for each resource, the “HTTP header Accept:Version_” column shows when an element
+was introduced to the payload. If a version other than 1 is required, it must be requested in the accept
+header of the call.
+
+To check the Retail API version and payload version supported by an installed API, access the root page of
+the endpoint.
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                           Page 5 of 221
+Minor version changes will be released for non-breaking changes such as introducing new elements or
+attributes. Developers should ignore new elements in the payload (if they are not required) and be aware
+that elements may not remain in a particular order although they will remain at the same level in the XML
+hierarchy.
+
+Major version changes can also be applied to changed behaviour like the automatic removal of data if not
+supplied. i.e. In one version it may not be removed when not supplied but in another version it may be
+removed.
+
+Major version changes have the potential to introduce changes which break the client’s software. For
+example, if a new element (or attribute for an existing element) is required on submit payloads, like a PUT
+call, this would be a breaking change. All changes are documented in the Retail API Change Log.
+
+Before installing a new version of the API, the business must be aware of the possible impact and discuss it
+with the website developer.
+
+1.5       ASSUMPTIONS / CONSTRAINTS
+
+      •     “Click and collect” and “Ship from store” – these features are NOT standard in Apparel21 – if you
+            want to use these, there is additional configuration with associated fees. Contact Sales and CRM
+            team to discuss further.
+      •     A single currency applies to all transactions for a single “web store”
+      •     In-store generated Credit Notes cannot be redeemed via Retail API
+      •     If orders are posted with ‘pre-authorised’ payment details, it is not possible to update the payment
+            details with the final payment transaction Id. Refunds for these transactions will not be able to be
+            processed through Apparel21 Mail Order or in store using “authorisation” number.
+      •     Each order can only be delivered to one person / location
+      •     Shipping confirmation emails can be supplied by Apparel21 using Mailer module (optional)
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                           Page 6 of 221
+      •     Apparel21 does supply gift voucher email. Gift voucher purchase email from web site NOT
+            supported.
+      •     Apparel21 generates customer email or SMS for pick up in store ‘ready to collect’ confirmation.
+            Web site email NOT supported for this task.
+      •     All elements posted must start with a capital letter. E.g. <Name> is valid but <name> is NOT valid
+      •     Website can supply own order reference, but it MUST be unique for each new order.
+      •     Email address must be unique within a brand or division. Person is identified in the Retail API via
+            email address, brand/division combination.
+      •     Click and collect (buy online pick up in store) and despatch from store orders must be FULLY paid at
+            time of order and NOT at time of pick up.
+      •     Orders containing gift vouchers MUST be fulfilled by the warehouse. They cannot be submitted as
+            ‘Click and Collect’ or ‘Despatch from store’ orders.
+      •     Online returns are supported if returned to warehouse – does not cater for “pick up in store” or
+            “Despatch from store” returns. These returns should be done in store rather than online.
+
+1.6       DEFINITION OF TERMS
+
+
+ Acronym or Term                    Description
+
+
+ API                                Application Programming Interface
+
+                                    A set of routines, protocols, and tools for building software applications.
+
+
+ Customer                           Same as online shopper. A consumer who directly buys goods from a seller in real-
+                                    time. “Person” in Apparel21 Retail API.
+
+
+ Generic Interface                  This is a function provided in Apparel21 to enhance the configuration options,
+ Translation                        allowing businesses to customise their system.
+
+
+ GIT                                See Generic Interface Translation
+
+
+ Id                                 Id refers to a system generated unique number for an object.
+
+
+ Online shopper                     A consumer who directly buys goods from a seller in real-time.
+
+
+ Person                             A term used within Apparel 21 to store details for an online shopper.
+
+
+ Product                            A garment (piece of clothing), or accessory (bag, shoe, etc).
+
+                                    A product can have more than one colour and/or size but is still considered a single
+                                    product record in Apparel21.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                           Page 7 of 221
+ Reference Code                     Reference Codes are assigned to a Reference Group. These are customisable by
+                                    client. E.g. Pants, Jackets, Skirts
+
+
+ Reference Group                    Reference Groups in Apparel21 are various attributes used to describe products and
+                                    other business entities at a higher level. E.g. Product Type
+
+
+ Reference Type                     See Reference Group. E.g. Product Type
+
+
+ Retailer                           A business utilising the Apparel21 application for its retail operations.
+
+
+ Shopping Cart                      A virtual shopping basket where items are ‘stored’ while browsing an online
+                                    catalogue.
+
+
+ SKU                                Stock Keeping Unit. The lowest level of representation of a product to size and
+                                    colour detail if applicable.
+
+
+ Style                              See Product.
+
+
+
+
+1.7      FURTHER ASSISTANCE
+
+If further information is required contact the Apparel21 Support Centre
+
+Phone                   +613 8415 9393
+
+Email                   Helpdesk@Apparel21.com
+
+Website                 www.Apparel21.com
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                           Page 8 of 221
+4     MINIMUM REQUIREMENTS
+
+1.8      SYSTEMS
+
+•     32- or 64-bit operating system
+•     Windows IIS v7 – configured to host MVC
+•     .Net 3.5 minimum - If installing .Net4 make sure .Net3.5 has been installed first
+•     Oracle client connectivity must be available to both the TEST and LIVE schemas
+
+1.9      SERVICES
+
+The Apparel21 Retail API must be installed and configured. Refer to separate documentation for the
+installation and configuration of the API.
+
+Apparel21 consultants will liaise with their customers to establish the configurations for Apparel21. They will
+set up and configure ‘test’ and ‘live’ systems for use with the API and provide the information required for
+the API configuration settings.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                           Page 9 of 221
+5    POSTMAN COLLECTION
+
+A Postman Collection is available for the Retail API.
+
+Link to latest collection file here:
+
+Apparel21 Retail API.postman_collection.json
+
+This can be imported into Postman to create a collection.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 10 of 221
+6    OVERVIEW
+
+The Apparel21 Retail API provides resources to support online shopping and enquiries.
+
+The API caters for a single currency but allows ‘pricing customers’ to be set up to cater for shoppers that
+are not required to pay tax on goods purchased.
+
+The included resources are:
+
+                  •     look up existing shopper details, including loyalties
+                  •     create new shopper
+                  •     navigation tree hierarchy - product references to display a navigation tree
+                  •     product information - colour and size information
+                  •     stock information by store
+                  •     store information. E.g. address details
+                  •     shopping cart to get latest prices, promotions and freight as defined in the Apparel21
+                        system
+                  •     create new orders – shopper, products, payment details, despatch from warehouse,
+                        despatch from store or pick up in store
+                  •     create new returns / exchange orders
+                  •     gift voucher selling
+                  •     gift voucher redemption
+                  •     look up sales history for shopper, including all store transactions as well as web sales
+
+As Apparel21 is extensively customisable and configurable, terminology and descriptions will change
+depending on how clients have implemented Apparel21.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 11 of 221
+SAMPLE WORK FLOW
+
+
+1.9.1 BUY ONLINE AND DESPATCH FROM WAREHOUSE
+
+      Retail API – sample work flow
+
+                                Shopper            Web application                             Apparel21 API
+
+
+                                                   Post ‘Person’                           Create Person,
+ Shopper account
+
+
+
+
+                             Create account
+                                                     request                              return person Id
+
+
+
+
+                                                    Get Product                          Product Reference
+                                                   Reference Type                            Type Ids
+ Build product hierarchy
+
+
+
+
+                                                                                         Product Reference
+                                                 Get navigation tree                      Descriptions and
+                                                                                               nodes
+
+
+
+
+                                                 Display navigation
+                            Browse products
+                                                        tree
+
+
+
+
+                                                 Get List of Products                       Products by
+                                                       (simple)                             Reference Id
+
+
+
+
+                                                  Display products
+
+
+
+
+                                                 Get Single Product                        Products with
+                             Select product
+                                                   by Id (detail)                         colours and sizes
+
+
+
+
+                           Add product to cart    Update web cart
+
+
+
+
+                                                   Submit Cart for                          Calculate cart
+                             Finalise order
+                                                      pricing                                  pricing
+
+
+
+
+                                                 Display final price,
+                             Confirm Order
+                                                 request payment
+ Shopping process
+
+
+
+
+                             Enter payment       Process payment,                         Generate Order in
+                                 details            Post order                               Apparel21
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121         A C N 0 05 99 7 90 0      P H : 613 841 5 93 00      F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                          Apparel21 Reference Guide                                            Page 12 of 221
+1.9.2 BUY ONLINE AND PICK UP IN STORE (CLICK AND COLLECT)
+
+ Click and Collect
+                                                                                                                                                                           Phase
+ Customer
+
+
+
+
+                                                               Checkout Pick Up In
+                     Log on to website   Browse Products                                                                         Collect Order
+                                                                     Store
+ Web Developer
+
+
+
+
+                                                                                          Send Order
+                                            Request/               Send Order          Confirmation email
+                                             Recieve
+ Retail API
+
+
+
+
+                                         GET FreeStock by      Create Customer
+                                              Store                 Order
+ Apparel21
+
+
+
+
+                                                                                                                                Update Customer
+                 Report on Customer
+                                                                  Create POS                                   Notify POS of     Order ready to        Complete Customer
+                 Orders (salesperson
+                                                                Customer Order                                Customer Order     collect (Email              Order
+                        web)
+                                                                                                                                   Customer)
+ Store Staff
+
+
+
+
+                                                                                                              Pack Customer
+                                                                                                                  Order
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121            A C N 0 05 99 7 90 0      P H : 613 841 5 93 00      F A X: 613 9 427 1752            W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                             Apparel21 Reference Guide                                                      Page 13 of 221
+1.9.3 BUY ONLINE AND DESPATCH FROM STORE
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 14 of 221
+1.10 USE OF IDS
+
+Apparel21 product codes and other business elements can be modified. Therefore rather than using
+“product code” or “return reason code” as a method of communicating between the web and Apparel 21
+databases, it is preferable to communicate data using unchanging Ids.
+
+Some items, such as products will have a Code AND an Id.
+
+      -     Code - user friendly product code used by the business to represent the item. Used for verbal
+            communications.
+      -     Id – system generated unchanging unique number. Not user friendly.
+
+Where the document refers to Id, it is referring to the number.
+
+e.g Product id 12345 code DRES0001 and description STRIPED MAXI DRESS
+
+1.11 API CALLS
+
+A standard API call is formed by three parts
+
+
+          Request part                                                       Notes
+
+
+ 1. URL with parameters                                                      Country code is mandatory parameter for all calls to
+                                                                             the API. Country code controls pricing and tax rates.
+                                                                             Country code maps to a setting in Apparel21 back
+                                                                             office.
+
+
+ 2. HTTP headers                                The payload version required should be included in
+    • “Content-type:text/xml” for GET, POST and the request header (Accept:version_2.0). If not
+       PUT                                      supplied, only version 1 elements apply.
+    •   “Accept:version_x”
+
+
+ 3. XML payload body (for PUT and POST, not for
+    GET)
+
+
+Examples for Create a person
+
+      1     HTTP POST Request
+            http://retailapi.apparel21.com/RetailAPI/Persons/?countryCode=AU
+      2     HTTP POST Request HTTP header
+      3     Content-type: text/xml
+      4     Accept:version_2.0
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 15 of 221
+      5     HTTP POST Request XML payload body
+                  <Person>
+                    <Title>Mr</Title>
+                      <Firstname>John</Firstname>
+                      <Surname>Hill</Surname>
+                      <Sex>M</Sex>
+                      <References>
+                           <Reference>
+                               <ReferenceTypeId>373</ReferenceTypeId>
+                               <Id />
+                           </Reference>
+                           <Reference>
+                               <ReferenceTypeId>1781</ReferenceTypeId>
+                               <Id />
+                           </Reference>
+                           <Reference>
+                               <ReferenceTypeId>1782</ReferenceTypeId>
+                               <Id />
+                           </Reference>
+                           <Reference>
+                               <ReferenceTypeId>1801</ReferenceTypeId>
+                               <Id />
+                           </Reference>
+                           <Reference>
+                               <ReferenceTypeId>1501</ReferenceTypeId>
+                               <Id />
+                           </Reference>
+                           <Reference>
+                               <ReferenceTypeId>27</ReferenceTypeId>
+                               <Id />
+                           </Reference>
+                      </References>
+                      <Addresses>
+                           <Billing>
+                               <ContactName />
+                               <AddressLine1>101 Cremorne St</AddressLine1>
+                               <AddressLine2 />
+                               <City>CREMORNE</City>
+                               <State>VIC</State>
+                               <Postcode>3121</Postcode>
+                               <Country>AUSTRALIA</Country>
+                           </Billing>
+                      </Addresses>
+                  </Person>
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 16 of 221
+7    REFERENCES
+
+Reference Groups in Apparel21 are various attributes used to describe products and other business entities
+at a higher level.
+
+Product Reference Groups are used to enable the grouping of products into similar categories and are able
+to be queried by the API. Product Reference details can be retrieved by the API to determine the order or
+hierarchy in which the products are displayed or grouped.
+
+These are customisable by client. Examples of some product references are shown below.
+
+
+
+
+As depicted above, Brand, Department, Class, etc. are setup as reference groups. They are referred to in
+the API as reference types.
+
+The corresponding codes ICED, Accessories, Shirts are reference codes.
+
+For a client site, these reference groups can be selected to control navigation as shown in the section
+Navigation Tree.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 17 of 221
+Reference Groups are also used for other fields in Apparel21.
+
+      -     Return reasons
+
+The API has several resources to obtain Reference details depending on the information required.
+
+
+ Reference Types                  This resource will list all Reference Types in Apparel21. The payload can be used to
+                                  obtain the Id of a Reference Type to enable the values for that reference Type to be
+                                  listed.
+
+                                  E.g. Product Department
+
+ References                       This resource requires a Reference Type Id and optionally a Reference Code to be
+                                  entered. The payload will list all valid Reference Types that are children of the
+                                  Reference Type.
+
+                                  E.g. Shoes, Jackets, Pants are References within “Product Department” reference
+                                  type.
+
+ Product Reference                Lists the Reference Types specific to ‘Products’.
+ Types
+                                  E.g. “Product Department”, “Season”
+
+ Product Colour                   Lists Product Colour Reference Codes. These are the references that exist at the
+ Reference Codes                  product / colour level. These references are NOT available as part of the navigation
+                                  tree or standard product extract due to payload size considerations.
+
+                                  This extract is suited to those businesses that extract all information on a daily /
+                                  weekly basis and organise the navigation with the web application.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 18 of 221
+1.12 REFERENCE DETAILS
+
+
+1.12.1 REFERENCE TYPES
+                                                                                                                                                                    GET response
+ Field                                             Format        Max         Comment                                                            Example       Reference      References     HTTP
+                                                               Length                                                                                         Types                       Header
+                                                                                                                                                                                          Accept:
+                                                                                                                                                                                          Version
+                                                                                                                                                                                                _
+ ReferenceTypes
+    ReferenceType                                                            ReferenceType is a sub-element of ReferenceTypes
+    Id                                             Integer           22      This is the unique identifier of the reference type                1221              Yes                         1.0
+    Code                                            Alpha             8      Code for this reference type                                       Season            Yes                         1.0
+    Name                                            Alpha            40      Extended description of reference type                             Season            Yes                         1.0
+ References
+    ReferencesByType                                                         ReferencesByType is a sub-element of References
+    ReferenceTypeId                                Integer           22      The Id entered in the request parameter                            1221                           Yes            1.0
+    ReferenceTypeCode                               Alpha             8      Code for this reference type                                       Season                         Yes            1.0
+    ReferenceTypeName                               Alpha            40      Extended description of reference type                             Season                         Yes            1.0
+    Reference                                                                Reference is a sub-element of References
+    ReferenceTypeId                                Integer           22      The Id entered in the request parameter                            1221                           Yes            1.0
+    Id                                             Integer           22      The Id entered in the request parameter                            4884                           Yes            1.0
+    Code                                            Alpha             8      Code for this reference type                                       Autumn                         Yes            1.0
+    Name                                            Alpha            40      Extended description of reference type                             Autumn                         Yes            1.0
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 0 05 99 7 90 0     P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                    Apparel21 Reference Guide                                           Page 19 of 221
+1.12.2 PRODUCT REFERENCE TYPES
+ Field               Format    Max Comment                                                                                                                     Example              GET            HTTP
+                                                        Length                                                                                                                    Response       Header
+                                                                                                                                                                                              Accept:Ver
+                                                                                                                                                                                                   sion_
+ Id                                       Integer             22     This Id describes which object the list of reference groups refers to. For products       1                     Yes              1.0
+                                                                     the value is 1.
+ Name                                      Alpha              30     Name of object                                                                            Style                 Yes              1.0
+   ReferenceTypes                                                    Reference Types is a sub-element of ProductReferenceTypes
+   Sequence                               Integer             22     Sequence of the reference type within the hierarchy                                       1                     Yes              1.0
+   ReferenceTypeId                        Integer             22     Unique Id for this reference type                                                         257                   Yes              1.0
+   Code                                    Alpha               8     Code for this reference type                                                              Brand                 Yes              1.0
+   Name                                    Alpha              40     Extended description of reference type                                                    Product Brand         Yes              1.0
+
+
+1.12.3 PRODUCT COLOURS REFERENCES
+
+ Field                                              Format            Max          Comment                                                                         Example     GET response         HTTP
+                                                                    Length                                                                                                                        Header
+                                                                                                                                                                                              Accept:Vers
+                                                                                                                                                                                                     ion_
+ ProductColoursReferences
+    ProductColourReference                                                         ProductColourReference is a sub-element of ProductColoursReferences
+    ClrId                                           Integer                22      The Id of a colour that relates to a particular style                           1451            Yes                2.0
+    RowNumber                                       Integer                22      Consecutive number of the row returned in the response                          28              Yes                2.0
+ References
+    Reference                                                                      Reference is a sub-element of References
+    ReferenceTypeId                                 Integer                22      Unique Id for the reference type set against the product colour                 1221            Yes                2.0
+    Id                                               Alpha                  8      The id assisgned to the product colour reference type                           4885            Yes                2.0
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 0 05 99 7 90 0        P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                  Apparel21 Reference Guide                                              Page 20 of 221
+

@@ -1,0 +1,1002 @@
+17 GIFT VOUCHERS
+
+Gift Vouchers can be sold and redeemed through the API. Gift vouchers sold online can be used in store.
+Gift vouchers sold in store can be used online (if they are “secure” type vouchers with a PIN).
+
+Note: Exception is gift voucher sales for “Click and Collect” and “Despatch from Store” orders. No online
+gift voucher sales can be picked up in store or despatched from store, they must be despatched from
+warehouse. The DespatchType element during an order post must be either blank or
+‘DespatchFromWarehouse’.
+
+1.57 SELLING GIFT VOUCHERS
+
+Only “secure” gift vouchers can be sold. This means a PIN must be entered when they are redeemed. An
+additional field for “Delivery Contact email address” has been added to the Cart and Orders endpoint. This
+allows the voucher to be ordered by the shopper but delivered to another person.
+
+Based on the settings in the Apparel 21 back office for the Voucher Type, the gift voucher can be either emailed
+or posted to the recipient. The ExtraVoucherInformation values able to be posted in the Order may be used
+to form part of the letter, voucher or email that is sent to the voucher recipient. The use of this information
+will vary between sites. While a basic template will be provided for the voucher and letter formats, an
+allowance must be made for the unique configuration that will be required for the documentation.
+
+If emailing voucher, vouchers can be delivered at a future date, using the <DeliveryDate> element when
+purchasing the order. If this feature is to be used, additional set up is required in the back office (job 117077).
+
+If using a third party to sell physical gift vouchers, it is possible to nominate a specific voucher number on the
+order to ensure that this is the voucher that is activated. This is optional. In the majority of cases, the voucher
+number is assigned by Apparel21 once the order is received.
+
+1.58 REDEEMING GIFT VOUCHERS
+
+Any voucher redeemed through the API - promotional or gift - must be a secure voucher type. This means
+that a PIN is mandatory.
+
+To redeem a Gift Voucher or Promotional voucher through the API, the voucher must first be validated. An
+endpoint has been provided to request the validation id for voucher redemptions. The request will include
+the redemption value and the response will provide an available amount. The validation includes a check
+that the voucher is being used in full if it is a “give change” type voucher, the amount field is used for this
+validation (and no other validation).
+
+The order POST will return an error if an attempt is made to redeem an amount greater than the available
+amount.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 161 of 221
+1.59 VOUCHER LOOK UP / VALIDATION DETAILS
+
+ Field                       Format              Max              Comment                                                             Example        GET Response       GET           HTTP Header
+                                                 Length                                                                                                (inquiry)     Response      Accept:Version_
+                                                                                                                                                                    (validation)
+ Voucher
+ Voucher Number              Alpha                          50    Number of the gift or promotional voucher                           60000226           Yes            Yes                    2.0
+ Expiry Date                 Date/Time                      22    Identifier for the transaction from the source table                2017-02-           Yes            Yes                    2.0
+                                                                  RET_TRANH                                                           17T00:00:00
+ Original Amount             Num(22,2)            Num(22,2)       Original Amount of the voucher                                      100                Yes            Yes                    2.0
+ Used Amount                 Num(22,2)            Num(22,2)       Amount of the voucher that has been spent                           10.50              Yes            Yes                    2.0
+ Available Amount            Num(22,2)            Num(22,2)       The amount that is now available to spend using the                 89.50              Yes            Yes                    2.0
+                                                                  voucher. This value may be affected by expiry date or
+                                                                  write-off rules.
+ Validation id               Alpha                          36    Validation Id required when the voucher is redeemed                 2f093406-          No             Yes                    2.0
+                                                                                                                                      eab4-4ada-
+                                                                  (used as payment on a sale). The id will remain valid               bb4b-
+                                                                  until another validation id is requested.                           aa2786ef2a01
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                           Page 162 of 221
+1.60 GIFT VOUCHER ENQUIRY
+
+The balance of a voucher can be checked using a GET request to the following URI.
+
+
+1.60.1 URI REQUEST FORMAT
+
+/Voucher/{voucher number}?pin={pinnumber}&?countryCode={countryCode}
+
+
+1.60.2 REQUEST PARAMETERS
+ Field              Required                                 Comment
+ voucher number     Mandatory                                Number of the Gift or Promotional Voucher
+ pin                                  Mandatory              PIN of the Voucher
+ CountryCode                          Mandatory              Country code of the shopper
+
+
+1.60.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Voucher/6000226?pin=1084&countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.60.4 EXAMPLE RESPONSE
+</Voucher>
+  <VoucherNumber>6000226</VoucherNumber>
+  <ExpiryDate>2017-02-17T00:00:00</ExpiryDate>
+  <OriginalAmount>100</OriginalAmount>
+  <UsedAmount>0</UsedAmount>
+  <AvailableAmount>100</AvailableAmount>
+</Voucher>
+
+
+
+1.60.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.60.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 403          5068                                 The request is not supported on current database
+ 403          5055                                 The voucher cannot be used online (it is not secure)
+ 403          5056                                 The voucher does nto exist (it is suspended)
+ 403          5057                                 The voucher has not been issued
+ 403          5059                                 The voucher is no longer valid
+ 403          5054                                 The voucher has already been redeemed
+ 403          5053                                 The pin is invalid
+ 403          5219                                 Gift voucher number <voucher number> currency <currency of
+                                                   voucher> is not valid for this store currency <currency of web store>
+ 404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 163 of 221
+1.61 GIFT VOUCHER VALIDATION
+
+The voucher must be validated prior to using the voucher as payment on a sale. The validation is obtained
+using a GET request to the following URI.
+
+
+1.61.1 URI REQUEST FORMAT
+
+/Voucher/GVValid/{voucher number}?pin={pinnumber}&amount={amount}&countryCode={countryCode}
+
+
+1.61.2 REQUEST PARAMETERS
+ Field            Required Comment
+ Voucher number  Mandatory Number of the gift or promotional Voucher
+ Pin                            Mandatory        PIN of the voucher
+ Amount                         Mandatory        Amount of the voucher that will be used – this is only used for checking
+                                                 that “give change” vouchers will be used in full
+ CountryCode                    Mandatory        Country code of the shopper
+
+
+1.61.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Voucher/GVValid/500005?pin=5885&amount=75&countryCode=
+AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.61.4 EXAMPLE RESPONSE
+
+ <Voucher>
+  <VoucherNumber>6080044</VoucherNumber>
+  <ExpiryDate>2017-02-17T00:00:00</ExpiryDate>
+  <OriginalAmount>100</OriginalAmount>
+  <UsedAmount>0</UsedAmount>
+  <AvailableAmount>100</AvailableAmount>
+  <ValidationId>2f093406-eab4-4ada-bb4b-aa2786ef2a01</ValidationId>
+</Voucher>
+
+
+
+1.61.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.61.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 403          5068                                 The request is not supported on current database
+ 403          5060                                 Invalid request amount parameters
+ 403          5055                                 The voucher cannot be used online
+ 403          5056                                 The voucher does not exist
+ 403          5057                                 The voucher has not been issued
+ 403          5059                                 The voucher is no longer valid
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 164 of 221
+ 403                     5054                      The voucher has already been redeemed
+ 403                     5053                      The PIN is invalid
+ 403                     5056                      The voucher has expired
+ 403                     5066                      The voucher must be used in full
+ 403                     5067                      The voucher has pending payments and cannot be processed
+ 403                     5219                      Gift voucher number <voucher number> currency <currency of
+                                                   voucher> is not valid for this store currency <currency of web store>
+ 404
+
+1.62 GIFT VOUCHER LOCKING (OPTIONAL)
+
+Any businesses not using the POST ORDERS endpoint to post eCommerce orders directly into Apparel21 will
+have issues with the use of gift vouchers where the same gift voucher is used twice within the timeframe of
+the order being placed and the time of its creation in Apparel21.
+
+To avoid these issues, there is an endpoint that can be used to lock the voucher. This is designed to be
+used immediately after the order is posted. A validation id is required to lock the order.
+
+Once a voucher is locked, it cannot be validated for another order.
+
+The lock is released from the voucher when the order is posted into Apparel21 or when the timeframe for
+locking expires.
+
+If website needs to unlock a purchase order before expiry time, this can be achieved by posting
+LockSeconds of 0 (zero) to release the lock.
+
+
+1.62.1 URI REQUEST FORMAT
+
+/Voucher/Lock/{voucher number}?ValidationId={validation id}&LockSeconds={number of seconds until lock
+expiry}/?countryCode={countryCode}
+
+
+1.62.2 REQUEST PARAMETERS
+ Field            Required Comment
+ Voucher number  Mandatory Number of the gift or promotional Voucher
+ ValidationId                   Mandatory        ValidationID
+ LockSeconds                     Optional        Number of seconds that voucher is to be locked for (if not supplied, lock
+                                                 is applied for 3600 seconds = 1 hour).
+
+                                                 To unlock voucher, post another lock request with lock seconds of zero.
+
+ CountryCode                    Mandatory        Country code of the shopper
+
+
+1.62.3 EXAMPLE REQUEST
+
+PUT
+https://retailapi.apparel21.com/RetailAPI/Voucher/Lock/500005?validationid=lloiol9987mlk&lockseconds=
+900&countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 165 of 221
+1.62.4 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.62.5 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 403          5061                                 Incorrect validation id
+
+
+1.63 GIFT VOUCHER SUMMARY (SIMPLE)
+
+This new endpoint has been designed for systems that need to store gift voucher information externally.
+This is endpoint will require additional licensing and charges, it is NOT part of our standard API suite.
+Please refer to job 118241 for further information.
+
+
+1.63.1 URI REQUEST FORMAT
+
+/Vouchers/VouchersSimple?countryCode=AU&updatedAfter=2020-12-01T11:33:07
+
+
+1.63.2 REQUEST PARAMETERS
+
+The GET request parameters are:
+
+
+ Parameter                        Mandatory / Optional            Description
+
+
+ UpdatedAfter                           Optional                  The available formats for this field are
+
+                                                                  YYYY-MM-DDTHH:MM:SS (24-hour format)
+
+                                                                  YYYY-MM-DD
+
+                                                                  If this field is passed in the request, the API returns all
+                                                                  unique and generic rewards that are modified, newly
+                                                                  issued, and redeemed since the time stamp
+
+
+ StartRow                               Optional                  Starting position of rewards returned
+
+
+ PageRows                               Optional                  Number of rewards returned
+
+
+ Country code                           Mandatory                 Country code for the designated webstore
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 166 of 221
+1.63.3 EXAMPLE REQUEST
+GET
+https://retailapi.apparel21.com/Vouchers/VouchersSimple?countryCode=AU&updatedAfter=2020-12-
+01T11:33:07
+        Content-type: text/xml
+        Accept:version_4.0
+
+
+1.63.4 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.63.5 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 403          5247                                 Unauthorised request from warehouse
+
+1.63.6 EXAMPLE RESPONSE
+      <Vouchers>
+            <VoucherNumber>1000030</VoucherNumber>
+            <ExpiryDate>2024-03-17</ExpiryDate>
+            <OriginalAmount>90</OriginalAmount>
+            <UsedAmount>80</UsedAmount>
+            <AvailableAmount>10</AvailableAmount>
+            <Pin>GCVa8FqFV92/7SufKcesBQ==</Pin>
+      </Vouchers>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 167 of 221
+18 FREE STOCK
+
+The Free Stock resource retrieves available stock at retail stores (and optionally warehouses if configured at
+head office to do so). The ‘available stock’ quantity will be determined by the “POS Free” calculation in
+Apparel21. This will enable a shopper to purchase goods online and collect from a store that is convenient
+for them.
+
+Only stores or warehouses that have a positive free stock value will be returned.
+
+The Stores resource is used to obtain address and contact details for the store/s. If returning warehouses,
+this information cannot be looked up and must be configured in the web system.
+
+
+  95666 Retail API Look up stock by Store
+
+                Shopper/ Website                        Retail API
+
+
+
+                       Shopper Views
+                                                    Product Information
+                          Product
+
+
+
+
+                                                       GET FreeStock
+
+                     Shopper views Stock
+                         Availability
+
+
+
+                                                         GET Stores
+
+
+
+
+                       Shopper makes
+                      purchase decision
+ Purchase
+
+
+
+
+The product queried can be
+            •   Coloured and sized
+
+            •   Coloured but not sized
+
+            •   Not coloured or sized
+For each type of product, the request can be made by StyleId, or ClrId or Skuid, which leads to different
+output xml documents.
+
+The data for the FreeStock query is stored in the attributes, not the values assigned to an element. Refer to
+the example payloads following.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 168 of 221
+ The root level will be the request index type (StyleId, ClrId or Skuid) unless the style level of the product is
+lower than that, in which case the root will be its style level. To illustrate, if the request passes in a ClrId
+for a T-shirt that is coloured and sized, you will get an XML tree with clr as root element and skus as
+children.
+
+                                                      Product attributes
+
+ Request                Style / Colour / Sized            Style / Colour                Style
+ Style                  Root = style                      Root = style                  Root = style
+                        Children = clr / SKU              Children = clr
+
+ Colour                 Root = clr                        Root = clr                    Root = style
+                        Children = SKU
+ SKU                    Root = sku                        Root = sku                    Root = style
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300     F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                             Page 169 of 221
+1.64 FREE STOCK DETAILS
+
+ Field                Attribute                  Format         Max           Comment                                                                    Example                    GET       HTTP
+                                                                Length                                                                                                            Response   Header
+                                                                                                                                                                                             Accept:
+                                                                                                                                                                                             Version
+                                                                                                                                                                                                   _
+ Style or Clr                                                                 The field name will be the level requested. The level of detail returned   Name=”Jeans &amp;          Yes1         2.0
+ or Sku                                                                       will be determined by the product setup and request made.                  Sizes" StyleIdx="6186"
+                      Name                       Alpha                 30     Name of the node that was requested                                        Jeans &amp; Sizes
+                      Style,clr or               Integer               22     Id of the level requested                                                  Styleidx=6186
+                      skuidx
+ Clr                                             Alpha                 82     The Clr name and Clridx                                                    Name="APRICOT"             Yes2         2.0
+                                                                                                                                                         ClrIdx="7116"
+                      Name                       Alpha                 60     Name of the colour                                                         APRICOT
+                      Clridx                     Integer               22     Id of the clr                                                              7116
+ Sku                                             Alpha                 29     The Sku name and skuidx                                                    Name="2"                   Yes3         2.0
+                                                                                                                                                         SkuIdx="13211
+                      Name                       Alpha                  7     Name of the size                                                           2
+                      Skuidx                     Integer               22     Id of the SKU                                                              13211
+ Store                                                                        Store is repeated for each store with free stock.
+ Store                                           Alpha                 30     Name, Storeid and StoreNumber                                              Name="Swanston St          Yes          2.0
+                                                                                                                                                         Shop" StoreId="7501"
+                                                                                                                                                         StoreNumber="234"
+                                                                                                                                                         FreeStock="991"
+                      Name                       Alpha                  ?     Name of the store                                                          Swanston St Shop
+                      StoreId                    Alpha                 22     Store Id                                                                   7501                       Yes          2.0
+                      StoreNumber                Integer                3     Store Number                                                               234                        Yes          2.0
+                      FreeStock                  Integer               ??     Free stock quantity – from ‘POS Free’ formula in Apparel21 back office     991                        Yes          2.0
+              Notes
+              1 - if Style requested
+              2 - if Style requested for product that has style / clr / sku
+              3 – if Style or colour requested
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00        P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                  Apparel21 Reference Guide                                             Page 170 of 221
+1.65 RETRIEVE FREESTOCK DETAILS
+
+To retrieve a list of freestock, use a GET on one of the following URI’s.
+
+
+1.65.1 URI REQUEST FORMATS
+
+/Freestock/style/{styleid}?countryCode={countryCode}
+
+/Freestock/clr/{clr}?countryCode={countryCode}
+
+/Freestock/sku/{skuid}?countryCode={countryCode}
+
+
+1.65.2 REQUEST PARAMETERS
+ Field                                                Required                  Comment
+ Style or clr or sku                                  Mandatory                 One of these values must be entered
+ Styleid or clrid or skuid                            Mandatory                 The id of the primary field
+ CountryCode                                          Mandatory                 Country code of the shopper
+
+
+1.65.3 EXAMPLE REQUEST BY STYLE
+
+GET https://retailapi.apparel21.com/RetailAPI/Freestock/style/1155?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+
+1.65.4 EXAMPLE PAYLOAD – REQUEST BY STYLE
+<Style Name="Jeans &amp; Sizes" StyleIdx="6186">
+  <Clr Name="APRICOT" ClrIdx="7116">
+    <Sku Name="1" SkuIdx="13210">
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="991" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="879" />
+    </Sku>
+    <Sku Name="2" SkuIdx="13211">
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="999" />
+    </Sku>
+    <Sku Name="3" SkuIdx="13212">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="980" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+    </Sku>
+    <Sku Name="4" SkuIdx="13213">
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="998" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="993" />
+    </Sku>
+    <Sku Name="5" SkuIdx="13214">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="993" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+    </Sku>
+      </Clr>
+  <Clr Name="AVOCADO" ClrIdx="7117">
+    <Sku Name="1" SkuIdx="13224">
+      <Store Name="Pitt St Store" StoreId="109864" StoreNumber="100" FreeStock="4" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="996" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="996" />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 171 of 221
+    </Sku>
+    <Sku Name="2" SkuIdx="13225">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="999" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+    </Sku>
+    <Sku Name="3" SkuIdx="13226">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="792" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="982" />
+    </Sku>
+    <Sku Name="4" SkuIdx="13227">
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="996" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="987" />
+    </Sku>
+    <Sku Name="5" SkuIdx="13228">
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="976" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="996" />
+    </Sku>
+  </Clr>
+  <Clr Name="BANANA" ClrIdx="7118">
+    <Sku Name="1" SkuIdx="13238">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="998" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+    </Sku>
+    <Sku Name="2" SkuIdx="13239">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="999" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+    </Sku>
+    <Sku Name="3" SkuIdx="13240">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="998" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+    </Sku>
+    <Sku Name="4" SkuIdx="13241">
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="691" />
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="978" />
+    </Sku>
+    <Sku Name="5" SkuIdx="13242">
+      <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+      <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="998" />
+    </Sku>
+
+
+
+1.65.5 EXAMPLE REQUEST BY CLR
+
+GET https://retailapi.apparel21.com/RetailAPI/Freestock/clr/1200?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.65.6 EXAMPLE PAYLOAD – REQUEST BY CLR
+
+<Clr Name="Jeans &amp; Sizes AVOCADO" ClrIdx="7117">
+  <Sku Name="1" SkuIdx="13224">
+    <Store Name="Pitt St Store" StoreId="109864" StoreNumber="100" FreeStock="4" />
+    <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="996" />
+    <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="996" />
+  </Sku>
+  <Sku Name="2" SkuIdx="13225">
+    <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="999" />
+    <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="999" />
+ </Sku>
+  <Sku Name="3" SkuIdx="13226">
+    <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="792" />
+    <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="982" />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 172 of 221
+  </Sku>
+  <Sku Name="4" SkuIdx="13227">
+    <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="996" />
+    <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="987" />
+  </Sku>
+  <Sku Name="5" SkuIdx="13228">
+    <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="976" />
+    <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="996" />
+  </Sku>
+  </Clr>
+
+
+
+1.65.7 EXAMPLE REQUEST BY SKU
+
+GET https://retailapi.apparel21.com/RetailAPI/Freestock/sku/1461?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.65.8 EXAMPLE PAYLOAD – REQUEST BY SKU
+<Sku Name="Jeans &amp; Sizes AVOCADO 1" SkuIdx="13224">
+  <Store Name="Pitt St Store" StoreId="109864" StoreNumber="100" FreeStock="4" />
+  <Store Name="George St Store" StoreId="108864" StoreNumber="212" FreeStock="996" />
+  <Store Name="Swanston St Shop" StoreId="7501" StoreNumber="234" FreeStock="996" />
+</Sku>
+
+
+
+1.65.9 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.65.10                ERROR RESPONSE
+ HTTP Error              API Error Code API Error Description
+ 404                     5008           No data found
+ 400                     5081           Sku index should be an integer
+ 400                     5081           Clr index should be an integer
+ 400                     5081           Style index should be an integer
+ 400                     5081           Store ID should be an integer
+ 400                     5080           You don’t have security for the requested store
+
+
+1.66 RETRIEVE FREESTOCK OF ALL STYLES
+
+AllStyles endpoint has been built on top of the existing Freestock call. The returned payload has the same
+structure as the existing Freestock call at style level.
+
+
+1.66.1 URI REQUEST FORMATS
+/Freestock/AllStyles?countryCode={countryCode}&startRow={startingPositionofStyleReturned}&pageRows
+={numberOfStylesReturned}
+
+/Freestock/AllStyles/{StoreId}?countryCode={countryCode}&startRow={startingPositionofStyleReturned}&p
+ageRows={numberOfStylesReturned}
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 173 of 221
+1.66.2 REQUEST PARAMETERS
+
+ Field                             Required              Comment
+ countryCode                       Mandatory             Country Code
+
+ StoreId                           Optional              Store Id
+ startRow                          Optional              Starting position of products returned
+ pageRows                          Optional              Number of products returned
+
+
+
+1.66.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Freestock/AllStyles?countryCode=AU&startRow=1&pageRows=50
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.66.4 EXAMPLE PAYLOAD
+<FreeStock xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-
+instance" Type="Array" TotalRows="442" PageStartRow="1" PageRows="50">
+    <Style Name="DOUBLE PKT SHIRT" StyleIdx="1101">
+          <Clr Name="MULTICOLOURED" ClrIdx="1322">
+            <Sku Name="6" SkuIdx="1783">
+                <Store Name="Central Warehouse Sydney" StoreId="9521" StoreNumber="999" FreeStock="100" />
+                <Store Name="EUROPEAN WAREHOUSE" StoreId="1502" StoreNumber="" FreeStock="61" />
+                <Store Name="Average Costing Warehouse" StoreId="9261" StoreNumber="" FreeStock="10" />
+                <Store Name="Chadstone" StoreId="8981" StoreNumber="811" FreeStock="84" />
+                <Store Name="Raw Materials" StoreId="2764" StoreNumber="" FreeStock="284" />
+                <Store Name="AUSTRALIA" StoreId="153" StoreNumber="" FreeStock="9708" />
+                <Store Name="NEW ZEALAND" StoreId="2323" StoreNumber="473" FreeStock="100" />
+            </Sku>
+            <Sku Name="8" SkuIdx="1784">
+                <Store Name="Average Costing Warehouse" StoreId="9261" StoreNumber="" FreeStock="10" />
+                <Store Name="RETURNS" StoreId="16484" StoreNumber="008" FreeStock="2" />
+                <Store Name="AUSTRALIA" StoreId="153" StoreNumber="" FreeStock="2011" />
+                <Store Name="EUROPEAN WAREHOUSE" StoreId="1502" StoreNumber="" FreeStock="2" />
+                <Store Name="Chadstone" StoreId="8981" StoreNumber="811" FreeStock="33" />
+                <Store Name="Central Warehouse Sydney" StoreId="9521" StoreNumber="999" FreeStock="100" />
+                <Store Name="SECONDS WAREHOUSE" StoreId="1161" StoreNumber="" FreeStock="15" />
+                <Store Name="NEW ZEALAND" StoreId="2323" StoreNumber="473" FreeStock="6" />
+                <Store Name="Raw Materials" StoreId="2764" StoreNumber="" FreeStock="294" />
+                <Store Name="WEB SHOP " StoreId="9441" StoreNumber="009" FreeStock="61" />
+            </Sku>
+
+
+
+1.66.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.66.6 ERROR RESPONSE
+ HTTP Error   API Error Code                     API Error Description
+ 404          5008                               No data found
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 174 of 221
+19 STOCK CHANGES
+
+The Stock Changed resource retrieves details of free stock for stores and the web store since a date / time.
+This endpoint is designed to get differences only and is not optimised for getting a full stock feed. It is
+intended that this be used to pick up recent changes since last feed. For items that have changed, the free
+stock value is the NEW available free stock and not the difference between last feed.
+
+Note: Payload response size will vary depending on the changes made between last request so to avoid
+large payload responses, it is suggested that requests are either for shorter periods of time OR for a limited
+warehouse. i.e. Could do one warehouse / store at a time to limit payload response size.
+
+The available filters for this endpoint are StoreID. To get details of the stores, use the resource Stores.
+
+The response for this endpoint includes SKUID. To get details of the products, use the resource Products.
+
+1.67 STOCK CHANGED
+
+
+Field      Attribute             Format          Comment                                      Example                               HTTP Header
+                                                                                                                                   Accept:Version_
+Store                                            One section for each store /                                                                   1.0
+                                                 warehouse
+           Storeid               Integer         Id of store / warehouse                      8981
+           LastChanged           Date/time       Date / time of last update                   2018-05-
+                                                                                              29T14:202:07.76
+SKU                                              One section for each SKU that has
+                                                 changed for store / warehouse
+           skuid                 Integer         Identifier of style / colour / size          30823                                               1.0
+           freeStock             Integer         Free Stock value                             4
+
+1.68 RETRIEVE STOCK CHANGED
+
+To retrieve a list of stock changes, use a GET on the following URI.
+
+
+1.68.1 URI REQUEST FORMATS
+
+/StockChanged?ChangedSince={date time}&StoreId={storeid}&countryCode={countryCode}
+
+
+1.68.2 REQUEST PARAMETERS
+ Field                                                Required                  Comment
+ StockChanged                                         Mandatory                 Date/time to get changes since.
+ StoreId                                                Optional                The id of the warehouse or store. Used to filter
+                                                                                response to a single warehouse / store. If not
+                                                                                supplied, changes for all stores and the web
+                                                                                store stock are returned.
+ CountryCode                                          Mandatory                 Country code of the shopper
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 175 of 221
+1.68.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/StockChanged?ChangedSince=2018-05-
+28T11:00:00&countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+
+1.68.4 EXAMPLE PAYLOAD RESPONSE
+<stockByStore xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema -
+instance" changedSince="2018-05-28T11:00:00">
+    <store storeid="8981" lastChanged="2018-05-29T14:20:07.76">
+        <sku skuid="34145" freeStock="4" />
+        <sku skuid="34447" freeStock="-15" />
+        <sku skuid="31460" freeStock="-1" />
+        <sku skuid="21804" freeStock="0" />
+        <sku skuid="33069" freeStock="-1" />
+        <sku skuid="30823" freeStock="-13" />
+    </store>
+    <store storeid="9001" lastChanged="2018-05-29T14:57:39.514">
+        <sku skuid="19702" freeStock="-207" />
+        <sku skuid="35723" freeStock="1" />
+        <sku skuid="35721" freeStock="1" />
+        <sku skuid="35724" freeStock="1" />
+        <sku skuid="19701" freeStock="-272" />
+        <sku skuid="1784" freeStock="-287" />
+        <sku skuid="35722" freeStock="1" />
+    </store>
+    <store storeid="9041" lastChanged="2018-05-29T14:09:06.187">
+        <sku skuid="31460" freeStock="1" />
+        <sku skuid="35723" freeStock="1" />
+        <sku skuid="35721" freeStock="1" />
+        <sku skuid="35724" freeStock="1" />
+        <sku skuid="35722" freeStock="1" />
+        <sku skuid="34447" freeStock="3" />
+        <sku skuid="33069" freeStock="2" />
+    </store>
+    <store storeid="9441" lastChanged="2018-05-29T15:44:18">
+        <sku skuid="1784" freeStock="1978" />
+        <sku skuid="30823" freeStock="22" />
+        <sku skuid="34561" freeStock="38" />
+        <sku skuid="28811" freeStock="100" />
+        <sku skuid="19701" freeStock="57" />
+        <sku skuid="34145" freeStock="36" />
+        <sku skuid="19702" freeStock="-201" />
+        <sku skuid="33069" freeStock="25" />
+        <sku skuid="34447" freeStock="11" />
+        <sku skuid="31460" freeStock="23" />
+        <sku skuid="15382" freeStock="-2" />
+        <sku skuid="12431" freeStock="394" />
+        <sku skuid="12432" freeStock="24556" />
+        <sku skuid="21804" freeStock="12" />
+    </store>
+</stockByStore>
+
+
+
+1.68.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 176 of 221
+1.68.6 ERROR RESPONSE
+ HTTP Error API Error Code                       API Error Description
+ 400        5147                                 Warehouse doesn’t exist: {0}
+ 400        5148                                 No company is attached to widx {0}
+ 400        5147                                 Invalid ChangedSince value: ‘{0}’. Valid format is ‘yyyy-MM-ddTHH:MM:SS
+ 403        5097                                 Stock formula not set up
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                           Page 177 of 221
+20 REWARDS
+
+The API retrieves retail reward / gift information necessary to display shopper reward balance on the
+website. At present, a person can only be attached to a single rewards program. Rewards can be $ or gifts.
+
+API includes ability to:
+
+     •     Retrieve list of rewards programs
+     •     Retrieve account information details including tier information, list of available points and rewards
+           / gifts
+     •     Retrieve transaction history of all rewards, gifts and points issued / redeemed to and from an
+           account
+     •     Add person to a rewards program (create an account)
+     •     Update person’s reward account tier details
+     •     Add new rewards / gifts to a person account
+     •     Add new points to a person account
+     •     Redeem points from a person account
+     •     Redeem rewards / gifts from a person account
+     •     Confirm redemption – allows confirming an unconfirmed request
+     •     Reverse a redemption request – can only be done within 24 hours of request
+
+The reward ‘account’ that a person belongs to can be retrieved using the Persons call.
+
+Sequence of API calls for a reward / gift redemption:
+
+Option 1 - If the website calls the order create call directly (i.e. can handle failure of order call)
+
+           •     Get Reward Account Details – to look up rewards balance or gifts available
+           •     Post Order – Spread reward $ discount across all order items and pass reward $ redemption as
+                 discount type 4.
+                 When redeeming a gift, post gift SKU as a 100% discounted item (discount type 4).
+
+
+Option 2 – If using third parties and need to decouple the reward redemption call from the order create
+call
+
+           •     Get Reward Account Details – to look up rewards balance or gifts available
+           •     Redeem Reward or Gift (with autoconfirm = false)
+           •     Post Order – Spread reward $ discount across all items and pass reward redemption discount
+                 (discount type 4) and request id (GUID). When redeeming a gift, post gift SKU as 100%
+                 discounted item (discount type 4). The Post Order call automatically confirms the reward
+                 redemption request.
+           •     Confirm reward redemption request (if want to confirm before post order call).
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 178 of 221
+1.69 REWARD PROGRAMS DETAILS
+
+
+
+ Field                                           Format         Max             Comment                                                     Example               GET         HTTP Header
+                                                                Length                                                                                          Response   Accept:Version_
+
+ RewardPrograms                                                                 Retrieves a list of all reward programs
+   Program                                                                      Program is a sub-element of
+                                                                                RewardPrograms
+    Id                                           Integer                        This is the unique identifier of the reward                 1                     Yes           1.0
+                                                                                program
+    Name                                         Alpha               250        Name of reward program                                      Apparel21 Rewards     Yes           1.0
+    Description                                  Alpha               250        Description of reward program                               Apparel21 Rewards     Yes           1.0
+                                                                                                                                            Program
+    Currency                                     Alpha               15         Currency of reward program                                  AUD                   Yes           1.0
+   Tiers                                                                        Retrieves a list of all tiers of a reward
+                                                                                program
+    Tier                                                                        Tier is a sub-element of Tiers. A program has
+                                                                                at least one tier.
+    Id                                           Integer                        This is the unique identifier of the tier                   1                     Yes           1.0
+    Name                                         Alpha               250        Tier name                                                   Bronze                Yes           1.0
+    Description                                  Alpha               250        Tier description                                            Bronze Tier           Yes           1.0
+    Sequence                                     Integer                        Tier sequence within program. Lower number                  1                     Yes           1.0
+                                                                                means lower tier.
+    AccrualSpend                                 Number                         Spend $ value required to accrue number of                  1                     Yes           1.0
+                                                                                points.
+    AccrualPoints                                Integer                        Number of points accrued for each $ spend                   1                     Yes           1.0
+                                                                                eg: Every $1 accrues 1 point
+    AutoRewardPointThreshold                     Integer                        Reward issuing rate i.e. total number of                    100                   Yes           1.0
+                                                                                points to reach before system automatically
+                                                                                converts total points to issue a reward
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                            Page 179 of 221
+                                                                                Eg: For every 100 points issue $10 reward
+    AutoRewardValue                              Number                         Reward $ amount issued when the points                     10        Yes   1.0
+                                                                                threshold is met.
+                                                                                Eg: Every 100 points issue $10 reward
+   AutoRewardGiftId                              Number                         Gift id issued when points threshold is met.               22        Yes   1.0
+                                                                                Eg: March Gift
+    TierPointBonus                               Integer                        Tier starting points bonus accrued when                    50        Yes   1.0
+                                                                                moving from a lower tier to a higher tier. Eg:
+                                                                                Tier welcome bonus points
+    TierRewardBonus                              Number                         Tier starting rewards bonus accrued when                   $20       Yes   1.0
+                                                                                moving from a lower tier to a higher tier.
+                                                                                eg: Sign up $20 reward bonus usable on first
+                                                                                sale
+   TierGiftBonusId                               Number                         Tier starting bonus gift earned when moving                145       Yes   1.0
+                                                                                from a lower tier to a higher tier.
+                                                                                Eg: Welcome to Gold Gift
+   DefaultPointsExpiry                                                          Default points expiry period for new points                          Yes   1.0
+    Months                                       Integer                        Points expiry months                                       12        Yes   1.0
+    Days                                         Integer                        Points expiry days                                         0         Yes   1.0
+   DefaultRewardExpiry                                                          Default reward expiry period for new rewards                         Yes   1.0
+    Months                                       Integer                        Rewards expiry months                                      12        Yes   1.0
+    Days                                         Integer                        Rewards expiry days                                        0         Yes   1.0
+   PreventDemotionPeriod                                                        Period a reward account is locked from being                         Yes   1.0
+                                                                                demoted. Shopper can still achieve a higher
+                                                                                tier but won’t be demoted even if they don’t
+                                                                                maintain spend.
+    Months                                       Integer                        Number of months demotion is prevented                     12        Yes   1.0
+    Days                                         Integer                        Number of days demotion is prevented                       7         Yes   1.0
+   QualifySpend                                  Integer                        Spend to qualify to achieve a tier                         $300      Yes   1.0
+   QualifyPeriod                                                                Rolling period that Apparel21 uses to sum up               12        Yes   1.0
+                                                                                historical transactions to calculate a person’s
+                                                                                tier.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                           Page 180 of 221
+

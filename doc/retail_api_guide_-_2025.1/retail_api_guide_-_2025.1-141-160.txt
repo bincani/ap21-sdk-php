@@ -1,0 +1,1011 @@
+1.50.1 URI REQUEST FORMAT
+
+/Persons/{personId}/Orders/?countryCode={countryCode}
+
+
+1.50.2 REQUEST PARAMETERS
+ Field         Required Comment
+ PersonId     Mandatory Id of the Person the orders are requested for
+ CountryCode              Mandatory              Country code of the shopper
+
+
+1.50.3 EXAMPLE REQUEST
+
+POST https://retailapi.apparel21.com/RetailAPI/Persons/101451/Orders/?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.50.4 EXAMPLE PAYLOAD
+<Order>
+    <OrderNumber>7894567</OrderNumber>
+    <PersonId>101451</PersonId>
+    <Addresses>
+      <Billing>
+        <AddressLine1>101 Cremorne St</AddressLine1>
+      </Billing>
+      <Delivery>
+        <AddressLine1>37 Swan Street</AddressLine1>
+      </Delivery>
+    </Addresses>
+    <UnattendedDeliveryOption>AuthorityToLeave</UnattendedDeliveryOption>
+    <Contacts>
+        <Email>john.smith@test.com.au</Email>
+        </Contacts>
+    <PartnerOrderId>123456</PartnerOrderId>
+    <OrderDetails>
+      <OrderDetail>
+        <SkuId>21503</SkuId>
+        <Quantity>1</Quantity>
+        <Customisation>Engrave- Joseph</Customisation>
+        <Price>59.90</Price>
+        <Value>59.90</Value>
+        <TaxPercent>10.00</TaxPercent>
+      </OrderDetail>
+    </OrderDetails>
+            <Payments>
+      <PaymentDetail>
+        <Id>7781</Id>
+        <Origin>CreditCard</Origin>
+        <CardType>TEST</CardType>
+        <Stan>986516</Stan>
+        <AuthCode/>
+        <AccountType/>
+        <Settlement>20111129</Settlement>
+        <Reference>Ref1</Reference>
+        <Amount>59.90</Amount>
+        <Message>payment_statusCURRENTbank_ </Message>
+      </PaymentDetail>
+    </Payments>
+    <PointsPartner>
+      <MembershipNumber>5542645628473</MembershipNumber>
+    </PointsPartner>
+  </Order>
+
+
+1.50.5 EXAMPLE ORDER DETAIL PAYLOAD FOR GIFT VOUCHER SALE
+<Delivery>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                           Page 141 of 221
+      <ContactName>Curtis Malasky</ContactName>
+      <AddressLine1>21 Cremorne St</AddressLine1>
+      <AddressLine2>Level 2</AddressLine2>
+       <City>RICHMOND</City>
+       <State>VIC</State>
+       <Postcode>3333</Postcode>
+       <Country>NEW ZEALAND</Country>
+ </Delivery>
+       </Addresses>
+  <DeliveryContacts>
+        <Email>underdunk@yahoo.com</Email>
+</DeliveryContacts>
+       <Contacts>
+           <Email>retailapi_4002_order2@gmail.com</Email>
+             <Phones>
+                 <Home>0499999999</Home>
+                 <Mobile>0488888888</Mobile>
+                 <Work>0477777777</Work>
+              </Phones>
+         </Contacts>
+  <OrderDetails Type="Array" TotalRows="8">
+        <OrderDetail>
+                <Id>1</Id>
+                 <SkuId>6321</SkuId>
+                 <Quantity>1</Quantity>
+                 <Price>105</Price>
+                  <Discount>0</Discount>
+                  <Value>105</Value>
+                <SenderName>Mummy</SenderName>
+                <ReceiverName>Daddy</ReceiverName>
+                <ExtraVoucherInformation>
+                      <VoucherType>GV_API_EMAIL</VoucherType>
+                      <EmailSubject>Gift Voucher for mail 001</EmailSubject>
+                         <PersonalisedMessage>Happy Birthday! Buy yourself something pretty
+                         </PersonalisedMessage>
+                        <Email>curtis.malasky@apparel21.com</Email>
+                 </ExtraVoucherInformation>
+  <TaxPercent>0</TaxPercent>
+  </OrderDetail>
+
+
+1.50.6 EXAMPLE ORDER PAYMENT DETAIL FOR REDEEMING A GIFT VOUCHER
+<PaymentDetail>
+    <Origin>GiftVoucher</Origin>
+     <VoucherNumber>7060120</VoucherNumber>
+     <ValidationId>3e5d3a6c-1efc-4e7b-adcf-10761c7fdda2</ValidationId>
+     <Amount>6.56</Amount>
+ </PaymentDetail>
+
+
+
+1.50.7 RESPONSE HEADER FORMAT
+
+/Persons/{personId}/Orders/{Orderid}/?countryCode={countryCode}
+
+
+1.50.8 RESPONSE PARAMETERS
+The Response Header’s transport location provides a URI that can be used to query the order that was
+created.
+              Field                                               Comment
+ URL                               URL to be used to query order
+ personId                                         Id of the Person the order is created for
+ Orderid                                          Id of the order created
+ CountryCode                                      Country code of the shopper
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 142 of 221
+1.50.9 EXAMPLE RESPONSE
+
+https://retailapi.apparel21.com/RetailAPI/Persons/9585/Orders/9999?countryCode=AU
+
+
+1.50.10      SUCCESS RESPONSE
+ HTTP Response
+ 201
+
+1.50.11             ERROR RESPONSE
+ HTTP            API Error API Error Text
+ Error           Code
+ 500
+ 400             5004              Email is required
+ 400             5005              Billing address is required
+ 400             5021              Delivery address is required
+ 400             5025              Person Id in payload mismatch with person id in URI
+ 400             5026              Payment does not match order due value
+ 403             5028              Invalid payment origin
+ 403             5055              The voucher cannot be used online
+ 403             5056              The voucher does not exist
+ 403             5059              The voucher is no longer valid
+ 403             5061              Incorrect ValidationId
+ 403             5062              The voucher has insufficient funds
+ 403             5065              The voucher has expired
+ 403             5066              The voucher must be used in full
+ 403             5067              The voucher has pending payments and cannot be processed
+ 403             5068              The request is not supported on current database
+ 403             5069              The email address is invalid in delivery section
+ 403             5070              Multiple payments with same voucher number
+ 403             5071              The voucher number is invalid
+ 403             5072              Contact name is required
+ 403             5073              In-store voucher cannot be purchased online
+ 403             5074              Invalid voucher type
+ 403             5075              Invalid email subject
+ 403             5076              Voucher type is required
+ 403             5077              The quantity of the gift voucher should be one
+ 403             5082              The store pickup Id is invalid. Store does not exist
+ 403             5083              Gift Vouchers are only allowed on a ‘Despatch from Warehouse’ order
+ 403             5084              Return reason id is missing
+ 403             5085              Return reason id is invalid
+ 403             5086              Return reason id/note not required
+ 403             5087              Returns are only allowed on a ‘Despatch from Warehouse’ order
+ 403             5088              Sku value and discount should be negative for return
+ 403             5094              Order value does not match Sku price
+ 403             5095              Delivery Contacts in payload mismatch with database version. An email cannot be
+                                   put on an order detail line with Database version before 2013.1
+ 403             5100              MerchantId xxxx is invalid” – this means that the merchant ID supplied in the
+                                   payload doesn’t match any payment gateways configured in Apparel21. This is
+                                   found in Code Maintenance / SPayGate – Sales Payment Gateway reference.
+ 403             5107              Invalid gift wrap flag ‘true’ – Must be ‘true’ or ‘false’
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 143 of 221
+ 403             5113              Discount_reason_id not required for loyalty or promotion type discounts
+ 403             5114              Despatch type xxx is invalid
+ 403             5115              Id xxx is not a valid Carrier/Service Type
+ 403             5116              Code xxx is not a valid Carrier/Service Type
+ 403             5119              Pickup Store Id is required for Click and Collect orders
+ 403             5120              Pickup Store Id is not valid for Despatch from Warehouse orders
+ 403             5123              Selected Freight Option element is not valid for Customer Pickup
+ 403             5014              Size of field XXXX, 9999 is too long. Maximum length is 9999.
+ 403             5129              SKU 99999999 is not valid (only first one will display if multiple invalid)
+ 403             5130              Membership Number XXXXXX does not match any known points partner
+ 403             5150              Unattended delivery option is invalid
+ 403             5175              Redemption element missing from Rewards Redemption discount
+ 403             5176              Redemption element must specify one and only one of the following elements:
+                                   Amount, GiftId or RequestId
+ 403             5177              Transaction with RequestId '{0}' for AccountId '{1}' does not exist
+ 403             5178              Cannot redeem rewards/gifts for multiple rewards accounts on the same order
+ 403             5179              Value of Discount does not match Amount in Redemption element
+ 403             5180              Gift can only be redeemed on an OrderDetail with a Quantity of 1
+ 403             5181              Only one rewards redemption discount can exist per OrderDetail
+ 403             5182              Gift redemption must be a 100% discount
+ 403             5183              RequestId '{0}' cannot be used to redeem more than the original request.
+ 403             5184              The total of all redemption discounts (including gift discounts) using RequestId '{0}'
+                                   must be the same as the original request.
+ 403             5189              Invalid expected delivery date. Valid format is 'yyyy-MM-dd'
+ 403             5190              Expected delivery date cannot be passed for 'ClickAndCollect' orders
+ 403             5212              Invalid wallet type XXXX. No match found.
+ 403             5213              Card type cannot be blank. A wallet type must be provided.
+ 403             5246              Customisation-‘custom message’ has invalid characters-possible emojis
+ 403             5014              Size of field CUSTOMISATION, <> is too long. Maximum length is 100
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 144 of 221
+15 RETURNS
+
+The Returns endpoint is used to create a return request. Posting a new return will generate an “exchange
+order” transaction in Apparel21 awaiting receipt. This functionality is designed for use to create
+transactions in advance of the stock arriving in the warehouse.
+
+It is possible to automatically “finalise” this return if the transaction is NOT going to be sent to the
+warehouse. Use the StockUpdate element as False to nominate that the return will NOT be sent to the
+warehouse. This will create the “exchange order” and then automatically refund the customer using the
+original payment information and then “finalise” that return.
+
+All returns are posted against an original web order. This endpoint was introduced in Apparel21 version
+2017.2 and at that date was limited to web order returns only and does not allow return of POS sales.
+
+The return posting response includes a URL to look up order status. When GET on this response URL, there
+is a <ReturnAuthorisationNumber> element that can be used as the authorisation for this return. This is
+the “exchange order” number for Apparel21 processing and represents this specific return.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 145 of 221
+1.51 RETURN DETAILS
+
+ Field                                      Format            Max         Comment                                                      Example       POST Request        DELETE        HTTP
+                                                              Length                                                                                                    Request      Header
+                                                                                                                                                                                  Accept:Ver
+                                                                                                                                                                                       sion_
+ ReturnOrder
+ Id                                         Integer                  22   Unique Order Id generated by API                             01254658            No           Yes              2.0
+ OrderNumber                                Alpha                    30   If left blank for a POST request, the API will               W0000125-R       Optional        No               2.0
+                                                                          generate a unique order number. If an
+                                                                          OrderNumber is entered, this will be known in
+                                                                          Apparel21 as Customer Order Number
+
+ OrigOrderNum                               Alpha                    30   This is the link between the return and the                  W0000125            Yes          No               2.0
+                                                                          original ecommerce order. This is the website
+                                                                          reference for the order. This is either passed
+                                                                          from the website (common) when the original
+                                                                          order was created or created automatically by
+                                                                          Apparel21 if not supplied on original order
+                                                                          (rare).
+ PersonId                                   Integer                  22   Apparel21 PersonID (person idx)                              3583                Yes          No               2.0
+ ReturnAuthorisationNumber                  Integer                  22   Apparel21 generated exchange order number                    123456              No           No               2.0
+                                                                          for the return. This cannot be posted from the
+                                                                          website. GET on the return posted to look up
+                                                                          this number to supplier to the shopper for
+                                                                          using as the reference number for this return.
+ StockUpdate                                True/False                    This element is not normally used. It can be                 True          Optional (if not   No               2.0
+                                                                          supplied as “False” to nominate that the                                   posted, stock is
+                                                                          returned item will NOT be sent back to the                                 expected to be
+                                                                          warehouse. This then triggers automatic                                     updated. i.e.
+                                                                          customer refund to finalise the return with                                    True).
+                                                                          stock adjustment to account for the item not
+                                                                          being sent back. If not supplied, it behaves as
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                           Page 146 of 221
+ Field                                      Format            Max         Comment                                                      Example               POST Request    DELETE        HTTP
+                                                              Length                                                                                                        Request      Header
+                                                                                                                                                                                      Accept:Ver
+                                                                                                                                                                                           sion_
+                                                                          “True”. i.e. A pending return / exchange order
+                                                                          is created in Apparel21 awaiting receipt in the
+                                                                          warehouse.
+ OrderDetails                                                             Contains a list of OrderDetail.
+     OrderDetail                                                          OrderDetail is a sub-element of OrderDetails.
+                                                                          One per original order, product, colour, size,
+                                                                          status.
+     SkuId                                  Integer                  22   Unique SKU Id being returned – must be on the                1234                       Yes       No               2.0
+                                                                          original order
+     Quantity                               Num(22,2)                22   Negative quantity for return quantity. E.g. -2               100                        Yes       No               2.0
+                                                                          to return 2 units of the SKUid
+     ReturnReasonID                         Integer                  22   Apparel21 return reason index code. Must                     10365                      Yes       No               2.0
+                                                                          match codes in reference group 272.
+     ReturnReasonNotes                      Alpha                   250   Notes on return reason – comment text                        Didn’t like the fit     Optional     No               2.0
+     Carrier                                Alpha                    12   Text to indicate carrier that will be used to ship           A Post                  Optional     No               2.0
+                                                                          the stock back to the warehouse. Is copied to
+                                                                          the Delivery Instructions for the exchange
+                                                                          order that is created.
+     ConNote                                Alpha                    50   Text to indicate consignment note / tracking ID              TA123156421541          Optional     No               2.0
+                                                                          for the stock shipment back to the warehouse.
+                                                                          Is copied to the Delivery Instructions for the
+                                                                          exchange order that is created.
+ Payments                                                                                                                                                      Optional     No               2.0
+     Payment Details
+     Merchant ID                            Alpha                   100   Nominate the merchant ID that the payment                    REFUNDID                   Yes       No               4.0
+                                                                          was posted against. This is used by Apparel to      21
+
+
+
+                                                                          map to the correct payment gateway for future
+                                                                          refunds of this payment.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                            Page 147 of 221
+ Field                                      Format            Max         Comment                                                      Example          POST Request    DELETE        HTTP
+                                                              Length                                                                                                   Request      Header
+                                                                                                                                                                                 Accept:Ver
+                                                                                                                                                                                      sion_
+     Card Type                              Alpha                   250   Card type for postings, often used to direct GL              REFUNDID              Yes       No                4.0
+                                                                          Postings so recommend use REFUNDID
+     Stan                                   Alpha                   250   Stan reference ID, not required for REFUNDID                 1234567               Yes       No               4.0
+                                                                          postings but can be used as alternate payment
+                                                                          reference
+     Origin                                 Alpha                    50   Origin of Payment                                            Credit Card or        Yes       No               4.0
+                                                                                                                                       Other
+     Amount                                 Num                    22,2   Value of total return value                                  -60.00                Yes       No               4.0
+     Reference                              Alpha                   250   Reference value from REFUNDID                                PaymentID          Optional     No               4.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                           Page 148 of 221
+1.52 POST A NEW RETURN
+
+
+1.52.1 URI REQUEST FORMAT
+
+/Persons/{PersonID}/Orders/{OrderID}/Returns?countryCode={countryCode}
+
+
+1.52.2 REQUEST PARAMETERS
+ Field         Required Comment
+ PersonId     Mandatory Id of the Person the orders are requested for
+ OrderId                  Mandatory              ID of the original order that the return relates to
+ CountryCode              Mandatory              Country code of the shopper
+
+
+1.52.3 EXAMPLE REQUEST
+
+POST https://retailapi.apparel21.com/RetailAPI/Persons/1241/Orders/12354/Returns?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.52.4 EXAMPLE PAYLOAD
+<ReturnOrder>
+        <OrderNumber>2017080706R</OrderNumber>
+        <OrigOrderNum>20170807-06</OrigOrderNum>
+        <PersonId>1241</PersonId>
+        <StockUpdate>True</StockUpdate>
+        <OrderDetails>
+                <OrderDetail>
+                        <SkuId>1784</SkuId>
+                        <Quantity>-1</Quantity>
+                        <ReturnReasonId>10365</ReturnReasonId>
+                        <Carrier>EMS</Carrier>
+                        <ConNote>ABC1234</ConNote>
+                </OrderDetail>
+                </OrderDetails>
+</ReturnOrder>
+
+
+
+1.52.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.52.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 500
+ 403          5135                                    Person ID is missing from the return order
+ 403          5136                                    Person ID from URL is different to payload
+ 403          5052                                    The order number already exists
+ 403          5133                                    Origianl order number 20170804-999 is not valid
+ 403          5138                                    Origianl Order Number is missing from the payload
+ 403          5139                                    SKUID 1785 not found on original order
+ 403          5140                                    Some of the quantities are greater than zero
+ 403          5085                                    Return reason id 103695 is invalid
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                           Page 149 of 221
+ 403                     5142                         Carrier name is too long
+ 403                     5141                         ConNote is too long
+ 403                     5143                         Some of the quantities are missing or equals to zero
+ 403                     5211                         Stock update ‘<aaaaa>’ is not valid. Must be ‘True’ or ‘False’
+
+1.52.7 PAYMENTS
+
+The payments element is an optional element that can be added to the return’s payload. It will add and
+post the payment to the transaction and can be used where refunds are processed at time of generating
+the return.
+
+
+1.52.8 EXAMPLE ADDITIONAL PAYLOAD
+</OrderDetails>
+    <Payments>
+        <PaymentDetail>
+            <MerchantId>Refundid</MerchantId>
+            <CardType>Refundid</CardType>
+            <Stan>0938</Stan>
+            <Origin>CreditCard</Origin>
+            <Amount>-80.00</Amount>
+            <Reference>Refundid TEST 0938</Reference>
+        </PaymentDetail>
+    </Payments>
+</ReturnOrder>
+
+
+
+1.53 LOOK AT THE STATUS OF A RETURN
+
+
+1.53.1 URI REQUEST FORMAT
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Persons/1241/Orders/12354/Returns/12345?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.53.2 REQUEST PARAMETERS
+ Field         Required Comment
+ PersonId     Mandatory Id of the Person the orders are requested for
+ OrderId                  Mandatory              ID of the original order that the return relates to
+ ReturnID                 Mandatory              Order ID of the return
+ CountryCode              Mandatory              Country code of the shopper
+
+
+1.53.3 EXAMPLE RESPONSE
+<ReturnOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Id>62347</Id>
+    <RowNumber>0</RowNumber>
+    <OrderNumber>20170804-01-R</OrderNumber>
+    <PersonId>1241</PersonId>
+    <WarehouseId>9441</WarehouseId>
+    <OrderDateTime>2017-08-04T13:57:43</OrderDateTime>
+    <TotalQuantity>-4</TotalQuantity>
+    <TotalTax>0</TotalTax>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                           Page 150 of 221
+      <TotalDiscount>0</TotalDiscount>
+      <TotalDue>-100</TotalDue>
+      <TotalPayment>0</TotalPayment>
+      <PickupStoreId />
+      <DeliveryInstructions />
+      <DespatchType>DespatchFromWarehouse</DespatchType>
+      <Addresses />
+      <Contacts>
+          <Email />
+          <Phones>
+              <Home />
+              <Mobile />
+              <Work />
+          </Phones>
+      </Contacts>
+      <DeliveryContacts>
+          <Email />
+          <Phones>
+              <Home />
+              <Mobile />
+              <Work />
+          </Phones>
+      </DeliveryContacts>
+      <OrderDetails Type="Array" TotalRows="1">
+          <OrderDetail>
+              <Id>195132</Id>
+              <Sequence>1</Sequence>
+              <ProductId>1101</ProductId>
+              <ColourId>1322</ColourId>
+              <SkuId>1784</SkuId>
+              <ProductCode>SHIRT0001</ProductCode>
+              <ProductName>DOUBLE PKT SHIRT</ProductName>
+              <ColourCode>001</ColourCode>
+              <ColourName>MULTICOLOURED</ColourName>
+              <SizeCode>8</SizeCode>
+              <Quantity>-4</Quantity>
+              <Price>25</Price>
+              <Discount>0</Discount>
+              <Value>-100</Value>
+              <TaxPercent>0</TaxPercent>
+              <QuantityTaken>0</QuantityTaken>
+              <QuantityPacked>0</QuantityPacked>
+              <ReturnReasonId>10365</ReturnReasonId>
+              <ReturnReasonNotes />
+              <GiftWrap>false</GiftWrap>
+              <GiftWrapMessage />
+              <SenderName />
+              <ReceiverName />
+              <Carrier>EMS</Carrier>
+              <CarrierUrl />
+              <ConNote>ABC1234</ConNote>
+              <Status>Processing</Status>
+          </OrderDetail>
+      </OrderDetails>
+      <SelectedFreightOption>
+          <Id />
+          <Name />
+          <Value>0</Value>
+          <TaxPercent xsi:nil="true" />
+      </SelectedFreightOption>
+      <Payments />
+      <Currency>
+          <Code />
+          <Format />
+      </Currency>
+      <PricesIncludeTax>false</PricesIncludeTax>
+      <PointsPartner>
+          <Id />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 151 of 221
+        <Name />
+        <MembershipNumber />
+    </PointsPartner>
+    <OrigOrderNum>20170804-01</OrigOrderNum>
+    <ReturnAuthorisationNumber>6026</ReturnAuthorisationNumber>
+</ReturnOrder>
+
+
+
+1.54 DELETE RETURN
+
+The DELETE returns endpoint can be used to reverse an Exchange order created via a return; the
+transaction won’t be deleted from the system it will remain for enquiry purposes. This endpoint will reverse
+the outstanding quantity / value of the order by reversing any payments that have been posted and will
+zero any line quantities on the order.
+Only returns that are in the following state can be reversed:
+
+                 •     Outstanding i.e. not already finalised
+                 •     Not in receipting process i.e. on a Warehouse Receipt
+
+Each DELETE creation will generate a new Websales_Header record with a ‘D’ at the end using the return
+order number as the prefix.
+
+1.54.1 URI REQUEST FORMAT
+
+DELETE https://retailapi.apparel21.com/RetailAPI/Returns/{returnid}?CountryCode=AU
+
+             Content-type: text/xml
+             Accept:version_2.0
+
+1.54.2 ORDER STATUS CODES
+
+When attempting to delete a return it will look at return order status and original order status. The only
+scenario where delete will be successfully processed, is when the return status is 9 (Return Merged) and
+the original status is 6 (Exchange).
+
+Below are the status dependants on the Return Status.
+
+ Status
+        Status value                Reason                            Error Message
+ code
+
+                                                                      You are attempting to delete a return that has not been
+         0 Pending                  Order not imported
+                                                                      imported successfully
+
+                                                                      You are attempting to delete an order that is in error and
+         1 Error                    Order not imported
+                                                                      therefore isn’t imported
+
+                                    Order imported not                You are attempting to delete an order that is not a return
+         2 Imported
+                                    despatched                        order
+
+               Imported                                               You are attempting to delete an order that is not a return
+         3                          Order on hold
+               with warning                                           order
+
+               Reassigning          Order being re-                   You are attempting to delete an order that is not a return
+         4
+               Location             assigned                          order
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                             Page 152 of 221
+                                    Order has been                    Items in return have been received and completed - you may
+         5 Completed
+                                    finalised                         not deleted a completed return
+
+                                                                      You are attempting to delete an order that is not a return
+         6 Exchange
+                                                                      order
+
+                                                                      You are attempting to delete an order that is not a return
+         7 Cancelled
+                                                                      order
+
+              Imported on                                             You are attempting to delete an order that is not a return
+         8                          Return order not valid
+              Hold                                                    order
+
+              Returned
+         9
+              Merged                                                  Valid - return Order status only
+
+              Returned              Warehouse receipt
+       10                                                             You are attempting to delete an item that has been returned
+              Received              processed
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                             Page 153 of 221
+16 SALES HISTORY
+
+
+It is possible to look up retail history for a shopper; including store sales, head office telephone / mail sales
+and web system sales. History is for despatched / picked up sales only, items still on order not visible using
+this feature.
+
+The Transaction Header contains information about the type of transaction, when and where it was done,
+and what currency was used.
+
+The Transaction Detail contains product information to SKU level that the customer has purchased
+including
+
+     •     Product Code
+     •     Size (if applicable)
+     •     Colour (if applicable)
+     •     Pricing
+
+The Transaction Discount Detail contains discount information, such as the type, reason and amount of
+discount applied.
+
+Transactions for a person that are NOT included are:
+
+     •     Wholesale orders with the person attached
+     •     Debtor sales (these are rare and more wholesale in nature)
+     •     Customer orders (these are treated as a Sale transaction when the order is paid)
+     •     Account payments (this is just a reduction of a customer’s debt incurred in a previous sale)
+
+Where the sale is generated from an order, it can be linked back to the original customer order using the
+OrderNumber element. This is the customer order number reference supplied when posting orders,
+manually entering orders in store or system generated if not supplied.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 154 of 221
+1.55 SALES HISTORY DETAILS
+
+
+
+ Field                                Format           Max            Comment                                                                        Example                 GET         HTTP
+                                                       Length                                                                                                              Response    Header
+                                                                                                                                                                                       Accept:
+                                                                                                                                                                                      Version_
+ Transactions                                                         Contains a list of transactions
+      Transaction                                                     Transaction is a sub-element of transactions
+      RowNumber                       Integer                10       Number generated by API, position of the transaction in the list, for          1                       Yes           2.0
+                                                                      reference purpose only
+      Id                              Integer                22       Identifier for the transaction from the source table RET_TRANH                 13753                   Yes           2.0
+      Number                          Alpha                  30       Unique Transaction Number from the source table RET_TRANH.                     D55500000135            Yes           2.0
+                                                                      W used for web orders, H used for mail orders, D used for docket
+                                                                      numbers
+      OrderNumber                     Alpha                  30       Where the sale was created from an order, this is the shopper’s order          W00001231               Yes           2.0
+                                                                      number supplied when creating the order. Is same as
+                                                                      <OrderNumber> used when posting order.
+      Type                            Alpha                  30       The description of the type of transaction, being:                             Sale                    Yes           2.0
+                                                                      Sale (includes exchanges and returns, and items paid for on account,
+                                                                      includes gift cards purchased)
+                                                                      Layby
+                                                                      Layby Update
+                                                                      Special Order
+                                                                      Special Order Update
+      SaleDate                        Date(YYYY-             10       The date the sale/layby was considered complete.                               2011-08-26T00:00:00     Yes           2.0
+                                      MM-DD)                          Includes a fixed time of 00:00:00 which can be ignored.
+                                                                      Reflects the configuration chosen for the system parameter 537
+                                                                      ‘Layby/Special Orders Posting Method’ as to whether a cash or
+                                                                      accrual method is used to account for the transaction. i.e. Sale date is
+                                                                      defined by the customer, but transaction date is a system-generated
+                                                                      date which differs from sale date for laybys and special orders.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 155 of 221
+ Field                                Format           Max            Comment                                                                        Example                  GET         HTTP
+                                                       Length                                                                                                               Response    Header
+                                                                                                                                                                                        Accept:
+                                                                                                                                                                                       Version_
+      StoreCode                       Integer                 3       Retail store code that the transaction is associated with from the             555                      Yes            2.0
+                                                                      source table WHSE
+      StoreName                       Alpha                  30       Retail store name that the transaction is associated with.                     Melbourne                Yes           2.0
+      Currency Code                   Alpha                  15       The currency code used for the transaction                                     AUD                      Yes           2.0
+      Currency Format                 #,##0.00                        The currency format used for the transaction                                   #,##0.00 ‘AUD’           Yes           2.0
+      Carrier                         Alpha                           For eCommerce transactions only, the freight carrier name attached             Ipec                     Yes           2.0
+                                                                      to the sale.
+      CarrierUrl                      Alpha                           For eCommerce transactions only, the website address for the carrier           https://online.toll.     Yes           2.0
+                                                                      to look up transactions. This is set up in Code Maintenance under the          com.au/trackandtrace
+                                                                                                                                                     /index.jsp
+                                                                      Carrier reference group.
+      ConNote                         Alpha                           For eCommerce transactions only, the consignment note number                   TN1211213213             Yes           2.0
+                                                                      assigned to the delivery.
+      ServiceType                     Alpha                           For eCommerce transactions that have a consignment note number,                Road                     Yes           2.0
+                                                                      this shows the carrier service type used for the delivery.
+      Details                                                         Contains a list of details of the transaction
+         Detail                                                       Detail is a sub-element of Details
+         Id                           Integer                22       Identifier for the transaction details row from the source table               15882                    Yes           2.0
+                                                                      RET_TRAND
+          Sequence                    Integer                10       Sequence number assigned at POS to indicate the order in which the             0                        Yes           2.0
+                                                                      product/discount was selected during the transaction.
+          ProductCode                 Alpha                  10       Unique Product Code                                                            W00123                   Yes           2.0
+          ProductName                 Alpha                  30       Product Name                                                                   Long Sleeve Shirt        Yes           2.0
+          ColourCode                  Alpha                  21       Colour Code                                                                    BLK                      Yes           2.0
+          ColourName                  Alpha                  61       Colour Name                                                                    Black                    Yes           2.0
+          SizeCode                    Alpha                   7       Size Code                                                                      XL                       Yes           2.0
+          Quantity                    Num(22,2)              22       Quantity of product purchased                                                  1                        Yes           2.0
+          Price                       Num(22,2)              22       Price of the product including GST for a single product, before                29.99                    Yes           2.0
+                                                                      discounts applied
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 156 of 221
+ Field                                Format           Max            Comment                                                                        Example     GET         HTTP
+                                                       Length                                                                                                  Response    Header
+                                                                                                                                                                           Accept:
+                                                                                                                                                                          Version_
+          Value                       Num(22,2)              22       Price paid for the quantity purchased including GST and including any          25.99       Yes            2.0
+                                                                      discounts,
+          TaxPercentage               Num(22,2)              22       Tax percentage numeric value (12.5 for 12.5%).                                 12.5        Yes           2.0
+          Discounts                                                   Contains a list of Discounts
+              Discount                                                Discount is a sub-element of Discounts
+              Id                      Alpha                  22       Discount identifier from source table RET_TRAND                                15908       Yes           2.0
+              Sequence                Alpha                  22       Sequence number assigned at POS to indicate the order in which the             3           Yes           2.0
+                                                                      product/discount was selected during the transaction.
+                Type                  Alpha                  50       Discount, Promotion or Loyalty                                                 Loyalty     Yes           2.0
+                Reason                Alpha                           Description of the reason for the discount.                                    Loyalty     Yes             2
+                                                                      For Discount type, this is the description of the discount reason used
+                                                                      For Promotion type, this is the name of the promotion
+                                                                      For Loyalty type, this is the text ‘Loyalty‘ used as the discount type
+                Amount                Num(22,2)              22       Value of Discount                                                              4           Yes             2
+                Percentage            Num(22,2)              22       Discount percentage                                                            15          Yes             2
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 157 of 221
+1.56 RETRIEVE SALES HISTORY FOR A PERSON
+
+To retrieve previously created transactions for a person use a GET on the following URI.
+
+
+1.56.1 URI REQUEST FORMAT
+
+/Persons/{personId}/RetailTransactions/?countryCode={countryCode}&startRow={startRow}&pageRows={p
+ageRows}
+
+
+1.56.2 REQUEST PARAMETERS
+ Field                                                Required                 Comment
+ personId                                             Mandatory                Id of the Person the transactions are requested
+                                                                               for
+ CountryCode                                          Mandatory                Country code of the shopper
+ startRow                                              Optional                Starting position of transactions returned
+ pageRows                                              Optional                Number of transactions rows returned
+ OrderNumber                                           Optional                Filter sales for selected Order Number (web
+                                                                               order number)
+
+1.56.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Persons/4883/RetailTransactions/?countryCode=AU&&OrderNu
+mber= W12345&startRow=1&pageRows=20
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.56.4 EXAMPLE PAYLOAD
+
+<Transactions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" Type="Array" TotalRows="15" PageStartRow="0"
+PageRows="0">
+  <Transaction>
+    <RowNumber>1</RowNumber>
+    <Id>13748</Id>
+    <Number>D55500000130</Number>
+    <OrderNumber>W12345</OrderNumber>
+<Type>Sale</Type>
+    <SaleDate>2011-08-26T00:00:00</SaleDate>
+    <StoreCode>555</StoreCode>
+    <StoreName>Curtis 2011.2 POS</StoreName>
+    <Currency>
+      <Code>AUD</Code>
+      <Format>#,##0.00 'AUD'</Format>
+    </Currency>
+    <Carrier>Ipec</Carrier>
+    <CarrierUrl>https://online.toll.com.au/trackandtrace/index.jsp</CarrierUrl>
+    <ConNote>TND112131231</ConNote>
+    <ServiceType>Road</ServiceType>
+    <Details Type="Array" TotalRows="1">
+      <Detail>
+        <Id>15882</Id>
+        <Sequence>0</Sequence>
+        <ProductCode>AUTOITEM1</ProductCode>
+        <ProductName>Automation - 1 Style</ProductName>
+        <ColourCode>-</ColourCode>
+        <ColourName>-</ColourName>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 158 of 221
+        <SizeCode>-</SizeCode>
+        <Quantity>-1</Quantity>
+        <Price>45.9</Price>
+        <Value>-45.9</Value>
+        <TaxPercentage>12.5</TaxPercentage>
+        <Discounts Type="Array" TotalRows="0" />
+      </Detail>
+    </Details>
+  </Transaction>
+  <Transaction>
+    <RowNumber>2</RowNumber>
+    <Id>13753</Id>
+    <Number>D55500000135</Number>
+    <OrderNumber>W12345</OrderNumber>
+<Type>Sale</Type>
+    <SaleDate>2011-08-26T00:00:00</SaleDate>
+    <StoreCode>555</StoreCode>
+    <StoreName>Curtis 2011.2 POS</StoreName>
+    <Currency>
+      <Code>AUD</Code>
+      <Format>#,##0.00 'AUD'</Format>
+    </Currency>
+    <Carrier>Ipec</Carrier>
+    <CarrierUrl>https://online.toll.com.au/trackandtrace/index.jsp</CarrierUrl>
+    <ConNote>TND112131222</ConNote>
+    <ServiceType>Road</ServiceType>
+    <Details Type="Array" TotalRows="5">
+      <Detail>
+        <Id>15905</Id>
+        <Sequence>0</Sequence>
+        <ProductCode>AUTOITEM2</ProductCode>
+        <ProductName>Automation - Styles, 1 Size</ProductName>
+        <ColourCode>CAM1-Beading</ColourCode>
+        <ColourName>CANVAS 123 123 123 123 123 123 Beading</ColourName>
+        <SizeCode>-</SizeCode>
+        <Quantity>1</Quantity>
+        <Price>29.99</Price>
+        <Value>25.99</Value>
+        <TaxPercentage>12.5</TaxPercentage>
+        <Discounts Type="Array" TotalRows="1">
+          <Discount>
+            <Id>15906</Id>
+            <Sequence>1</Sequence>
+            <Type>Discount</Type>
+            <Reason>POS Loyalty 1</Reason>
+            <Amount>4</Amount>
+            <Percentage>15</Percentage>
+          </Discount>
+        </Discounts>
+      </Detail>
+      <Detail>
+        <Id>15907</Id>
+        <Sequence>2</Sequence>
+        <ProductCode>AUTOITEM2</ProductCode>
+        <ProductName>Automation - Styles, 1 Size</ProductName>
+        <ColourCode>CAM-Beading</ColourCode>
+        <ColourName>Camel Beading</ColourName>
+        <SizeCode>-</SizeCode>
+        <Quantity>1</Quantity>
+        <Price>29.99</Price>
+        <Value>25.99</Value>
+        <TaxPercentage>12.5</TaxPercentage>
+        <Discounts Type="Array" TotalRows="1">
+          <Discount>
+            <Id>15908</Id>
+            <Sequence>3</Sequence>
+            <Type>Discount</Type>
+            <Reason>POS Loyalty 1</Reason>
+            <Amount>4</Amount>
+            <Percentage>15</Percentage>
+          </Discount>
+        </Discounts>
+      </Detail>
+      <Detail>
+        <Id>15909</Id>
+        <Sequence>4</Sequence>
+        <ProductCode>AUTOITEM2</ProductCode>
+        <ProductName>Automation - Styles, 1 Size</ProductName>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 159 of 221
+        <ColourCode>ATL-Beading</ColourCode>
+        <ColourName>ATLANTIC Beading</ColourName>
+        <SizeCode>-</SizeCode>
+        <Quantity>1</Quantity>
+        <Price>29.99</Price>
+        <Value>25.99</Value>
+        <TaxPercentage>12.5</TaxPercentage>
+        <Discounts Type="Array" TotalRows="1">
+          <Discount>
+            <Id>15910</Id>
+            <Sequence>5</Sequence>
+            <Type>Discount</Type>
+            <Reason>POS Loyalty 1</Reason>
+            <Amount>4</Amount>
+            <Percentage>15</Percentage>
+          </Discount>
+        </Discounts>
+      </Detail>
+    </Details>
+  </Transaction>
+</Transactions>
+
+
+1.56.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.56.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+ 400          5034                                 Invalid pagination parameters
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 160 of 221
+

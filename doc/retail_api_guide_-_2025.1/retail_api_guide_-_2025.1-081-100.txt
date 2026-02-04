@@ -1,0 +1,1053 @@
+            <CreditStatus />
+            <Message />
+            <JoinDate />
+            <StatusId />
+        </Loyalty>
+        <Loyalty>
+            <Id>1262</Id>
+            <LoyaltyTypeId>10570</LoyaltyTypeId>
+            <LoyaltyType>Staff Loyalty 40%</LoyaltyType>
+            <CardNo>L40</CardNo>
+            <Expiry />
+            <Balance />
+            <CreditStatus />
+            <Message />
+            <JoinDate>2014-09-11</JoinDate>
+            <StatusId />
+        </Loyalty>
+    </Loyalties>
+    <RewardsAccounts>
+        <Account>
+            <Id>1</Id>
+            <ProgramId>1</ProgramId>
+            <ProgramName>Apparel21 Rewards Program</ProgramName>
+            <TierId>1</TierId>
+            <TierName>Bronze</TierName>
+        </Account>
+    </RewardsAccounts>
+</Person>
+
+
+
+1.37.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.37.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+1.38 RETRIEVE SINGLE PERSON LAST UPDATE T IMESTAMP
+
+This request will return the last update timestamp for a single person using the Person Id retrieved
+previously. The timestamp returned is required when updating a person record and is used to check that
+the record being updated has not been modified since the record was retrieved.
+
+
+1.38.1 URI REQUEST FORMAT
+
+Perform a GET on the following endpoint.
+
+/Persons/{id}/UpdateTimeStamp/?CountryCode={CountryCode}
+
+
+1.38.2 REQUEST PARAMETERS
+ Field               Required                                         Comment
+ Id                  Mandatory                                        Id of the Person
+ Country Code                            Mandatory                    Country Code of shopper
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 81 of 221
+1.38.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Persons/4881/UpdateTimeStamp/?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+
+1.38.4 EXAMPLE RESPONSE
+<PersonUpdateTimeStamp>
+<PersonId>101451</PersonId>
+<UpdateTimeStamp>2012-10-09T10:47:16</UpdateTimeStamp>
+   </PersonUpdateTimeStamp>
+
+
+1.38.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.38.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+
+1.39 RETRIEVE PERSON RECORDS UPDATED AFTER A SPECIFIC TIMESTAMP
+
+To retrieve person records that have been updated after a specific timestamp.
+
+
+1.39.1 URI REQUEST FORMAT
+
+Perform a GET on the following endpoint
+
+/Persons/?countryCode={countryCode}&UpdatedAfter={timestamp}
+
+
+1.39.2 REQUEST PARAMETERS
+ Field               Required                                         Comment
+ countryCode         Mandatory                                        Country code of shopper
+ updatedAfter                            Mandatory                    To retrieve person records that have been updated after a
+                                                                      specific timestamp
+
+                                                                      The following are the valid formats for the timestamp:
+
+                                                                      YYYY-MM-DDTHH:MM:SS (24-hour format)
+
+                                                                      YYYY-MM-DDTHH:MM (24-hour format)
+
+                                                                      YYYY-MM-DD
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                             Page 82 of 221
+1.39.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Persons/?countryCode=AU&updatedAfter=2021-12-
+15T11:00:00
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+
+1.39.4 EXAMPLE RESPONSE
+<Persons xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-
+     instance">
+    <Person>
+        <Id>13173</Id>
+        <UpdateTimeStamp>15/12/2021 11:15:13 AM</UpdateTimeStamp>
+        <References Type="Array">
+
+
+1.39.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.39.6 ERROR RESPONSE
+ HTTP Error     API Error Code API Error Text
+ 404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 83 of 221
+1.40 CREATE NEW PERSON
+
+Prior to a shopper generating an order through the website they must be created as a Person in Apparel21.
+A Person is created by submitting a POST to the following URI. Only one Person can be created at a time.
+
+
+1.40.1 URI REQUEST FORMAT
+
+/Persons/?countryCode={countryCode}
+
+
+1.40.2 REQUEST PARAMETERS
+ Field                 Required                                Comment
+ CountryCode           Mandatory                               Country Code of Shopper
+
+
+1.40.3 EXAMPLE REQUEST
+
+POST https://retailapi.apparel21.com/RetailAPI/Persons/?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.40.4 EXAMPLE PAYLOAD
+<Person>
+    <Title>MS</Title>
+    <Initials>AM</Initials>
+    <Firstname>ALICE</Firstname>
+    <Surname>MCGINTY</Surname>
+        <References Type="Array">
+        <Reference>
+            <ReferenceTypeId>373</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1781</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1782</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1801</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1501</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>27</ReferenceTypeId>
+            <Id />
+        </Reference>
+    </References>
+    <CustomData>
+        <Cards Type="Array">
+            <Card Name="My_sample_data"> <!—If no data, pass the card with empty value fields -->
+                <Fields Type="Array">
+                    <Field Name="My card_No">LMI01234567890123</Field>
+                    <Field Name="Preferred language">
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 84 of 221
+                        <ListValues Type="Array">
+                             <Value>English</Value>
+                        </ListValues>
+                    </Field>
+                    <Field Name="MID_Line">45789357</Field>
+                    <Field Name="Collect">true</Field>
+                    <Field Name="Usage">true</Field>
+                    <Field Name="Disclosure">true</Field>
+                    <Field Name="Allow_Contact">false</Field>
+                    <Field Name="Email_Status">true</Field>
+                    <Field Name="SMS_Status">false</Field>
+                    <Field Name="DirectMail_Status">true</Field>
+                    <Field Name="Terms and Condition">true</Field>
+                </Fields>
+            </Card>
+        </Cards>
+    </CustomData>
+    <IsAgent>false</IsAgent>
+    <Addresses>
+        <Billing>
+            <ContactName />
+            <AddressLine1>1 SWAN ST</AddressLine1>
+            <AddressLine2 />
+            <City>RICHMOND</City>
+            <State>VIC</State>
+            <Postcode>3121</Postcode>
+            <Country>AUSTRALIA</Country>
+        </Billing>
+    </Addresses>
+    <Contacts>
+        <Email>alice.mcginty@gmail2.com</Email>
+    </Contacts>
+    <Loyalties Type="Array">
+        <Loyalty>
+            <LoyaltyTypeId>10570</LoyaltyTypeId>
+            <CardNo>L4012345</CardNo>
+            <Expiry />
+            <Balance />
+            <CreditStatus />
+            <Message />
+            <JoinDate>2014-09-11</JoinDate>
+            <StatusId />
+        </Loyalty>
+    </Loyalties>
+</Person>
+
+
+
+1.40.5 SUCCESS RESPONSE
+ HTTP Response
+ 201               Newly created person referenced by the URI returned in the location header field.
+
+1.40.6 ERROR RESPONSE
+ HTTP Error API Error Code                       API Error Text
+ 400        5000                                 Surname is required
+ 400        5001                                 Firstname is required
+ 400        5003                                 Code must be blank to create new person
+ 400        5006                                 Email already exists for other person
+ 400        5089                                 Reference id is invalid
+ 400        5090                                 Reference id is invalid for the reference type
+ 400        5091                                 Reference id is required for the reference type id 9999
+ 400        5099                                 Invalid date format. Valid format is ‘yyyy-MM-dd’
+                                                 This occurs when Start Date or Date of Birth date formats are incorrect.
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                               Apparel21 Reference Guide                                            Page 85 of 221
+ 400                  5111                       Invalid privacy flag ‘xxxx’ – must be ‘true’ or ‘false
+ 400                  5109                       Invalid numeric value: ‘xxx’
+ 400                  5101                       Loyalty type is empty
+ 400                  5106                       Invalid loyalty type id: ‘xxxx’
+ 400                  5103                       Person already has a loyalty card of type: ‘xxxx’
+ 400                  5102                       Loyal card number ‘xxx’ is being used
+ 400                  5104                       Loyalty card number ‘xxx’ is invalid. It should start with ‘LM’ OR ‘L1’
+ 400                  5105                       Loyalty card number is empty
+ 403                  5014                       Size of field XXXX, 9999 is too long. Maximum length is 9999.
+ 403                  5209                       A person is already attached to docket Dxxxxxx
+ 403                  5210                       Docket Number Dxxxxxx is not valid
+ 403                  5193                       Card name ‘xxxxx’ is invalid
+ 403                  5194                       Card name is missing
+ 403                  5195                       Field name ‘xxxxx’ is invalid
+ 403                  5196                       Field value ‘xxxx’ is invalid for Field: 'XXXXX'
+ 403                  5197                       Field type is invalid. Field: ‘XXXX’
+ 403                  5198                       Field length is invalid. Field: 'TextXX'; Field Value: 'xxx'
+ 403                  5199                       Nonnumeric data found for numeric field. Field: ‘XXX’;Field Value: ‘xxx’
+ 403                  5200                       Invalid value range. Field: 'NumberXXX'; Field Value: 'number'
+ 403                  5201                       Invalid date format. Valid format is 'yyyy-MM-dd'. Field: 'DateXXX'; Field
+                                                 Value: 'dd-mm-yyyy'
+ 403                  5202                       Invalid reference. Field: XXXX
+ 403                  5203                       Multiple values not allowed. Field: 'Tag List XXX'
+ 403                  5204                       Invalid list value. Field: 'Tag List XX' ; List Value: ‘xxx’
+ 403                  5205                       Record not exist
+ 403                  5206                       No Person Template Found
+
+1.40.7 UPDATE EXISTING PERSON
+
+Update details for a Person by submitting a PUT to the following URI.
+
+Note: all person data not supplied in the payload will be cleared off the person account except for Custom
+Data which still remains the same.
+
+As person data can be updated in many places of Apparel21 (retail API, POS, Person Maintenance), it is
+essential to get the latest person data before posting an update so that no changes are lost. To determine
+whether the latest data is being supplied, the “update time stamp” element is used. This supplied
+information must match the current status of the person for an update to be successful.
+
+1.40.8 URI REQUEST FORMAT
+
+         /Persons/{id}?countryCode={countryCode}
+
+
+1.40.9 REQUEST PARAMETERS
+
+ Field                                       Required            Comment
+ Id                                          Mandatory           Person id retrieved from the person GET
+ CountryCode                                 Mandatory           Country Code of Shopper
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                               Apparel21 Reference Guide                                            Page 86 of 221
+1.40.10                EXAMPLE REQUEST
+
+PUT https://retailapi.apparel21.com/RetailAPI/Persons/4881?countryCode=AU
+
+                       Content-type: text/xml
+                       Accept:version_2.0
+
+1.40.11                EXAMPLE PAYLOAD
+    <Person>
+      <Title>Mr</Title>
+        <Firstname>Fred</Firstname>
+        <Surname>Smith</Surname>
+        <Sex>M</Sex>
+        <UpdateTimeStamp>11/11/2014 3:54:30 PM</UpdateTimeStamp>
+<References>
+             <Reference>
+                 <ReferenceTypeId>373</ReferenceTypeId>
+                 <Id />
+             </Reference>
+             <Reference>
+                 <ReferenceTypeId>1781</ReferenceTypeId>
+                 <Id />
+             </Reference>
+             <Reference>
+                 <ReferenceTypeId>1782</ReferenceTypeId>
+                 <Id />
+             </Reference>
+             <Reference>
+                 <ReferenceTypeId>1801</ReferenceTypeId>
+                 <Id />
+             </Reference>
+             <Reference>
+                 <ReferenceTypeId>1501</ReferenceTypeId>
+                 <Id />
+             </Reference>
+             <Reference>
+                 <ReferenceTypeId>27</ReferenceTypeId>
+                 <Id />
+             </Reference>
+        </References>
+        <CustomData>
+<Cards Type="Array">
+<Card Name="Special request">
+<Fields Type="Array">
+<Field Name="Special request from customer">Prefer to receive a catalog via post</Field>
+</Fields>
+</Card>
+<Card Name="Marketing information "> <!--This clears out data from card-->
+<Fields Type="Array">
+<Field Name="SMS "/>
+<Field Name="Email"/>
+<Field Name="Address"/>
+</Fields>
+</Card>
+</Cards>
+</CustomData>
+        <Addresses>
+             <Billing>
+                 <ContactName />
+                 <AddressLine1>101 Cremorne St</AddressLine1>
+                 <AddressLine2 />
+                 <City>CREMORNE</City>
+                 <State>VIC</State>
+                 <Postcode>3121</Postcode>
+                 <Country>AUSTRALIA</Country>
+             </Billing>
+        </Addresses>
+    </Person>
+
+
+1.40.12      SUCCESS RESPONSE
+ HTTP Response
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 87 of 221
+ 200
+
+1.40.13                ERROR RESPONSE
+ HTTP Error             API Error Code             API Error Text
+ 400                    5000                       Surname is required
+ 400                    5001                       Firstname is required
+ 400                    5003                       Code must be blank to create new person
+ 400                    5004                       Email is required
+ 400                    5005                       Billing address is required
+ 400                    5006                       Email already exists for other person
+ 400                    5010                       Person has been updated by another user – Update Time Stamp has
+                                                   changed from date/time to date/time
+
+                                                   This occurs if user is updating an existing person but either hasn’t
+                                                   supplied an “updated time stamp” element or has supplied one that
+                                                   is out of date.
+
+ 400                     5089                      Reference id is invalid
+ 400                     5090                      Reference id is invalid for the reference type
+ 400                     5091                      Reference id is required for the reference type id 9999
+ 400                     5099                      Invalid date format. Valid format is ‘yyyy-MM-dd’
+                                                   This occurs when Start Date or Date of Birth date formats are
+                                                   incorrect.
+ 403                     5014                      Size of field XXXX, 9999 is too long. Maximum length is 9999.
+ 403                     5193                      Card name ‘xxxxx’ is invalid
+ 403                     5194                      Card name is missing
+ 403                     5195                      Field name ‘xxxxx’ is invalid
+ 403                     5196                      Field value ‘xxxx’ is invalid for Field: 'XXXXX'
+ 403                     5197                      Field type is invalid. Field: ‘XXXX’
+ 403                     5198                      Field length is invalid. Field: 'TextXX'; Field Value: 'xxx'
+ 403                     5199                      Nonnumeric data found for numeric field. Field: ‘XXX’;Field Value:
+                                                   ‘xxx’
+ 403                     5200                      Invalid value range. Field: 'NumberXXX'; Field Value: 'number'
+ 403                     5201                      Invalid date format. Valid format is 'yyyy-MM-dd'. Field: 'DateXXX';
+                                                   Field Value: 'dd-mm-yyyy'
+ 403                     5202                      Invalid reference. Field: XXXX
+ 403                     5203                      Multiple values not allowed. Field: 'Tag List XXX'
+ 403                     5204                      Invalid list value. Field: 'Tag List XX' ; List Value: ‘xxx’
+ 403                     5205                      Record not exist
+ 403                     5206                      No Person Template Found
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 88 of 221
+1.41 GET LIST OF CUSTOM DATA TEMPLATES
+
+A GET endpoint is available to retrieve the list of custom data templates available on a web warehouse.
+Besides, details of a single template can be retrieved by supplying the template name.
+
+Field                          Format            Comment                   Example                                  Single         HTTP
+                                                                                                                    template       Header
+                                                                                                                    by name
+                                                                                                                                   Accept:Versi
+                                                                                                                                   on
+
+CustomData                                       List of custom data                                                Yes            2.0
+                                                 templates
+
+ Template                      Alpha                                                                                Yes            2.0
+
+  Name                         Alpha             Template name                                                      Yes            2.0
+
+  ImageUrl                     Alpha             A web-based image         https://apparel21.com/wp-                Yes            2.0
+                                                 URL                       content/uploads/2018/07/hero
+                                                                           _p.jpg
+  Fields                       Alpha             Type="Array"                                                       Yes            2.0
+
+    Field                      Alpha                                                                                Yes            2.0
+
+     Label                     Alpha             Label for data field                                               Yes            2.0
+
+     Type                      Alpha             Data type of data         Text                                     Yes            2.0
+                                                 field. There are 6        Memo
+                                                 data types available.     Date
+                                                                           Number
+                                                                           Checkbox
+                                                                           TagList
+     Length                    Number            For Text data type        1000                                     Yes            2.0
+
+     Min                       Number            For Number data           0                                        Yes            2.0
+                                                 type
+
+     Max                       Number            For Number data           1000                                     Yes            2.0
+                                                 type
+
+                               Alpha             For TagList datatype      False                                    Yes            2.0
+TagListMultiSelect                                                         True
+
+
+     IsAdhocList               Alpha             For TagList datatype      False                                    Yes            2.0
+                                                                           True
+        Tags                   Alpha             Type="Array"                                                       Yes            2.0
+
+         Tag                   Alpha                                                                                Yes            2.0
+
+          Value                Alpha             For TagList datatype      Australia                                Yes            2.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                               Apparel21 Reference Guide                                            Page 89 of 221
+1.41.1 URI REQUEST FORMAT
+
+/Persons/customdatatemplates?countryCode={countryCode}
+
+
+1.41.2 REQUEST PARAMETERS
+ Field                 Required                                Comment
+ CountryCode           Mandatory                               Country Code of Shopper
+
+
+1.41.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Persons/customdatatemplates?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.41.4 EXAMPLE RESPONSE
+<CustomData xmlns:xsd="http://www.w3.org/2001/XMLSchema" mlns:xsi="http://www.w3.org/2001/XMLSchema-
+instance">
+        <Template>
+                <Name>Special request</Name>
+                <ImageUrl/>
+                <Fields Type="Array">
+                        <Field>
+                                <Label>Special request from customer</Label>
+                                <Type>Memo</Type>
+                        </Field>
+                </Fields>
+        </Template>
+        <Template>
+                <Name>Marketing information </Name>
+                <ImageUrl/>
+                <Fields Type="Array">
+                        <Field>
+                                <Label>SMS </Label>
+                                <Type>Checkbox</Type>
+                        </Field>
+                        <Field>
+                                <Label>Email</Label>
+                                <Type>Checkbox</Type>
+                        </Field>
+                        <Field>
+                                <Label>ID</Label>
+                                <Type>Number</Type>
+                                <Min>0</Min>
+                                <Max>10000</Max>
+                         </Field>
+                </Fields>
+        </Template>
+</CustomData>
+
+
+
+1.41.5 SUCCESS RESPONSE
+HTTP Response
+200
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 90 of 221
+1.41.6 ERROR RESPONSE
+HTTP Error      API Error Code                               API Error Text
+403             5015                                         No person template available for the warehouse
+403             5206                                         No person template found
+
+1.42 GET A SINGLE TEMPLATE BY TEMPLATE NAME
+
+
+1.42.1 URI REQUEST FORMAT
+
+/Persons/customdatatemplates/{template name}?countryCode={countryCode}
+
+
+1.42.2 REQUEST PARAMETERS
+ Field                 Required                                Comment
+ Template name         Mandatory                               Name of the custom data template
+ CountryCode           Mandatory                               Country Code of Shopper
+
+
+1.42.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Persons/customdatatemplates/hobby%20and%20interest?count
+ryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.42.4 EXAMPLE RESPONSE
+<CustomData xmlns:xsd=http://www.w3.org/2001/XMLSchema mlns:xsi="http://www.w3.org/2001/XMLSchema-
+instance">
+        <Template>
+                <Name>hobby and interest</Name>
+                <ImageUrl/>
+                <Fields Type="Array">
+                        <Field>
+                                <Label>List of interests</Label>
+                                <Type>TagList</Type>
+                                <TagListMultiSelect>False</TagListMultiSelect>
+                                <IsAdhocList>False</IsAdhocList>
+                                <Tags Type="Array">
+                                        <Tag>
+                                               <Value>Arts and crafts</Value>
+                                        </Tag>
+                                        <Tag>
+                                               <Value>Cooking</Value>
+                                        </Tag>
+                                        <Tag>
+                                               <Value>Gaming</Value>
+                                        </Tag>
+                                        <Tag>
+                                               <Value>Movie</Value>
+                                        </Tag>
+                                        <Tag>
+                                               <Value>Music</Value>
+                                        </Tag>
+                                        <Tag>
+                                               <Value>Sports</Value>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 91 of 221
+                                                      </Tag>
+                                </Tags>
+                        </Field>
+                </Fields>
+        </Template>
+</CustomData>
+
+
+
+1.42.5 SUCCESS RESPONSE
+HTTP Response
+200
+
+1.42.6 ERROR RESPONSE
+HTTP Error      API Error Code                               API Error Text
+403             5015                                         No person template available for the warehouse
+403             5206                                         No person template found
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 92 of 221
+13 CARTS
+
+The Shopping Cart is presented to the API to validate the contents and apply latest prices, promotions and
+freight as defined in Apparel 21.
+
+When you PUT a shopping cart to the API, the prices are checked and tax and any promotional discounts
+are calculated. Prices are not checked for products that are Gift Vouchers, the API will accept the price that
+is passed with the product.
+
+Freight charges are also added as defined in the Apparel21 back office setup. The returned Cart
+information can be used to generate the Order XML payload then call the API to create the actual Order. It
+is not mandatory to use to Cart function to generate the order payload.
+
+Note: the contents of a cart are not stored by the API or Apparel21.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 93 of 221
+1.43 CART DETAILS
+
+ Field                               Format           Max              Comment                                                                        Example         PUT        PUT         HTTP
+                                                      Length                                                                                                        Request    Response    Header
+                                                                                                                                                                                          Accept:V
+                                                                                                                                                                                           ersion_
+ Id                                  Integer                  22       Order Id                                                                       96854213      Optional     As per         1.0
+                                                                                                                                                                                request
+ OrderNumber                         Alpha                    30       Unique Order Number                                                            W0000125      Optional     As per        1.0
+                                                                                                                                                                                request
+ PersonId                            Integer                  22       Unique Person Id                                                               3583          Optional     As per        1.0
+                                                                                                                                                                                request
+ SyncedAt                            Date(YYYY-               10       Cart synchronisation date                                                      7/07/2011     Optional     Yes           1.0
+                                     MM-DD)                                                                                                           12:10:57 PM
+ TotalQuantity                       Number                   22       Total quantity of ordered products                                             125           Optional     Yes           1.0
+ TotalTax                            Num(22,2)                22       Tax value calculated by API based on TaxPercent and                            10.95           No         Yes           1.0
+                                                                       CartDetail.Value)
+ TotalDiscount                       Num(22,2)                22       Discount value (Calculated by API base on Sum of                               20.16         Optional     Yes           1.0
+                                                                       CartDetail.Discount)
+ TotalDue                            Num(22,2)                22       Due value (Calculated by API base on Sum of individual product final           2000.25       Optional     Yes           1.0
+                                                                       value + freight value)
+ TotalWeight                         Num(22,2)                22       Total weight of goods (Calculated by API base on                               1000          Optional     Yes           1.0
+                                                                       CartDetail.UnitWeight * CartDetail.Quantity)
+ TaxAdjustment                       Num(22,2)                22       Tax adjustment value. Product prices are initially shown with the tax          25              No         Yes           1.0
+                                                                       rate based on the default Pricing Customer set up in Apparel21. If
+                                                                       the tax rate for the final customer is different to this an adjustment
+                                                                       value will be provided.
+
+      Addresses                                                        There are two addresses as part of the Order resource - Billing and
+                                                                       Delivery. The following field definitions are common for both.
+                                                                       Billing and Delivery are sub-elements of addresses.
+      AddressLine1                   Alpha                    50       Address line 1                                                                 Level 2       Optional     As per        1.0
+                                                                                                                                                                                request
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                               Page 94 of 221
+ Field                               Format          Max              Comment                                                                        Example           PUT        PUT         HTTP
+                                                     Length                                                                                                          Request    Response    Header
+                                                                                                                                                                                           Accept:V
+                                                                                                                                                                                            ersion_
+      AddressLine2                   Alpha                   50       Address line 2                                                                 21 Cremorne     Optional     As per         1.0
+                                                                                                                                                                                 request
+                                                                                                                                                     Street
+      State                          Alpha                   50       State                                                                          VIC             Optional     As per        1.0
+                                                                                                                                                                                 request
+      Postcode                       Alpha                   10       Post code or ZIP code                                                          3121            Optional     As per        1.0
+                                                                                                                                                                                 request
+      Country                        Alpha                   20       Country                                                                        Australia       Optional     As per        1.0
+                                                                                                                                                                                 request
+
+
+      Contacts                                                        Contacts consists of Email and Phone numbers.
+      Email                          Alpha                 250        Email address. This is mandatory as it is used to uniquely identify            john@Apparel2   Optional     As per        1.0
+                                                                                                                                                                                 request
+                                                                      the person.                                                                    21.com
+           Phones                                                     Phones is a sub element of Contacts
+          Home                       Alpha                 250        Home phone                                                                     03 94275120     Optional     As per        1.0
+                                                                                                                                                                                 request
+          Mobile                     Alpha                 250        Mobile Phone                                                                   0421 552 654    Optional     As per        1.0
+                                                                                                                                                                                 request
+          Work                       Alpha                 250        Work phone                                                                     84159300        Optional     As per        1.0
+                                                                                                                                                                                 request
+ CartDetails                                                          Contains a list of CartDetail
+     CartDetail                                                       CartDetail is a sub-element of CatDetails
+     Id                              Integer                 22       Number generated by API, position of the CartDetail in the                     1               Optional     Yes           1.0
+                                                                      CartDetails list, for reference purpose only
+      Sequence                       Integer                 22       Number generated by API, position of the orderDetail in the                    10              Optional     As per        1.0
+                                                                                                                                                                                 request
+                                                                      OrderDetails list, for reference purpose only
+      ProductId                      Integer                 22       Unique Product Id                                                              3641            Optional     Yes           1.0
+      ColourId                       Integer                 22       Unique Colourl Id                                                              2566            Optional     Yes           1.0
+      SkuId                          Integer                 22       Unique SKU Id                                                                  1234              Yes        Yes           1.0
+      ProductCode                    Alpha                   10       Unique Product Code                                                            W00123          Optional     Yes           1.0
+      ProductName                    Alpha                   30       Product Name                                                                   Long Sleeve     Optional     Yes           1.0
+                                                                                                                                                     Shirt
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 95 of 221
+ Field                               Format          Max              Comment                                                                        Example              PUT        PUT         HTTP
+                                                     Length                                                                                                             Request    Response    Header
+                                                                                                                                                                                              Accept:V
+                                                                                                                                                                                               ersion_
+      ColourCode                     Alpha                    21      Colour Code                                                                    BLK                Optional     Yes            1.0
+      ColourName                     Alpha                   61       Colour Name                                                                    Black              Optional     Yes            1.0
+      SizeCode                       Alpha                    7       Size Code                                                                      XL                 Optional     Yes            1.0
+      Quantity                       Num(22,2)               22       Quantity of product                                                            100                  Yes        Yes            1.0
+      Price                          Num(22,2)               22       Price of the CartDetail                                                        210                Optional     Yes            1.0
+      Discount                       Num(22,2)               22       Discount of the CartDetail                                                     50                 Optional     Yes            1.0
+      Value                          Num(22,2)               22       Net Value (Price * Quantity)                                                   160.25             Optional     Yes            1.0
+      UnitWeight                     Num(22,2)               22       Unit Weight                                                                    50.5               Optional     Yes            1.0
+         Discounts                                                    Discounts is a sub-element of Cart Detail
+         Id                          Integer                 22       Number generated by API, position of the Discount in the Discounts             123                Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                      list, for reference purpose only
+          Parentid                   Integer                 22       Parent CartDetail Id                                                           1                  Optional     As per        1.0
+                                                                                                                                                                                    request
+          DiscountType               Alpha                   50       API defined Type of Discount                                                   ManualDiscount     Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                      Manual Discount, Promotion Discount, Loyalty Discount or
+                                                                      unknown
+          DiscountTypeId             Integer                 22       API defined Discount Type Id                                                   1                  Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                      1 for ManualDiscount, 2 for PromotionDiscount, 3 for
+                                                                      LoyaltyDiscount
+          PromoId                    Integer                 22       API defined Promotion Id                                                       1080 (for Buy 2    Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                                                                                                     get 10% off a
+                                                                                                                                                     TIE)
+          loyaltyId                  Integer                 22       API defined Loyalty Id                                                         109605 (for        Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                                                                                                     Member)
+          Sequence                   Integer                 22       Number generated by API, position of the Discount in the Discounts             0                  Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                      list, for reference purpose only
+          Description                Alpha                   50       API generated Description of Discount                                          Loyalty discount   Optional     As per        1.0
+                                                                                                                                                                                    request
+                                                                                                                                                     Member
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 96 of 221
+ Field                               Format          Max              Comment                                                                        Example         PUT        PUT         HTTP
+                                                     Length                                                                                                        Request    Response    Header
+                                                                                                                                                                                         Accept:V
+                                                                                                                                                                                          ersion_
+          Percentage                 Num(22,2)               22       Discount percentage in number                                                  20            Optional     As per         1.0
+                                                                                                                                                                               request
+          Value                      Num(22,2)               22       Discount Value                                                                 10            Optional     As per        1.0
+                                                                                                                                                                               request
+          TaxPercent                 Num(22,2)               22       Tax percentage in number (12.5 for 12.5%)                                      12.5          Optional     As per        1.0
+                                                                                                                                                                               request
+ SelectedFreightOption                                                Selected Freight Option
+ Id                                  Integer                 22       Freight Id (Read from Apparel21 system GIT, provided by Apparel21              123           Optional     As per        1.0
+                                                                                                                                                                               request
+                                                                      Consultant)
+ Name                                Alpha                 250        Freight Name                                                                   Fox Freight   Optional     As per        1.0
+                                                                                                                                                                               request
+                                                                                                                                                     Service
+ Value                               Num(22,2)               22       Freight Value                                                                  156           Optional     As per        1.0
+                                                                                                                                                                               request
+ FreightOptions                                                       List of Freight Options available                                                                                       1.0
+ Id                                  Integer                 22       Freight Id (Read from Apparel21 system GIT)                                    123           Optional     As per        1.0
+                                                                                                                                                                               request
+ Name                                Alpha                 250        Freight Name                                                                   Fox Freight   Optional     As per        1.0
+                                                                                                                                                                               request
+                                                                                                                                                     Service
+ Value                               Num(22,2)               22       Freight Value                                                                  156           Optional    As pear        1.0
+                                                                                                                                                                               request
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 97 of 221
+1.44 SUBMIT CART
+
+The Cart details are submitted by a PUT to the following URI.
+
+
+1.44.1 URI REQUEST FORMAT
+
+/Carts/{id}?countryCode={countryCode}
+
+
+1.44.2 REQUEST PARAMETERS
+
+ Field                                  Required             Comment
+ Id                                     Mandatory            Your Id for the cart
+ CountryCode                            Mandatory            Country Code of Shopper
+
+
+1.44.3 EXAMPLE REQUEST
+
+PUT https://retailapi.apparel21.com/RetailAPI/Carts/1234?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.44.4 REQUEST PAYLOAD
+         <Cart>
+         <PersonId>101451<PersonId>
+           <CartDetails>
+             <CartDetail>
+               <Id>829</Id>
+               <SkuId>21503</SkuId>
+               <Quantity>2</Quantity>
+               <Price>69.95/Price>
+               <Value>139.90</Value>
+             </CartDetail>
+           </CartDetails>
+           </Cart>
+
+
+1.44.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.44.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 400          5033                                 No products in cart
+ 403          5014                                 Size of field XXXX, 9999 is too long. Maximum length is 9999.
+
+1.44.7 RESPONSE PAYLOAD
+<Cart>
+  <SyncedAt>2012-10-09T12:05:47</SyncedAt>
+  <TotalQuantity>2</TotalQuantity>
+  <TotalTax>12.72</TotalTax>
+  <TotalDiscount>0</TotalDiscount>
+  <TotalDue>139.90</TotalDue>
+  <TotalWeight>0</TotalWeight>
+  <CartDetails Type="Array" TotalRows="1">
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 98 of 221
+    <CartDetail>
+      <Id>1</Id>
+      <ProductId>8843</ProductId>
+      <ColourId>10702</ColourId>
+      <SkuId>21503</SkuId>
+      <ProductCode>00122</ProductCode>
+      <ProductName>Cotton Drill Overall </ProductName>
+      <ColourCode>S-331</ColourCode>
+      <ColourName>S- Safety Orange</ColourName>
+      <SizeCode>57</SizeCode>
+      <Quantity>2</Quantity>
+      <Price>69.95</Price>
+      <Discount>0</Discount>
+      <Value>139.90</Value>
+      <UnitWeight>0</UnitWeight>
+      <TaxPercent>10</TaxPercent>
+    </CartDetail>
+  </CartDetails>
+  <SelectedFreightOption>
+    <Id />
+    <Name />
+    <Value>0</Value>
+  </SelectedFreightOption>
+  <FreightOptions>
+    <FreightType>
+      <Id>161</Id>
+      <Name>Express</Name>
+      <Value>10</Value>
+    </FreightType>
+    <FreightType>
+      <Id>162</Id>
+      <Name>Standard</Name>
+      <Value>10</Value>
+    </FreightType>
+  </FreightOptions>
+  <TaxAdjustment>0</TaxAdjustment>
+</Cart>
+
+
+Tax, discounts and freight charges will be applied to the cart based on the configurations in Apparel21.
+
+If tax is adjusted based on the customer settings in Apparel21, an adjustment to the standard website tax
+rate will be displayed here.
+
+The cart update should be performed as products are added, deleted and/or quantities modified or if the
+date changes.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 99 of 221
+14 ORDERS
+
+To create an order, either use the detail returned from the Cart PUT response, or generate the order detail
+independently.
+
+The information at the root level of the Order payload contains detail about the customer (person),
+payment information, freight, and contact details. If Person details, i.e. address are changed when the
+order is posted, changes will be saved against that order only. The Person master file record is not
+modified unless the API receives a PUT to the person record.
+
+The order detail contains product information to SKU level that the customer has ordered including
+
+     •     Product Code
+     •     Size (if applicable)
+     •     Colour (if applicable)
+     •     Pricing
+     •     Discounts (if applicable)
+
+When the order is created in Apparel21 it is comprised of detail generated from the API and default
+information from Apparel21. Order details can also include orders entered directly into Apparel21, not via
+the website. This could be in store orders, telephone orders, returns and exchanges.
+
+
+1.44.8 PRODUCT AND FREIGHT PRICING
+
+The pricing shown on the order for products and freight can be generated from
+-        the cart PUT response
+-        generated from the website
+-        a combination of the above
+In some instances the website will need to post pricing it has generated, for example freight rates or a
+special charge that does not have the price setup in Apparel21. When these details are added to the create
+order payload, they should show the tax rate that applies to the price that has been sent. For example if
+the Freight was $10 and no tax applied the tax percentage should be shown as ‘0’.
+
+    <OrderDetail>
+       …….
+       <Quantity>1</Quantity>
+       <Price>10</Price>
+       <Value>10</Value>
+       <TaxPercent>0</TaxPercent>
+         …….
+     </OrderDetail>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 100 of 221
+

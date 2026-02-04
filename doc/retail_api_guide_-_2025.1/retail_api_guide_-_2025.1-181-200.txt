@@ -1,0 +1,1118 @@
+    Months                                       Integer                        Qualifications spend in months                              12                      Yes   1.0
+    Days                                         Integer                        Qualifications spend in days                                14                      Yes   1.0
+   MinimumSpendToRedeem                          Number                         Minimum spend threshold to redeem                           19                      Yes   1.0
+                                                                                rewards
+ Gifts                                                                          Retrieves a list of gifts defined for the                                           Yes   1.0
+                                                                                reward program
+   Gift                                                                         Gift is a sub-element of Gifts                                                      Yes   1.0
+    Id                                           Integer                        Unique identifier of the gift.                                                      Yes   1.0
+    Name                                         Alpha               250        Name of gift                                                March gift - Bronze     Yes   1.0
+    Description                                  Alpha               250        Gift description                                            March gift for Bronze   Yes   1.0
+                                                                                                                                            Tier customers
+      GiftStyles                                                                GiftStyles is a sub-element of Gift                                                 Yes   1.0
+        Style                                                                   Style is a sub-element of GiftStyles                                                Yes   1.0
+          Id                                     Integer             22         Unique identifier of the style                              123                     Yes   1.0
+          Code                                   Alpha               10         Style code                                                  CAND                    Yes   1.0
+          Name                                   Alpha               30         Style description                                           Pack of Candles         Yes   1.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                            Page 181 of 221
+1.70 REWARD ACCOUNT DETAILS
+
+
+Field                            Format          Max         Comment                          Example                      GET               POST Response          PUT Response            HTTP Header
+                                                 Length                                                                  Response                                                          Accept:Versio
+                                                                                                                                                                                                     n_
+RewardAccount                                                Retrieve reward account
+                                                             details
+  Id                             Integer                     This is the unique               1                              Yes                      No                  No                         1.0
+                                                             identifier of the person
+                                                             reward account
+  ProgramId                      Integer                     This is the unique               1                              Yes            Yes - Mandatory               No                         1.0
+                                                             identifier of the reward
+                                                             program
+  ProgramName                    Alpha             250       Name of reward                   Family &                       Yes                      No                  No                         1.0
+                                                             program                          Friends
+  Currency                       Alpha             15        Currency of reward               AUD                            Yes                      No                  No                         1.0
+                                                             program
+  TierId                         Integer                     This is the unique               1                              Yes          Optional – Must be      Optional – Tier id to              1.0
+                                                             identifier of the tier                                                          valid for the     promot account to – must
+                                                                                                                                               program          be valid for the program
+  TierName                       Alpha             250       Tier name                        Bronze                         Yes                  No                       No                        1.0
+  PersonId                       Integer                     Person idx                       1841                           Yes           Yes - Mandatory          Optional – When                  1.0
+                                                                                                                                                                  provided, validates
+                                                                                                                                                                 account id and person
+  AvailablePoints                Integer                     Available points balance         353                            Yes                      No                   No                        1.0
+                                                             (unexpired)
+  AvailableRewards               Number                      Available rewards $              30                             Yes                      No                  No                         1.0
+                                                             balance (unexpired)
+  JoinDate                       Date                        Date person joined the           2018-01-01                     Yes                      No                  No                         1.0
+                                                             rewards program YYYY-
+                                                             MM-DD
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300       F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 182 of 221
+Field                            Format          Max         Comment                          Example                   GET               POST Response          PUT Response            HTTP Header
+                                                 Length                                                               Response                                                          Accept:Versio
+                                                                                                                                                                                                   n_
+  TierJoinDate                   Date                        Date person achieved a           2018-01-01                  Yes                      No                  No                         1.0
+                                                             tier YYYY-MM-DD
+  TierLockedUntilDate            Date                        Next Tier calculation will       2018-01-25                  Yes            Optional - sets to   Optional – sets to null             1.0
+                                                             be done after this date                                                      null when not         when not passed
+                                                             YYYY-MM-DD                                                                       passed
+ PointsToNextReward              Integer                     Points to accrue to next         386                         Yes                   No                     No                         1.0
+                                 (Nullable)                  reward. Can be blank.
+ SpendToNextReward               Number                      Spend to incur to                86                          Yes                      No                  No                         1.0
+                                 (Nullable)                  achieve next reward.
+                                                             Can be blank.
+ NextTierId                      Integer                     Will be blank if reward          41                          Yes                      No                  No                         1.0
+                                 (Nullable)                  program has no tiers or
+                                                             shopper is on last tier.
+ SpendToNextTier                 Number                      Spend to incur to next           386                         Yes                      No                  No                         1.0
+                                 (Nullable)                  tier if shopper belongs to
+                                                             a tiered rewards
+                                                             program. Can be blank.
+PointsList
+ Accrual
+  IssueId                        Number                      UniqueIdx of points              42181                       Yes                      No                  No                         1.0
+                                                             accrual
+   CreatedDateTime               Date                        Date points accrued              2018-01-15                  Yes                      No                  No                         1.0
+   Description                   Alpha             250       Points accrual reason            Social Media                Yes                      No                  No                         1.0
+                                                                                              post
+   Total                         Integer                     Total points accrued             100                         Yes                      No                  No                         1.0
+   Redeemed                      Integer                     Number of points that            20                          Yes                      No                  No                         1.0
+                                                             have already been
+                                                             redeemed
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300    F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 183 of 221
+Field                            Format          Max         Comment                          Example                   GET               POST Response     PUT Response    HTTP Header
+                                                 Length                                                               Response                                             Accept:Versio
+                                                                                                                                                                                      n_
+   PendingRedemption             Integer                     Points that have been            10                          Yes                      No           No                   1.0
+                                                             redeemed, but are still in
+                                                             a pending state and can
+                                                             be reversed
+   Available                     Integer                     Points available balance         70                          Yes                      No           No                   1.0
+   ExpiryDate                    Date                        Date points expire (can                                      Yes                      No           No                   1.0
+                                                             no longer be drawn
+                                                             from)
+RewardsList                                                                                                                                                                          1.0
+ Reward                                                                                                                                                                              1.0
+  IssueId                        Number                      UniqueIdx of issued              164321                      Yes                      No           No                   1.0
+                                                             reward
+   CreatedDateTime               Date                        Date reward issued               1/1/2018                    Yes                      No           No                   1.0
+   Description                   Alpha             250       Reward description               Birthday                    Yes                      No           No                   1.0
+   Total                         Number                      Total value of reward            $20                         Yes                      No           No                   1.0
+   Redeemed                      Number                      Reward $ redeemed                $5                          Yes                      No           No                   1.0
+   PendingRedemption             Number                      Reward value that has            $3                          Yes                      No           No                   1.0
+                                                             been redeemed, but is
+                                                             still in a pending state
+                                                             and can be redeemed
+   Available                     Number                      Reward $ balance                 $12                         Yes                      No           No                   1.0
+                                                             available to redeem
+   ExpiryDate                    Date                        Date reward expires (can         2019/1/1                    Yes                      No           No                   1.0
+                                                             no longer be drawn
+                                                             from). YYYY-MM-DD
+ IssueReason                                                 Reward issue reason                                                                                                     1.0
+   Id                            Number                      Reference code idx of            17666                       Yes             Yes (id or code       No                   1.0
+                                                             issue reason                                                                   required)
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300    F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 184 of 221
+Field                            Format          Max         Comment                          Example                   GET               POST Response     PUT Response    HTTP Header
+                                                 Length                                                               Response                                             Accept:Versio
+                                                                                                                                                                                      n_
+   Code                          Alpha             30        Reference code of the            Birthday                    Yes             Yes (id or code       No                   1.0
+                                                             issue reason                                                                   required)
+   Name                          Alpha             250       Reference code name of           Birthday                    Yes                   No              No                   1.0
+                                                             the issue reason                 Reward
+GiftList                                                                                                                  Yes                      No           No                   1.0
+ Gift                                                                                                                     Yes                      No           No                   1.0
+   IssueId                       Number                      UniqueIdx of issued gift         301                         Yes                      No           No                   1.0
+   CreateDateTime                Date                        Date/Time gift added to          2018-12-                    Yes                      No           No                   1.0
+                                                             reward account                   05T15:00:19
+   Description                   Alpha             250       Gift issue description           March Gift Issue            Yes                      No           No                   1.0
+   GiftId                        Integer                     Unique Gift Id                   26                          Yes                      No           No                   1.0
+   GiftName                      Alpha             250       Name of gift                     March Gift Gift             Yes                      No           No                   1.0
+   ExpiryDate                    Date                        Gift expiry date YYYY-           2019/1/1                    Yes                      No           No                   1.0
+                                                             MM-DD
+   IssueReason                                               Gift issue reason                                                                                                       1.0
+     Id                          Number                      Reference code idx of            17668                       Yes             Yes (id or code       No                   1.0
+                                                             issue reason                                                                   required)
+     Code                        Alpha             30        Reference code of the            Gold Tier Gift              Yes             Yes (id or code       No                   1.0
+                                                             issue reason                                                                   required)
+     Name                        Alpha             250       Reference code name of           Gold Tier Gift              Yes                   No              No                   1.0
+                                                             the issue reason
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300    F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 185 of 221
+1.71 REWARD TRANSACTIONS DETAILS
+
+
+ Field                                Format      Max          Comment                        Example                          HTTP Header
+                                                  Length                                                                      Accept:Versio
+                                                                                                                                        n_
+ RewardTransactions                                                                                                               1.0
+   Transactions                                                                                                                     1.0
+     TransactionDateTime              Date                     Date Time of transaction       2018-08-22T15:19:10                   1.0
+     Description                      Alpha          250       Description of                 Birthday Reward                       1.0
+                                                               transaction – For retail
+                                                               and web orders consists
+                                                               of transaction type and
+                                                               store name
+      Source                          Alpha          250       Transaction source – eg:       Retail API                            1.0
+                                                               Retail, CSV, Websales,
+                                                               Account Management,
+                                                               Tier Bonus, Retail API
+                                                               etc.
+      Reference                       Alpha          250       This is the order number       D0123455                              1.0
+                                                               for web orders, docket
+                                                               number for retail sales
+                                                               or reference given when
+                                                               adding points/rewards
+                                                               via CSV or API.
+                                                               Blank for sign up bonus.
+      Spend                           Number                   Spend contributing to          100                                   1.0
+                                                               points accrual. Zero if
+                                                               directly adding points.
+     ForeignSpend                     Number                   Spend amount at                200                                   1.0
+                                                               overseas outlets
+     ForeignCurrency                  Alpha           15       Spend currency at              USD                                   1.0
+                                                               overseas outlets
+      Points                          Integer                  Total points adjustment.       50                                    1.0
+                                                               Positive if adding points,
+                                                               negative if redeeming or
+                                                               negatively accruing
+                                                               points through returns.
+                                                               Can be positive or
+                                                               negative.
+      RewardAmount                    Number                   Total reward                   10                                    1.0
+                                                               adjustment. Positive if
+                                                               adding reward, negative
+                                                               if redeeming reward.
+      GiftId                          Integer                                                                                       1.0
+      GiftName                        Alpha          250                                                                            1.0
+      NewGift                         Alpha           5        True only on transaction       true                                  1.0
+                                                               gift is issued. False all
+                                                               other instances.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 186 of 221
+ Field                                Format      Max          Comment                        Example                          HTTP Header
+                                                  Length                                                                      Accept:Versio
+                                                                                                                                        n_
+        RedeemedGiftSkuId             Number                   SKUIDX of gift redeemed        1541                                1.0
+        Confirmed                     Integer                  Confirmed flag (0-             True                                1.0
+                                                               Unconfirmed, 1-
+                                                               Confirmed). If
+                                                               unconfirmed and
+                                                               REVERSED does not
+                                                               equal 1, the transaction
+                                                               is pending and may be
+                                                               reversed.
+
+
+1.72 REWARD POST DETAILS
+
+Field                   Format            Comment                                             Example                         HTTP Header
+                                                                                                                              Accept:Versio
+                                                                                                                                        n_
+RewardPost
+ RequestId              Alpha(250)        Globally unique request identifier. Must be         5AFC78B8-A622-                        1.0
+                                          a GUID. Mandatory.                                  438B-9ABE-
+                                                                                              AE9665827837
+ PersonId               Number            Identity of the person. When passed,                1841                                  1.0
+                                          person and accountId in request must
+                                          match.
+ Amount                 Integer           Must be positve                                     5                                     1.0
+ PointsCost             Number            Points cost of reward. Must be zero or              50                                    1.0
+                                          positive. Defaults to zero when not
+                                          provided.
+ Description            Alpha(250)        Reward description. Optional                        Birthday                              1.0
+ Reference              Alpha(250)        Reference for reward. Optional.                     BRT1                                  1.0
+ ExpiryDate             Date              Expiry date in YYYY-MM-DD format. Uses              2018-09-30                            1.0
+                                          tier diefault ifnot passed.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 187 of 221
+1.73 GIFT POST DETAILS
+
+Field                   Format            Comment                                  Example                              HTTP Header
+                                                                                                                       Accept:Version_
+GiftPost
+ RequestId              Alpha(250)        Globally unique request                  5AFC78B8-A622-438B-                         1.0
+                                          identifier. Must be a GUID.              9ABE-AE9665827837
+                                          Mandatory.
+ PersonId               Number            Identity of the person. When             1841                                        1.0
+                                          passed, person and accountId in
+                                          request must match.
+ GiftId                 Integer           Unique identifier for gift               5                                           1.0
+ PointsCost             Number            Points cost of reward. Must be           50                                          1.0
+                                          zero or positive. Defaults to zero
+                                          when not provided.
+ Description            Alpha(250)        Reward description. Optional             Birthday                                    1.0
+ Reference              Alpha(250)        Reference for reward. Optional.          BRT1                                        1.0
+ ExpiryDate             Date              Expiry date in YYYY-MM-DD                2018-09-30                                  1.0
+                                          format. Uses tier diefault if not
+                                          passed.
+
+
+
+
+1.74 POINTS POST DETAILS
+
+Field                   Format            Comment                                  Example                              HTTP Header
+                                                                                                                       Accept:Version_
+PointsPost
+ RequestId              Alpha(250)        Globally unique request                  5AFC78B8-A622-438B-                         1.0
+                                          identifier. Must be a GUID.              9ABE-AE9665827838
+                                          Mandatory.
+ PersonId               Number            Identity of the person. Optional.        1841                                        1.0
+                                          When passed, person and
+                                          accountId in request must match.
+ Points                 Integer           Number of points to add. Must            50                                          1.0
+                                          be positive.
+ Description            Alpha(250)        Reward description. Optional             Birthday                                    1.0
+ Reference              Alpha(250)        Reference for reward. Optional.          BRT1                                        1.0
+ ExpiryDate             Date              Expiry date in YYYY-MM-DD                2018-09-30                                  1.0
+                                          format. Uses tier diefault ifnot
+                                          passed.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 188 of 221
+1.75 REWARD REDEEM DETAILS
+
+Field                          Format            Comment                                Example                              HTTP Header
+                                                                                                                            Accept:Version_
+RewardRedemption
+ AutoConfirm                   Alpha             True or False. When set to             True                                        1.0
+                                                 true, confirmed automatically
+                                                 and cannot be reversed.
+ RequestId                     Alpha(250)        Globally unique request                5AFC78B8-A622-438B-                         1.0
+                                                 identifier. Must be a GUID.            9ABE-AE9665827838
+                                                 Mandatory.
+ PersonId                      Number            Identity of the person.                1841                                        1.0
+                                                 Optional. When passed,
+                                                 person and accountId in
+                                                 request must match.
+ Amount                        Number            Rewards $ to redeem. Must              50                                          1.0
+                                                 be positive.
+ Description                   Alpha(250)        Reward redemption                      Birthday                                    1.0
+                                                 description. Optional.
+ Reference                     Alpha(250)        Reference for reward                   BRT1                                        1.0
+                                                 redemption. Optional.
+ SpendAmount                   Number            Minimum spend validation,              19                                          1.0
+                                                 must be greater than
+                                                 minimum to redeem reward
+
+
+
+
+1.76 GIFT REDEEM DETAILS
+
+Field                          Format            Comment                                Example                              HTTP Header
+                                                                                                                            Accept:Version_
+GiftRedemption
+ AutoConfirm                   Alpha             True or False. When set to             True                                        1.0
+                                                 true, confirmed automatically
+                                                 and cannot be reversed.
+ RequestId                     Alpha(250)        Globally unique request                5AFC78B8-A622-438B-                         1.0
+                                                 identifier. Must be a GUID.            9ABE-AE9665827838
+                                                 Mandatory.
+ PersonId                      Number            Identity of the person.                1841                                        1.0
+                                                 Optional. When passed,
+                                                 person and accountId in
+                                                 request must match.
+ RedeemedSkuId                 Number            SKUIDX of gift being                   6861                                        1.0
+                                                 redeemed
+ GiftId                        Integer           Unique identifier of gift.             50                                          1.0
+ Description                   Alpha(250)        Gift redeem description.               Birthday                                    1.0
+                                                 Optional.
+ Reference                     Alpha(250)        Reference for gift                     BRT1                                        1.0
+                                                 redemption. Optional.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00    P H : 613 8 415 9300       F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                               Page 189 of 221
+1.77 POINTS REDEEM DETAILS
+
+Field                          Format            Comment                                Example                              HTTP Header
+                                                                                                                            Accept:Version_
+PointsRedemption
+ AutoConfirm                   Alpha             True or False. When set to             True                                        1.0
+                                                 true, confirmed automatically
+                                                 and cannot be reversed.
+ RequestId                     Alpha(250)        Globally unique request                5AFC78B8-A622-438B-                         1.0
+                                                 identifier. Must be a GUID.            9ABE-AE9665827838
+                                                 Mandatory.
+ PersonId                      Number            Identity of the person.                1841                                        1.0
+                                                 Optional. When passed,
+                                                 person and accountId in
+                                                 request must match.
+ Points                        Integer           Number of points to redeem.            50                                          1.0
+                                                 Must be positive.
+ Description                   Alpha(250)        Reward redemption                      Birthday                                    1.0
+                                                 description. Optional.
+ Reference                     Alpha(250)        Reference for reward                   BRT1                                        1.0
+                                                 redemption. Optional.
+
+1.78 RETRIEVE LIST OF REWARD PROGRAM DETAILS
+
+This GET request will return a list of all rewards programs available in Apparel21.
+
+1.78.1 URI REQUEST FORMAT
+
+/rewards/programs{/programId}?countryCode={countryCode}
+
+
+1.78.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Country Code   Mandatory Country Code of shopper
+ Program                        Optional          Reward Program Id – when not specified, returns all programs
+
+
+1.78.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Rewards/Programs?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00    P H : 613 8 415 9300       F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                               Page 190 of 221
+1.78.4 EXAMPLE RESPONSE
+
+       <RewardPrograms>
+           <Program>
+               <Id>1</Id>
+               <Name>Apparel21 Rewards Program</Name>
+               <Description>Apparel21 Rewards Program</Description>
+               <Currency>AUD</Currency>
+               <Tiers Type="Array">
+                   <Tier>
+                       <Id>1</Id>
+                       <Name>Bronze</Name>
+                       <Description>Bronze Tier</Description>
+                       <Sequence>1</Sequence>
+                       <AccrualSpend>1</AccrualSpend>
+                       <AccrualPoints>1</AccrualPoints>
+                       <AutoRewardPointThreshold>100</AutoRewardPointThreshold>
+                       <AutoRewardValue>10</AutoRewardValue>
+                       <AutoRewardGiftId />
+                       <TierPointsBonus>0</TierPointsBonus>
+                       <TierRewardsBonus>0</TierRewardsBonus>
+                       <TierGiftBonusId />
+                       <DefaultPointsExpiry>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </DefaultPointsExpiry>
+                       <DefaultRewardExpiry>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </DefaultRewardExpiry>
+                       <PreventDemotionPeriod>
+                           <Months>0</Months>
+                           <Days>0</Days>
+                       </PreventDemotionPeriod>
+                       <QualifySpend>0</QualifySpend>
+                       <QualifyPeriod>
+                           <Months>0</Months>
+                           <Days>0</Days>
+                       </QualifyPeriod>
+                       <MinimumSpendToRedeem>19</MinimumSpendToRedeem>
+                   </Tier>
+                   <Tier>
+                       <Id>2</Id>
+                       <Name>Silver</Name>
+                       <Description>Silver Tier</Description>
+                       <Sequence>2</Sequence>
+                       <AccrualSpend>1</AccrualSpend>
+                       <AccrualPoints>2</AccrualPoints>
+                       <AutoRewardPointThreshold>100</AutoRewardPointThreshold>
+                       <AutoRewardValue>20</AutoRewardValue>
+                       <AutoRewardGiftId />
+                       <TierPointsBonus>0</TierPointsBonus>
+                       <TierRewardsBonus>0</TierRewardsBonus>
+                       <TierGiftBonusId />
+                       <DefaultPointsExpiry>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </DefaultPointsExpiry>
+                       <DefaultRewardExpiry>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </DefaultRewardExpiry>
+                       <PreventDemotionPeriod>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </PreventDemotionPeriod>
+                       <QualifySpend>300</QualifySpend>
+                       <QualifyPeriod>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </QualifyPeriod>
+                       <MinimumSpendToRedeem>19</MinimumSpendToRedeem>
+                   </Tier>
+                       <Id>3</Id>
+                       <Name>Gold</Name>
+                       <Description>Gp;d</Description>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 191 of 221
+                       <Sequence>3</Sequence>
+                       <AccrualSpend>100</AccrualSpend>
+                       <AccrualPoints>2</AccrualPoints>
+                       <AutoRewardPointThreshold>100</AutoRewardPointThreshold>
+                       <AutoRewardValue>20</AutoRewardValue>
+                       <AutoRewardGiftId>21</AutoRewardGiftId>
+                       <TierPointsBonus>0</TierPointsBonus>
+                       <TierRewardsBonus>0</TierRewardsBonus>
+                       <TierGiftBonusId />
+                       <DefaultPointsExpiry>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </DefaultPointsExpiry>
+                       <DefaultRewardExpiry>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </DefaultRewardExpiry>
+                       <PreventDemotionPeriod>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </PreventDemotionPeriod>
+                       <QualifySpend>5000</QualifySpend>
+                       <QualifyPeriod>
+                           <Months>12</Months>
+                           <Days>0</Days>
+                       </QualifyPeriod>
+                       <MinimumSpendToRedeem>19</MinimumSpendToRedeem>
+                   </Tier>
+               </Tiers>
+               <Gifts Type="Array">
+                   <Gift>
+                       <Id>2</Id>
+                       <Name>August Gifts</Name>
+                       <Description>August Gifts</Description>
+                       <GiftStyles Type="Array" />
+                   </Gift>
+                   <Gift>
+                       <Id>1</Id>
+                       <Name>March Gifts</Name>
+                       <Description>March Gifts</Description>
+                       <GiftStyles Type="Array">
+                           <Style>
+                               <Id>6861</Id>
+                               <Code>CAP</Code>
+                               <Name>STRAW COWBOY - CAPPICINO</Name>
+                           </Style>
+                           <Style>
+                               <Id>7201</Id>
+                               <Code>Bottles</Code>
+                               <Name>BOTTLE CAP OSFA</Name>
+                           </Style>
+                       </GiftStyles>
+                   </Gift>
+               </Gifts>
+           </Program>
+           <Program>
+              …….
+              …..
+           </Program>
+       </RewardPrograms>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 192 of 221
+1.79 RETRIEVE REWARD ACCOUNT DETAILS
+
+This GET request retrieves all account information details including a person’s current tier details, spend to
+next reward / tier details and list of available accrued points and issued rewards that are not expired.
+
+
+1.79.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}?countryCode={countryCode}
+
+
+1.79.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Account id of the reward program that the shopper belongs to
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.79.3 EXAMPLE REQUEST
+
+GET        https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.79.4 EXAMPLE RESPONSE
+
+<RewardAccount>
+    <Id>1</Id>
+    <ProgramId>1</ProgramId>
+    <ProgramName>Apparel21 Rewards Program</ProgramName>
+    <Currency>AUD</Currency>
+    <TierId>1</TierId>
+    <TierName>Bronze</TierName>
+    <PersonId>1841</PersonId>
+    <TierLockedUntilDate>2019-09-19</TierLockedUntilDate>
+    <AvailablePoints>100</AvailablePoints>
+    <AvailableRewards>25</AvailableRewards>
+    <JoinDate>2018-09-11</JoinDate>
+    <TierJoinDate>2018-09-19</TierJoinDate>
+    <PointsToNextReward>86</PointsToNextReward>
+    <SpendToNextReward>86</SpendToNextReward>
+    <NextTierId>41</NextTierId>
+    <SpendToNextTier>386</SpendToNextTier>
+    <PointsList Type="Array">
+        <Accrual>
+            <AccrualId>42181</AccrualId>
+            <CreatedDateTime>2018-08-22T15:19:10</CreatedDateTime>
+            <Description>Free Points</Description>
+            <Total>100</Total>
+            <Redeemed>0</Redeemed>
+            <PendingRedemption>0</PendingRedemption>
+            <Available>100</Available>
+            <ExpiryDate>2019-08-22</ExpiryDate>
+        </Accrual>
+    </PointsList>
+    <RewardsList Type="Array">
+        <Reward>
+            <RewardId>163421</RewardId>
+            <CreatedDateTime>2018-08-22T15:24:44</CreatedDateTime>
+            <Description>Birthday Reward</Description>
+            <Total>25</Total>
+            <Redeemed>0</Redeemed>
+            <PendingRedemption>0</PendingRedemption>
+            <Available>25</Available>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 193 of 221
+            <ExpiryDate>2019-08-22</ExpiryDate>
+            <IssueReason>
+                <Id>17665</Id>
+                <Code>Birthday Reward </Code>
+                <Name>Birthday Reward </Name>
+            </IssueReason>
+        </Reward>
+    </RewardsList>
+    <GiftList Type="Array">
+        <Gift>
+            <IssueId>301</IssueId>
+            <CreatedDateTime>2018-12-05T15:00:19</CreatedDateTime>
+            <Description>Test March Gift</Description>
+            <GiftId>21</GiftId>
+            <GiftName>March Gift</GiftName>
+            <Available>true</Available>
+            <ExpiryDate>2019-12-05</ExpiryDate>
+            <IssueReason>
+                <Id>17666</Id>
+                <Code>Random</Code>
+                <Name>Random Reward</Name>
+            </IssueReason>
+        </Gift>
+    </GiftList>
+</RewardAccount>
+
+1.80 REWARDS SUMMARY (SIMPLE)
+
+This new endpoint has been designed for systems that need to store rewards information externally. This is
+endpoint will require additional licensing and charges, it is NOT part of our standard API suite. Please refer
+to job 118240 for further information.
+
+
+1.80.1 URI REQUEST FORMAT
+
+/Rewards/RewardsSimple?countryCode=AU&startRow=1&pageRows=20&updatedAfter=2020-12-
+01T11:33:07&personid=2102
+
+
+1.80.2 REQUEST PARAMETERS
+
+The GET request parameters are:
+
+
+ Parameter                        Mandatory / Optional            Description
+
+
+ UpdatedAfter                           Optional                  The available formats for this field are
+
+                                                                  YYYY-MM-DDTHH:MM:SS (24-hour format)
+
+                                                                  YYYY-MM-DD
+
+                                                                  If this field is passed in the request, the API returns all
+                                                                  unique and generic rewards that are modified, newly
+                                                                  issued, and redeemed since the time stamp
+
+
+ personId                               Optional                  This field is used to filter rewards for a specific person. If
+                                                                  person ID is provided, it retrieves all UNIQUE rewards
+                                                                  available for the given person
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 194 of 221
+ StartRow                               Optional                  Starting position of rewards returned
+
+
+ PageRows                               Optional                  Number of rewards returned
+
+
+ Country code                           Mandatory                 Country code for the designated webstore
+
+
+
+1.80.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/Rewards/RewardsSimple?countryCode=AU&startRow=1&pageRows=20&up
+datedAfter=2020-12-01T11:33:07&personid=2102
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.80.4 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.80.5 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 403          5247                                 Unauthorised request from warehouse
+
+1.80.6 EXAMPLE RESPONSE
+      <RewardsAccount>
+          <Id>61</Id>
+          <ProgramName>AP21 VIP</ProgramName>
+          <TierName>Bronze</TierName>
+          <PersonId>3223</PersonId>
+          <Email>KP@gmail.com</Email>
+          <TierLockedUntilDate />
+          <AvailableRewards>0</AvailableRewards>
+          <SpendToNextReward>100</SpendToNextReward>
+          <SpendToNextTier>300</SpendToNextTier>
+          <RewardsList Type="Array" />
+      </RewardsAccount>
+      <RewardsAccount>
+          <Id>104</Id>
+          <ProgramName>AP21 VIP</ProgramName>
+          <TierName>Bronze</TierName>
+          <PersonId>2102</PersonId>
+          <Email>BelindaC@gmail.com</Email>
+          <TierLockedUntilDate />
+          <AvailableRewards>200</AvailableRewards>
+          <SpendToNextReward>100</SpendToNextReward>
+          <SpendToNextTier>300</SpendToNextTier>
+          <RewardsList Type="Array">
+              <Reward>
+                  <RewardId>24487</RewardId>
+                  <Description>Good Will rewards</Description>
+                  <Available>200</Available>
+                  <ExpiryDate>2024-06-15</ExpiryDate>
+              </Reward>
+          </RewardsList>
+      </RewardsAccount>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 195 of 221
+1.81 REWARDS EXPIRED
+
+This new endpoint has been designed to export a list of Expired Rewards. It’s only required for manage
+rewards in a third-party system that don’t interact directly with the Retail API. Normally, when posting
+rewards, the Retail API will validate whether a reward is expired or not. This is endpoint will require
+additional licensing and charges, it is NOT part of our standard API suite. Please refer to job 119327 for
+further information.
+
+
+1.81.1 URI REQUEST FORMAT
+
+/Rewards/ExpiredRewardsSimple?countryCode=AU&startRow=1&pageRows=20&updatedAfter=2020-12-
+01T11:33:07&personid=2102
+
+
+1.81.2 REQUEST PARAMETERS
+
+The GET request parameters are:
+
+ Parameter                        Mandatory / Optional            Description
+ fromExpiry                       Optional                        The available formats for this field are
+                                                                  YYYY-MM-DD (24-hour format)
+                                                                  If this field is passed in the request, the API returns all rewards
+                                                                  in the nominated from expiry date range. If left blank, only
+                                                                  expired rewards will be included.
+ toExpiry                         Optional                        The available formats for this field are
+                                                                  YYYY-MM-DD (24-hour format)
+                                                                  If this field is passed in the request, the API returns all rewards
+                                                                  in the nominated to expiry date range. If left blank, only expired
+                                                                  rewards will be included i.e. rewards with an expiry date up to
+                                                                  ‘yesterday’.
+                                                                  Only expired rewards will be included in the query.
+ personId                         Optional                        This field is used to filter rewards for a specific person. If person
+                                                                  ID is provided, it retrieves all UNIQUE rewards available for the
+                                                                  given person
+ StartRow                         Optional                        Starting position of rewards returned
+ PageRows                         Optional                        Number of rewards returned
+ Country code                     Mandatory                       Country code for the designated webstore
+
+
+1.81.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/Rewards/ExpiredRewardsSimple?countryCode=AU&startRow=1&pageRows=
+20&updatedAfter=2020-12-01T11:33:07&personid=2102
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.81.4 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 196 of 221
+1.81.5 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 403          5247                                 Unauthorised request from warehouse
+
+1.81.6 EXAMPLE RESPONSE
+               <RewardsAccount>
+                <Id>35681</Id>
+                <ProgramName>AP21 VIP </ProgramName>
+                <TierName>Gold 🙂</TierName>
+                <PersonId>315733</PersonId>
+                <Email>John@apparel21.com</Email>
+                <AvailableRewards>0</AvailableRewards>
+                <RewardsList Type="Array">
+                   <Reward>
+                      <RewardId>237921</RewardId>
+                      <Description>Loyalty</Description>
+                      <Available>0</Available>
+                      <ExpiryDate>2025-01-28</ExpiryDate>
+                   </Reward>
+                  </RewardsList>
+           </RewardsAccount>
+           </RewardsAccounts>
+
+
+
+1.82 CREATE AN ACCOUNT FOR A PERSON
+
+Do a POST on the below URI to add a person to a rewards program. This creates a reward account for the
+person and marks the new account as active. Person Id is an optional element.
+
+If the person was already a member of another reward program, the old account gets deactivated and the
+new account is activated intead.
+
+Assigning a person to an existing ‘inactive’ account, reactivates the old reward account.
+
+When a tier is not passed, the person is assigned the default tier.
+
+
+1.82.1 URI REQUEST FORMAT
+
+/rewards/accounts?countryCode={countryCode}
+
+
+1.82.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Country Code   Mandatory Country Code of shopper
+
+
+1.82.3 EXAMPLE REQUEST
+
+POST       https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 197 of 221
+1.82.4 EXAMPLE PAYLOAD
+
+<RewardAccount>
+        <ProgramId>21</ProgramId>
+        <TierId>21</TierId>
+        <TierLockedUntilDate>2019-08-22</TierLockedUntilDate>
+        <PersonId>2541</PersonId>
+</RewardAccount>
+
+
+1.82.5 EXAMPLE RESPONSE
+<RewardAccount>
+    <Id>21</Id>
+    <ProgramId>21</ProgramId>
+    <ProgramName>Family and Friends Rewards Program</ProgramName>
+    <TierId>21</TierId>
+    <TierName>Bronze</TierName>
+    <PersonId>2541</PersonId>
+    <TierLockedUntilDate>2019-08-22</TierLockedUntilDate>
+</RewardAccount>
+
+
+
+1.83 UPDATE REWARD ACCOUNT TIER DETAILS
+
+Do a PUT on the below URI to update a person’s tier information.
+
+
+1.83.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountid}?countryCode={countryCode}
+
+
+1.83.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the shopper reward account
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.83.3 EXAMPLE REQUEST
+
+PUT        https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.83.4 EXAMPLE PAYLOAD
+<RewardAccount>
+        <TierId>22</TierId>
+        <TierLockedUntilDate>2019-09-01</TierLockedUntilDate>
+        <PersonId>2541</PersonId>
+</RewardAccount>
+
+
+1.83.5 EXAMPLE RESPONSE
+
+<RewardAccount>
+    <Id>21</Id>
+    <ProgramId>21</ProgramId>
+    <ProgramName>Family and Friends Rewards Program</ProgramName>
+    <TierId>22</TierId>
+    <TierName>Silver</TierName>
+    <PersonId>2541</PersonId>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 198 of 221
+    <TierLockedUntilDate>2019-09-01</TierLockedUntilDate>
+</RewardAccount>
+
+
+
+1.84 RETRIEVE LIST OF TRANSACTIONS FOR A REWARD ACCOUNT
+
+Do a GET on the below URI to retrieve a history of all points and reward accruals and redemptions.
+
+
+1.84.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/transactions?countryCode={countryCode}
+
+
+1.84.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+ From Date                      Optional         Earliest date to retrieve transaction from yyyy-MM-dd format
+
+
+1.84.3 EXAMPLE REQUEST
+
+POST       https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Transactions?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.84.4 EXAMPLE RESPONSE
+<RewardTransaction>
+    <Transaction>
+        <TransactionDateTime>2018-08-22T15:19:10</TransactionDateTime>
+        <Description>Free Points</Description>
+        <Source>CSV</Source>
+        <Reference>XYZ1234</Reference>
+        <Spend>0</Spend>
+         <ForeignSpend>0</ForeignSpend>
+        <ForeignCurrency/>
+        <Points>100</Points>
+        <RewardAmount>0</RewardAmount>
+        <GiftId />
+        <GiftName />
+        <NewGift>false</NewGift>
+        <RedeemedGiftSkuId />
+        <Confirmed>true</Confirmed>
+    </Transaction>
+    <Transaction>
+        <TransactionDateTime>2018-08-22T15:24:44</TransactionDateTime>
+        <Description>March Gift</Description>
+        <Source>Account Management</Source>
+        <Reference />
+        <Spend>0</Spend>
+         <ForeignSpend>0</ForeignSpend>
+        <ForeignCurrency/>
+        <Points>0</Points>
+        <RewardAmount>0</RewardAmount>
+        <GiftId>21</GiftId>
+        <GiftName>March Gift</GiftName>
+        <NewGift>true</NewGift>
+        <RedeemedGiftSkuId />
+        <Confirmed>true</Confirmed>     </Transaction>
+    <Transaction>
+        <TransactionDateTime>2018-12-07T10:05:52</TransactionDateTime>
+        <Description>Redeem March Reward</Description>
+        <Source>RetailAPI</Source>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 199 of 221
+        <Reference>Redeen March Reward API</Reference>
+        <Spend>0</Spend>
+        <ForeignSpend>0</ForeignSpend>
+        <ForeignCurrency/>
+        <Points>0</Points>
+        <RewardAmount>0</RewardAmount>
+        <GiftId>21</GiftId>
+        <GiftName>March Gift</GiftName>
+        <NewGift>false</NewGift>
+        <RedeemedGiftSkuId>15541</RedeemedGiftSkuId>
+        <Confirmed>true</confirmed>
+    </Transaction>
+</RewardTransactions>
+
+
+
+1.85 ADD NEW REWARDS TO AN ACCOUNT
+
+Do a POST on the below URI to issue new rewards to a reward account.
+
+
+1.85.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/rewards/?countryCode={countryCode}
+
+
+1.85.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.85.3 EXAMPLE REQUEST
+
+POST       https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Rewards/?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.85.4 EXAMPLE PAYLOAD
+
+<RewardPost>
+       <PersonId>1841</PersonId>
+       <RequestId>5AFC78B8-A622-438B-9ABE-AE9665827838</RequestId>
+       <Amount>25</Amount>
+       <Description>Insta posts</Description>
+       <Reference>SM1</Reference>
+       <ExpiryDate>2019-08-30</ExpiryDate>
+       <IssueReason>
+         <Id>17666</Id>
+       </IssueReason>
+</RewardPost>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 200 of 221
+
