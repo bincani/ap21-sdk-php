@@ -129,6 +129,15 @@ GET /Products/{productId}/FuturePrice/?countryCode={cc}
 ```
 SDK Class: `lib/Product/FuturePrice.php`
 
+### Product/CustomDataTemplate
+```
+GET /Products/customdatatemplates?countryCode={cc}
+GET /Products/customdatatemplates/{templateName}?countryCode={cc}
+```
+SDK Class: `lib/Product/CustomDataTemplate.php`
+- Returns template definitions (field names, types, list values)
+- Accessed as: `$ap21->Product->CustomDataTemplate->get()` or `$ap21->Product($name)->CustomDataTemplate->get()`
+
 ### Not Implemented
 - `GET /ProductsSimple/?countryCode={cc}` - Simplified product list
 - `GET /ProductNotes/{id}/?countryCode={cc}` - Product notes
