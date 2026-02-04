@@ -42,18 +42,17 @@ class TestSimpleResource extends TestResource
      */
     public function testPost()
     {
-        if ($this->postArray) {
-            $result = static::$ap21->{$this->resourceName}->post($this->postArray);
-            $this->assertTrue(is_array($result));
-            $this->assertNotEmpty($result);
-            return $result['id'];
+        if (!$this->postArray) {
+            $this->markTestSkipped('No post data defined for ' . $this->resourceName);
         }
+        $result = static::$ap21->{$this->resourceName}->post($this->postArray);
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+        return $result['id'];
     }
 
     /**
      * Test get resource
-     *
-     * @depends testPost
      */
     public function testGet()
     {
@@ -79,13 +78,14 @@ class TestSimpleResource extends TestResource
      */
     public function testGetSelf($id)
     {
-        if ($id) {
-            $product = static::$ap21->{$this->resourceName}($id)->get();
-
-            $this->assertTrue(is_array($product));
-            $this->assertNotEmpty($product);
-            $this->assertEquals($id, $product['id']);
+        if (!$id) {
+            $this->markTestSkipped('No ID available (testPost was skipped)');
         }
+        $product = static::$ap21->{$this->resourceName}($id)->get();
+
+        $this->assertTrue(is_array($product));
+        $this->assertNotEmpty($product);
+        $this->assertEquals($id, $product['id']);
     }
 
     /**
@@ -95,13 +95,14 @@ class TestSimpleResource extends TestResource
      */
     public function testPut($id)
     {
-        if ($this->putArray) {
-            $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
-            $this->assertTrue(is_array($result));
-            $this->assertNotEmpty($result);
-            foreach($this->putArray as $key => $value) {
-                $this->assertEquals($value, $result[$key]);
-            }
+        if (!$this->putArray) {
+            $this->markTestSkipped('No put data defined for ' . $this->resourceName);
+        }
+        $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+        foreach($this->putArray as $key => $value) {
+            $this->assertEquals($value, $result[$key]);
         }
     }
 
@@ -112,16 +113,18 @@ class TestSimpleResource extends TestResource
      */
     public function testDelete($id)
     {
-        if ($id) {
-            $result = static::$ap21->{$this->resourceName}($id)->delete();
-            $this->assertEmpty($result);
+        if (!$id) {
+            $this->markTestSkipped('No ID available (testPost was skipped)');
         }
+        $result = static::$ap21->{$this->resourceName}($id)->delete();
+        $this->assertEmpty($result);
     }
 
     public function testPostError() {
-        if ($this->errorPostArray) {
-            $this->expectException('PHPAP21\\Exception\\ApiException');
-            static::$ap21->{$this->resourceName}->post($this->errorPostArray);
+        if (!$this->errorPostArray) {
+            $this->markTestSkipped('No error post data defined for ' . $this->resourceName);
         }
+        $this->expectException('PHPAP21\\Exception\\ApiException');
+        static::$ap21->{$this->resourceName}->post($this->errorPostArray);
     }
 }

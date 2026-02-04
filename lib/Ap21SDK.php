@@ -190,7 +190,7 @@ class Ap21SDK
 
         if ($timeToWait) {
             //convert time to microseconds
-            $microSecondsToWait = $timeToWait * 1000000;
+            $microSecondsToWait = (int) ($timeToWait * 1000000);
             //Wait to maintain the API call difference of .5 seconds
             usleep($microSecondsToWait);
         }

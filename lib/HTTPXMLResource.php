@@ -142,7 +142,7 @@ abstract class HTTPXMLResource extends HTTPResource
         if ($wrapData && !empty($dataArray)) {
             $dataArray = $this->wrapData($dataArray);
         }
-        $response = HttpRequestXml::post($url, $dataArray, $this->httpHeaders);
+        $response = HttpRequestXml::post($url, $this->arrayToXml($dataArray), $this->httpHeaders);
         return $this->processResponse($response, $this->resourceKey);
     }
 
@@ -169,7 +169,7 @@ abstract class HTTPXMLResource extends HTTPResource
         if ($wrapData && !empty($dataArray)) {
             $dataArray = $this->wrapData($dataArray);
         }
-        $response = HttpRequestXml::put($url, $dataArray, $this->httpHeaders);
+        $response = HttpRequestXml::put($url, $this->arrayToXml($dataArray), $this->httpHeaders);
         return $this->processResponse($response, $this->resourceKey);
     }
 
@@ -240,6 +240,26 @@ abstract class HTTPXMLResource extends HTTPResource
             throw new ApiException(sprintf("%d - %s", $errCode, $errDesc));
         }
 
+    }
+
+    /**
+     * Convert a data array to an XML string using the resource key as root element
+     *
+     * @param array|string $data
+     * @return string
+     */
+    protected function arrayToXml($data)
+    {
+        if (is_string($data)) {
+            return $data;
+        }
+
+        $xml = new \SimpleXMLElement(sprintf('<%s/>', $this->resourceKey));
+        array_walk_recursive($data, function ($value, $key) use ($xml) {
+            $xml->addChild($key, htmlspecialchars((string) $value));
+        });
+
+        return $xml->asXML();
     }
 
     /**
