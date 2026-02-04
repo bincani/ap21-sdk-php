@@ -43,7 +43,7 @@ class TestSimpleResource extends TestResource
     public function testPost()
     {
         if (!$this->postArray) {
-            $this->markTestSkipped('No post data defined for ' . $this->resourceName);
+            $this->markTestSkipped($this->resourceName . ' is read-only: POST not supported');
         }
         $result = static::$ap21->{$this->resourceName}->post($this->postArray);
         $this->assertTrue(is_array($result));
@@ -79,7 +79,7 @@ class TestSimpleResource extends TestResource
     public function testGetSelf($id)
     {
         if (!$id) {
-            $this->markTestSkipped('No ID available (testPost was skipped)');
+            $this->markTestSkipped($this->resourceName . '::testGetSelf skipped: no ID available (POST not supported or failed)');
         }
         $product = static::$ap21->{$this->resourceName}($id)->get();
 
@@ -96,7 +96,7 @@ class TestSimpleResource extends TestResource
     public function testPut($id)
     {
         if (!$this->putArray) {
-            $this->markTestSkipped('No put data defined for ' . $this->resourceName);
+            $this->markTestSkipped($this->resourceName . ' is read-only: PUT not supported');
         }
         $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
         $this->assertTrue(is_array($result));
@@ -114,7 +114,7 @@ class TestSimpleResource extends TestResource
     public function testDelete($id)
     {
         if (!$id) {
-            $this->markTestSkipped('No ID available (testPost was skipped)');
+            $this->markTestSkipped($this->resourceName . '::testDelete skipped: no ID available (POST not supported or failed)');
         }
         $result = static::$ap21->{$this->resourceName}($id)->delete();
         $this->assertEmpty($result);
@@ -122,7 +122,7 @@ class TestSimpleResource extends TestResource
 
     public function testPostError() {
         if (!$this->errorPostArray) {
-            $this->markTestSkipped('No error post data defined for ' . $this->resourceName);
+            $this->markTestSkipped($this->resourceName . '::testPostError skipped: no error post data defined (POST not supported)');
         }
         $this->expectException('PHPAP21\\Exception\\ApiException');
         static::$ap21->{$this->resourceName}->post($this->errorPostArray);
