@@ -48,6 +48,7 @@ class TestSimpleResource extends TestResource
         $result = static::$ap21->{$this->resourceName}->post($this->postArray);
         $this->assertTrue(is_array($result));
         $this->assertNotEmpty($result);
+        $this->summary($this->resourceName . '::POST', $result);
         return $result['id'];
     }
 
@@ -60,6 +61,7 @@ class TestSimpleResource extends TestResource
         $result = $resource->get();
 
         $this->assertTrue(is_array($result));
+        $this->summary($this->resourceName . '::GET', $result);
         //Data posted, so cannot be empty
         if($this->postArray) {
             $this->assertNotEmpty($result);
@@ -86,6 +88,7 @@ class TestSimpleResource extends TestResource
         $this->assertTrue(is_array($product));
         $this->assertNotEmpty($product);
         $this->assertEquals($id, $product['id']);
+        $this->summary($this->resourceName . '::GET(' . $id . ')', $product);
     }
 
     /**
@@ -101,6 +104,7 @@ class TestSimpleResource extends TestResource
         $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
         $this->assertTrue(is_array($result));
         $this->assertNotEmpty($result);
+        $this->summary($this->resourceName . '::PUT(' . $id . ')', $result);
         foreach($this->putArray as $key => $value) {
             $this->assertEquals($value, $result[$key]);
         }
