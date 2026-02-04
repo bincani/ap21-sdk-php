@@ -5,15 +5,12 @@ namespace PHPAP21;
 class RetailTransactionsTest extends TestResource
 {
     /**
-     * Test that RetailTransactions child resource is resolvable
-     *
-     * Note: RetailTransactions.php lives in lib/ (PHPAP21\RetailTransactions)
-     * but Person's childResource resolution looks for PHPAP21\Person\RetailTransactions.
-     * This test verifies the current behavior.
+     * Test GET retail transactions with invalid person triggers error
      */
     public function testGetTransactionsError()
     {
-        $this->expectException('PHPAP21\\Exception\\SdkException');
+        $this->expectException('PHPAP21\\Exception\\ApiException');
+        // Invalid person ID should throw ApiException from the API
         static::$ap21->Person(999999)->RetailTransactions->get();
     }
 }

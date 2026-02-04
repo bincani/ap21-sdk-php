@@ -1,6 +1,6 @@
 # Retail Transactions (Sales History)
 
-SDK Class: `lib/RetailTransactions.php` (HTTPXMLResource) - **BROKEN: processResponse has bug**
+SDK Class: `lib/Person/RetailTransactions.php` (extends Person)
 
 ## GET Sales History for a Person
 ```

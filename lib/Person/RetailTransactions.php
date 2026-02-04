@@ -3,11 +3,15 @@
  * class RetailTransactions
  */
 
-namespace PHPAP21;
+namespace PHPAP21\Person;
 
+use PHPAP21\CurlRequest;
+use PHPAP21\HttpRequestXml;
+use PHPAP21\Person as Person;
 use PHPAP21\Exception\ApiException;
+use PHPAP21\Log;
 
-class RetailTransactions extends HTTPXMLResource
+class RetailTransactions extends Person
 {
     protected $resourceKey = 'retailtransactions';
 
@@ -24,6 +28,27 @@ class RetailTransactions extends HTTPXMLResource
     public function pluralizeKey()
     {
         return 'Transactions';
+    }
+
+    /**
+     * Generate a HTTP GET request and return result as an array
+     *
+     * @throws ApiException if the response has an error specified
+     * @throws CurlException if response received with unexpected HTTP code.
+     *
+     * @return array
+     */
+    public function get($urlParams = array(), $url = null, $dataKey = null)
+    {
+        if (!$url) {
+            $url = $this->generateUrl($urlParams);
+        }
+        if (!$dataKey) {
+            $dataKey = $this->pluralizeKey();
+        }
+        $response = HttpRequestXml::get($url, $this->httpHeaders);
+        $this->xml = $this->processResponse($response, $dataKey);
+        return $this->xml;
     }
 
     /**
