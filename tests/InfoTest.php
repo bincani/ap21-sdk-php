@@ -15,5 +15,6 @@ class InfoTest extends TestResource
         $this->assertNotEmpty($info);
         $this->assertArrayHasKey('api_ver', $info);
         $this->assertArrayHasKey('payloads', $info);
+        $this->summary('Info::GET', [$info]);
     }
 }

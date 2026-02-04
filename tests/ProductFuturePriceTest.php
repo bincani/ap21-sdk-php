@@ -32,9 +32,11 @@ class ProductFuturePriceTest extends TestResource
         try {
             $result = static::$ap21->Product(static::$productId)->FuturePrice->get();
             $this->assertIsArray($result);
+            $this->summary('Product(' . static::$productId . ')::FuturePrice', $result);
         } catch (Exception\ApiException $e) {
             // Accept API errors (e.g. no future prices set)
             $this->assertInstanceOf(Exception\ApiException::class, $e);
+            $this->summary('Product(' . static::$productId . ')::FuturePrice', [['error' => $e->getMessage()]]);
         }
     }
 }

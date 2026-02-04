@@ -32,9 +32,11 @@ class FreestockTest extends TestResource
         try {
             $freestock = static::$ap21->Freestock->Style(static::$productId)->get();
             $this->assertIsArray($freestock);
+            $this->summary('Freestock::Style(' . static::$productId . ')', $freestock);
         } catch (Exception\ApiException $e) {
             // Accept API errors (e.g. product not found in freestock)
             $this->assertInstanceOf(Exception\ApiException::class, $e);
+            $this->summary('Freestock::Style(' . static::$productId . ')', [['error' => $e->getMessage()]]);
         }
     }
 
@@ -46,8 +48,10 @@ class FreestockTest extends TestResource
         try {
             $freestock = static::$ap21->Freestock->AllStyles->get();
             $this->assertIsArray($freestock);
+            $this->summary('Freestock::AllStyles', $freestock);
         } catch (Exception\ApiException $e) {
             $this->assertInstanceOf(Exception\ApiException::class, $e);
+            $this->summary('Freestock::AllStyles', [['error' => $e->getMessage()]]);
         }
     }
 }

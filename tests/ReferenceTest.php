@@ -27,5 +27,6 @@ class ReferenceTest extends TestResource
         $this->assertObjectHasProperty('id', $result);
         $this->assertObjectHasProperty('code', $result);
         $this->assertObjectHasProperty('references', $result);
+        $this->summary('Reference(' . $typeId . ')::GET', $result);
     }
 }

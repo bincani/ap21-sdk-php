@@ -12,9 +12,11 @@ class ProductCustomDataTemplateTest extends TestResource
         try {
             $result = static::$ap21->Product->CustomDataTemplate->get();
             $this->assertIsArray($result);
+            $this->summary('Product::CustomDataTemplate', $result);
         } catch (Exception\ApiException $e) {
             // Accept API errors (e.g. no templates configured)
             $this->assertInstanceOf(Exception\ApiException::class, $e);
+            $this->summary('Product::CustomDataTemplate', [['error' => $e->getMessage()]]);
         }
     }
 }

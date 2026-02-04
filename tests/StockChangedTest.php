@@ -17,9 +17,11 @@ class StockChangedTest extends TestResource
                 'updatedAfter' => $updatedAfter
             ]);
             $this->assertIsArray($stockChanged);
+            $this->summary('StockChanged::GET (since ' . $updatedAfter . ')', $stockChanged);
         } catch (Exception\ApiException $e) {
             // Accept API errors
             $this->assertInstanceOf(Exception\ApiException::class, $e);
+            $this->summary('StockChanged::GET', [['error' => $e->getMessage()]]);
         }
     }
 }
