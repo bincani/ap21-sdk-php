@@ -1,0 +1,1061 @@
+1.12.4 PERSON REFERENCES
+
+ Field                                             Format            Max          Comment                                                                     Example       GET response         HTTP
+                                                                   Length                                                                                                                      Header
+                                                                                                                                                                                           Accept:Vers
+                                                                                                                                                                                                  ion_
+ PersonReferenceTypes
+    Id                                             Integer                22      Id of the object for Person – fixed to 12                                   12                Yes                1.0
+    Name                                            Alpha                  6      Name of the object – always “Person”                                        Person            Yes                1.0
+    ReferenceTypes
+       Reference                                                                  Reference is a sub element of Reference Types
+       Sequence                                    Integer                22      Sequence of this reference type within the hierarchy (can be up to 10)      2                 Yes                1.0
+       ReferenceTypeId                             Integer                22      Id of reference type                                                        1261              Yes                1.0
+       Code                                         Alpha                 15      Code of this reference type – user friendly                                 Pref              Yes                1.0
+       Name                                         Alpha                 30      Longer name of this reference type – user friendly                          Preferences       Yes                1.0
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0        P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                              Page 21 of 221
+  1.13 RETRIEVE REFERENCE TYPES
+
+  The Reference Type details are retrieved by submitting a GET to the following URI. All Reference Type Ids
+  will be returned.
+
+
+  1.13.1 URI REQUEST FORMAT
+
+  /ReferenceTypes/{id}?countryCode={countryCode}
+
+
+  1.13.2 REQUEST PARAMETERS
+   Field                    Required                                         Comment
+   Country Code             Mandatory                                        Country Code of shopper
+   Id                                                  Optional              Id of Reference Type
+
+
+  1.13.3 EXAMPLE REQUEST
+
+  GET https://retailapi.apparel21.com/RetailAPI/ReferenceTypes/?countryCode=AU
+
+              Content-type: text/xml
+              Accept:version_2.0
+
+  1.13.4 EXAMPLE RESPONSE
+
+      <ReferenceTypes>
+      <ReferenceType>
+      <Id>1</Id>
+      <Code>Class</Code>
+      <Name>Product Class</Name>
+         </ReferenceType>
+      <ReferenceType>
+      <Id>211</Id>
+      <Code>CmplReas</Code>
+      <Name>Completed Reason</Name>
+         </ReferenceType>
+      <ReferenceType>
+      <Id>1969</Id>
+      <Code>Coil #</Code>
+      <Name>Coil Number</Name>
+         </ReferenceType>
+      <ReferenceType>
+      <Id>426</Id>
+      <Code>ColrType</Code>
+      <Name>Colour Type</Name>
+         </ReferenceType>
+      <ReferenceType>
+      <Id>100</Id>
+      <Code>Comments</Code>
+      <Name>Comments</Name>
+         </ReferenceType>
+      <ReferenceType>
+      <Id>2</Id>
+      <Code>Comp Grp</Code>
+      <Name>Component Group</Name>
+         </ReferenceType>
+      <ReferenceType>
+      <Id>22</Id>
+      <Code>Company</Code>
+      <Name>Company</Name>
+</ReferenceType>
+….etc…..
+   </ReferenceTypes>
+
+
+
+
+  1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+  RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 22 of 221
+1.13.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.13.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 404
+
+1.14 RETRIEVE REFERENCE CODES
+
+The reference codes for a particular Reference Type Id are retrieved by submitting a GET to the following
+URI.
+
+
+1.14.1 URI REQUEST FORMAT
+
+/References/{referencetypeId}/{refcodeId}?CountryCode={countryCode}
+
+
+1.14.2 REQUEST PARAMETERS
+ Field                                               Required                Comment
+ Country Code                                        Mandatory               Country Code of shopper
+ ReferenceTypeId                                     Mandatory               Reference Type Id to be queried
+ RefcodeId                                             Optional              Reference Code Id
+
+
+1.14.3 EXAMPLE REQUEST
+
+GET         https://retailapi.apparel21.com/RetailAPI/References/1?countryCode=AU
+
+            Content-type: text/xml
+            Accept:version_2.0
+
+1.14.4 EXAMPLE RESPONSE
+
+<ReferencesbyType>
+<ReferenceTypeId>1</ReferenceTypeId>
+<ReferenceTypeCode>Class</ReferenceTypeCode>
+<ReferenceTypeName>Product Class</ReferenceTypeName>
+<References Type="Array">
+    <Reference>
+<ReferenceTypeId>1</ReferenceTypeId>
+<Id>2368</Id>
+<Code>Accessories</Code>
+<Name>Accessories</Name>
+    </Reference>
+    <Reference>
+<ReferenceTypeId>1</ReferenceTypeId>
+<Id>6723</Id>
+<Code>Belts</Code>
+<Name>Belts</Name>
+    </Reference>
+    <Reference>
+<ReferenceTypeId>1</ReferenceTypeId>
+       ….etc…..
+   </References>
+</ReferencesbyType>
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 23 of 221
+1.14.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.14.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 404
+
+1.15 RETRIEVE PRODUCT REFERENCE TYPE S
+
+The Reference Type details for products are retrieved by submitting a GET to the following URI. The Ids
+returned will be used to retrieve the product navigation tree.
+
+
+1.15.1 URI REQUEST FORMAT
+
+/ProductReferenceTypes?countryCode={countryCode}
+
+
+1.15.2 REQUEST PARAMETERS
+ Field                    Required                                         Comment
+ Country Code             Mandatory                                        Country Code of shopper
+ ExtendedRefs                                        Optional              “True” to return all product references (not just style
+                                                                           references) can be up to 20.
+
+1.15.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/ProductReferenceTypes?countryCode=AU&ExtendedRefs=true
+
+            Content-type: text/xml
+            Accept:version_2.0
+
+1.15.4 EXAMPLE RESPONSE
+
+<ProductReferenceTypes xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Id>99</Id>
+    <Name>Product</Name>
+    <ReferenceTypes Type="Array">
+        <Reference>
+            <Sequence>1</Sequence>
+            <ReferenceTypeId>257</ReferenceTypeId>
+            <Code>Range</Code>
+            <Name>Product Range</Name>
+        </Reference>
+        <Reference>
+            <Sequence>2</Sequence>
+            <ReferenceTypeId>1021</ReferenceTypeId>
+            <Code>Season</Code>
+            <Name>Product Season</Name>
+        </Reference>
+        <Reference>
+            <Sequence>3</Sequence>
+            <ReferenceTypeId>1</ReferenceTypeId>
+            <Code>Prod Grp</Code>
+            <Name>Product Group</Name>
+        </Reference>
+        <Reference>
+            <Sequence>4</Sequence>
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 24 of 221
+            <ReferenceTypeId>1201</ReferenceTypeId>
+            <Code>StockTyp</Code>
+            <Name>Stock Type</Name>
+        </Reference>
+        <Reference>
+            <Sequence>5</Sequence>
+            <ReferenceTypeId>258</ReferenceTypeId>
+            <Code>Label</Code>
+            <Name>Product Label</Name>
+        </Reference>
+        <Reference>
+            <Sequence>6</Sequence>
+            <ReferenceTypeId>1621</ReferenceTypeId>
+            <Code>COrigin</Code>
+            <Name>Country of Origin</Name>
+        </Reference>
+        <Reference>
+            <Sequence>7</Sequence>
+            <ReferenceTypeId>315</ReferenceTypeId>
+            <Code>Batch Tp</Code>
+            <Name>Batch Type</Name>
+        </Reference>
+        <Reference>
+            <Sequence>11</Sequence>
+            <ReferenceTypeId>2</ReferenceTypeId>
+            <Code>Comp Grp</Code>
+            <Name>Component Group</Name>
+        </Reference>
+        <Reference>
+            <Sequence>13</Sequence>
+            <ReferenceTypeId>19</ReferenceTypeId>
+            <Code>Story</Code>
+            <Name>Story</Name>
+        </Reference>
+    </ReferenceTypes>
+</ProductReferenceTypes>
+
+
+1.15.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.15.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 404
+
+1.16 RETRIEVE PRODUCT COLOUR REFERENCE CODES
+
+The Product Colour Reference Codes are retrieved by submitting a GET to the following URI.
+
+
+1.16.1 URI REQUEST FORMAT
+
+/ProductColourReferences?countryCode={countryCode}
+
+
+1.16.2 REQUEST PARAMETERS
+ Field                    Required                                         Comment
+ Country Code             Mandatory                                        Country Code of shopper
+
+
+1.16.3 EXAMPLE REQUEST
+GET         https://retailapi.apparel21.com/ProductColourReferences?countryCode={{CodeForCountry}}
+
+            Content-type: text/xml
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 25 of 221
+            Accept:version_2.0
+
+
+1.16.4                  EXAMPLE RESPONSE
+    <ProductColourReference>
+        <ClrId>1142</ClrId>
+        <RowNumber>1</RowNumber>
+        <References Type="Array">
+            <Reference>
+                <ReferenceTypeId>1221</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>425</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>1000903</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>1322</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>1000001</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>202</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>1261</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>256</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>419</ReferenceTypeId>
+                <Id />
+            </Reference>
+            <Reference>
+                <ReferenceTypeId>10</ReferenceTypeId>
+                <Id />
+            </Reference>
+        </References>
+    </ProductColourReference>
+….etc…..
+
+
+
+
+1.16.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.16.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 404
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 26 of 221
+1.17 RETRIEVE PRODUCT COLOUR REFERENCE CODES FOR A SINGLE PRODUCT COLOUR
+
+The Product Colours References are retrieved by submitting a GET to the following URI.
+
+
+1.17.1 URI REQUEST FORMAT
+
+/ProductColourReferences/clrid/?countryCode={countryCode}
+
+
+1.17.2 REQUEST PARAMETERS
+ Field                                              Required                Comment
+ Country Code                                       Mandatory               Country Code of shopper
+ ClrId                                              Mandatory               Unique Id of the style / colour
+
+
+1.17.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/ProductColourReferences/1002?countryCode=AU
+
+            Content-type: text/xml
+            Accept:version_2.0
+
+1.17.4                  EXAMPLE RESPONSE
+<ProductColourReferences>
+      <ClrId>1002</ClrId>
+      <RowNumber>1</RowNumber>
+      <References Type="Array">
+      <Reference>
+      <ReferenceTypeId>1002</ReferenceTypeId>
+      <Id />
+         </Reference>
+         </References>
+   </ProductColourReferences>
+
+
+
+
+1.17.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.17.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 404
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 27 of 221
+1.18 RETRIEVE PERSON REFERENCE CODES
+
+The Person References are retrieved by submitting a GET to the following URI.
+
+
+1.18.1 URI REQUEST FORMAT
+
+/PersonReferenceTypes/?countryCode={countryCode}
+
+
+1.18.2 REQUEST PARAMETERS
+ Field                                              Required                Comment
+ CountryCode                                        Mandatory               Country Code of shopper
+
+
+1.18.3 EXAMPLE REQUEST
+
+GET         https://retailapi.apparel21.com/RetailAPI/PersonReferenceTypes?countryCode=AU
+
+            Content-type: text/xml
+            Accept:version_2.0
+
+1.18.4 EXAMPLE RESPONSE
+<Id>12</Id>
+<Name>Person</Name>
+<ReferenceTypes Type="Array">
+     <Reference>
+        <Sequence>1</Sequence>
+        <ReferenceTypeId>1281</ReferenceTypeId>
+        <Code>SType</Code
+        ><Name>Store Type</Name>
+     </Reference>
+     <Reference>
+        <Sequence>2</Sequence>
+        <ReferenceTypeId>1321</ReferenceTypeId>
+        <Code>PerType</Code>
+        <Name>Person Type</Name>
+     </Reference>
+     <Reference>
+        <Sequence>3</Sequence>
+        <ReferenceTypeId>1361</ReferenceTypeId>
+        <Code>AgeGrp</Code>
+        <Name>Age Group</Name>
+     </Reference>
+     <Reference>
+        <Sequence>5</Sequence>
+        <ReferenceTypeId>27</ReferenceTypeId>
+        <Code>SalesRep</Code>
+        <Name>Sales Rep</Name>
+     </Reference></ReferenceTypes>
+</PersonReferenceTypes>
+
+
+1.18.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.18.6 ERROR RESPONSE
+ HTTP Error   API Error Code                          API Error Text
+ 404
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752   W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                         Page 28 of 221
+8           NAVIGATION TREE
+
+This resource provides a tree of product references which can be used to construct a navigation path for
+finding products. The structure and levels of the tree is defined by the query providing the product
+reference types to navigate by. Up to 5 levels can be requested.
+
+Refer to Product References for further detail.
+
+1.19 NAVIGATION TREE DETAILS
+
+
+Each reference tree consists of up to 5 levels of nodes. The following is a description of fields for one level.
+
+ Field                            Format             Max      Comment                                  Example                GET             HTTP
+                                                   Length                                                                   Response        Header
+                                                                                                                                           Accept:V
+                                                                                                                                            ersion_
+ Level                             Integer              1     Level of Node                            2                      Yes                1.0
+ NodeId                            Integer             22     Unique Id for node. This is useful       2                      Yes                1.0
+                                                              for storing the nodes in a
+                                                              browser object.
+ ReferenceTypeId                   Integer             22     Id of the refence type                   257                    Yes                  1.0
+ ReferenceId                       Integer             22     Id of reference. A reference is an       6326                   Yes                  1.0
+                                                              instance of a reference type.
+ ReferenceCode                     Alpha              15      Reference Code                           Mens                   Yes                  1.0
+ ReferenceName                     Alpha              40      Reference Name                           Mens                   Yes                  1.0
+ ProductQuery                      Alpha             250      A string which is used as query          1,2405:2,63            Yes                  1.0
+                                                              parameter to the the products            26
+                                                              resource to get a list of products
+                                                              satisfying this node.
+                                                              Format is sequence,reference
+                                                              code index:sequence,reference
+                                                              code index
+                                                              Sequence = reference position
+                                                              on the product
+                                                              Reference code index = unique
+                                                              identifier for reference code,
+                                                              e.g. 12345 = Womens
+ ProductQueryNames                 Alpha             250      Description of the references            Commune,               Yes                  1.0
+                                                              building up this node.                   Mens
+ LevelProductQuery                 Alpha             250      Product query string for this level      2,6326                 Yes                  1.0
+                                                              only.
+
+
+
+
+1 0 1 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 0 05 99 7 90 0   P H : 613 841 5 93 00   F A X: 613 9 427 1752     W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                   Apparel21 Reference Guide                                           Page 29 of 221
+RETRIEVE NAVIGATION TREE
+
+Perform a GET on the following URI to detect the product reference (navigation) tree types available from
+the Apparel21 installation. The parameter values for levels are the reference type ids as retrieved
+previously. Typically these would be stored in a configuration file at the website provider.
+
+
+1.19.1 URI REQUEST FORMAT
+
+ReferenceTree?countryCode={countryCode}&level1={id1}&level2={id2}&level3={id3}&level4={id4}&level5=
+{id5}
+
+
+1.19.2 REQUEST PARAMETERS
+ Field                  Required                                         Comment
+ Country Code          Mandatory                                         Country Code of shopper
+ Level 1                                         Mandatory               ReferenceTypeId of the first level of hierarchy
+ Level 2                                         Optional                ReferenceTypeId of the second level of hierarchy
+ Level 3                                         Optional                ReferenceTypeId of the third level of hierarchy
+ Level 4                                         Optional                ReferenceTypeId of the fourth level of hierarchy
+ Level 5                                         Optional                ReferenceTypeId of the fifth level of hierarchy
+
+
+1.19.3 EXAMPLE REQUEST
+
+For this example we will use SubBrand, Division and Product Group in the navigation tree.
+
+GET
+https://retailapi.apparel21.com/RetailAPI/ReferenceTree?countrycode=AU&level1=1041&level2=1004&lev
+el3=1
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+
+1.19.4 EXAMPLE RESPONSE
+       <ReferenceTree>
+       <Reference>
+       <Level>1</Level>
+       <NodeId>1</NodeId>
+       <ReferenceTypeId>258</ReferenceTypeId>
+       <ReferenceId>10991</ReferenceId>
+       <ReferenceCode>BONZ</ReferenceCode>
+       <ReferenceName>Bonez Streetwear</ReferenceName>
+       <ProductQuery>1,10991</ProductQuery>
+       <ProductQueryNames>Bonez Streetwear</ProductQueryNames>
+       <LevelProductQuery>1,10991</LevelProductQuery>
+       <Children>
+       <Reference>
+       <Level>2</Level>
+       <NodeId>2</NodeId>
+       <ReferenceTypeId>257</ReferenceTypeId>
+       <ReferenceId>6326</ReferenceId>
+       <ReferenceCode>Mens</ReferenceCode>
+       <ReferenceName>Mens</ReferenceName>
+       <ProductQuery>1,10991:2,6326</ProductQuery>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                             Page 30 of 221
+       <ProductQueryNames>Bonez Streetwear, Mens</ProductQueryNames>
+       <LevelProductQuery>2,6326</LevelProductQuery>
+       <Children>
+       <Reference>
+       <Level>3</Level>
+       <NodeId>3</NodeId>
+       <ReferenceTypeId>1</ReferenceTypeId>
+       <ReferenceId>2797</ReferenceId>
+       <ReferenceCode>Dresses</ReferenceCode>
+       <ReferenceName>Dresses</ReferenceName>
+       <ProductQuery>1,10991:2,6326:3,2797</ProductQuery>
+       <ProductQueryNames>Bonez Streetwear, Mens, Dresses</ProductQueryNames>
+       <LevelProductQuery>3,2797</LevelProductQuery>
+       <Children />
+          </Reference>
+          </Children>
+          </Reference>
+       <Reference>
+       <Level>2</Level>
+       <NodeId>4</NodeId>
+       <ReferenceTypeId>257</ReferenceTypeId>
+       <ReferenceId>5063</ReferenceId>
+       <ReferenceCode>Women</ReferenceCode>
+       <ReferenceName>Womens</ReferenceName>
+       <ProductQuery>1,10991:2,5063</ProductQuery>
+       <ProductQueryNames>Bonez Streetwear, Womens</ProductQueryNames>
+       <LevelProductQuery>2,5063</LevelProductQuery>
+       <Children>
+       <Reference>
+       <Level>3</Level>
+       <NodeId>5</NodeId>
+       <ReferenceTypeId>1</ReferenceTypeId>
+       <ReferenceId>2364</ReferenceId>
+       <ReferenceCode>Jackets</ReferenceCode>
+       <ReferenceName>Jackets</ReferenceName>
+       <ProductQuery>1,10991:2,5063:3,2364</ProductQuery>
+       <ProductQueryNames>Bonez Streetwear, Womens , Jackets</ProductQueryNames>
+       <LevelProductQuery>3,2364</LevelProductQuery>
+       <Children />
+          </Reference>
+          </Children>
+          </Reference>
+          </Children>
+          </Reference>
+       <Reference>
+       <Level>1</Level>
+       <NodeId>6</NodeId>
+       <ReferenceTypeId>258</ReferenceTypeId>
+       <ReferenceId>2405</ReferenceId>
+       <ReferenceCode>COMM</ReferenceCode>
+       <ReferenceName>Commune</ReferenceName>
+       <ProductQuery>1,2405</ProductQuery>
+       <ProductQueryNames>Commune</ProductQueryNames>
+       <LevelProductQuery>1,2405</LevelProductQuery>
+       <Children>
+       <Reference>
+       <Level>2</Level>
+       <NodeId>7</NodeId>
+       <ReferenceTypeId>257</ReferenceTypeId>
+       <ReferenceId>4060</ReferenceId>
+       <ReferenceCode>Accessories</ReferenceCode>
+       <ReferenceName>Accessories</ReferenceName>
+       <ProductQuery>1,2405:2,4060</ProductQuery>
+       <ProductQueryNames>Commune, Accessories</ProductQueryNames>
+       <LevelProductQuery>2,4060</LevelProductQuery>
+       <Children>
+       <Reference>
+       <Level>3</Level>
+       <NodeId>8</NodeId>
+       <ReferenceTypeId>1</ReferenceTypeId>
+       <ReferenceId>2368</ReferenceId>
+       <ReferenceCode>Accessories</ReferenceCode>
+       <ReferenceName>Accessories</ReferenceName>
+       <ProductQuery>1,2405:2,4060:3,2368</ProductQuery>
+       <ProductQueryNames>Commune, Accessories, Accessories</ProductQueryNames>
+       <LevelProductQuery>3,2368</LevelProductQuery>
+       <Children />
+          </Reference>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 31 of 221
+….etc…..
+
+
+When a user clicks on a particular node, the associated products can be retrieved via the ProductQuery
+elements.
+<ProductQuery>1,2405:2,4060:3,2368</ProductQuery>
+
+
+Note: Record details of this element will be used in the products endpoint.
+
+
+1.19.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.19.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 32 of 221
+9    PRODUCTS
+
+The API retrieves relevant product information necessary for the customer to browse products on the
+website. The detail includes
+
+     •     Description
+     •     Colour and size information
+     •     Pricing
+     •     Stock availability
+     •     Barcodes
+     •     Product Reference Code details
+
+There are six different methods of obtaining product information.
+The following resources construct product detail in three levels – product, colour and SKU – with pricing
+and stock availability.
+List of products
+Single product by Id
+Products you might like
+
+The following resources do not provide SKU level detail including stock availability.
+Get list of products – simple
+Single product by Id – simple
+Product notes by Id
+Product colour notes by colour Id
+
+There may be many colours for a product and each colour is able to have up to 30 sizes (SKU).
+
+Colour References
+Products are sometimes grouped at the colour level using Colour References. A list of products with similar
+colour references can be obtained using the Clr Id on the Product detail and using the request listed in
+Product Colours References.
+
+Pricing
+By size, there are three price fields:
+
+Price = Current price for today’s date
+OriginalPrice = Original price (price with no start or end date)
+RetailPrice = Current price for today’s date from price scheme set in Generic Interface Translation table for
+SALESNET_RRP. This may not be the same price scheme as the store.
+
+Promotional pricing set up in Apparel21 Retail Promotions is only applied when the Cart is submitted.
+
+The Markdown Status element and filter at the product / colour level can be used to see if the current price
+is a permanent or temporary markdown. This is useful for tagging products for a different area of the
+website. For example, permanent markdown product / colours can be moved to a “clearance” section of
+the website. Note: The item MUST have an “ORIGINAL” price for this to be effective. The Original price is
+the price with NO effective date range.
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 33 of 221
+Custom Data
+Apparel21 has Custom Data types that can be added to products. This allows businesses to further enrich
+the information about their products. As part of enriching data, the Retail API has been updated to allow
+web developers to retrieve the custom data to use within the web environment.
+
+To utilise the custom data functionality, the header of the call will need to specify ‘version 4’
+
+content-type: text/xml
+
+Accept: version_4.0
+
+To make Custom Data available to web developers, and the extra information that businesses can add to
+their products, two product calls have been updated to retrieve the Custom Data.
+
+Full product call
+
+/Products?countryCode={countryCode}&CustomData=true
+
+Single product call
+
+/Products/{id}?countryCode={countryCode}&CustomData=true
+
+An endpoint exists to return product custom data templates and attributes to know how custom data fields
+are defined.
+
+Image URL
+
+List of products and Single product by Id resources have a request parameter to return image URLs at
+product and colour levels.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 34 of 221
+1.20 PRODUCT DETAILS
+
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+ Id                                 Integer            22    Id for the product                    34053                      Yes           Yes       Yes         Yes        Yes       Yes         No       1.0
+ RowNumber                          Integer            22    The row number of this                27                         Yes           Yes       Yes         Yes        Yes       No          No       1.0
+                                                             product for this query
+ Code                                Alpha             10    The product code                      EMC4                       Yes           Yes       Yes         Yes        Yes       No          No       1.0
+ Name                                Alpha             30    Description of product                Dririder Target            Yes           Yes       Yes         Yes        Yes       No          No       1.0
+                                                                                                   Gloves
+ Description                         Alpha           254     Comments specified for a              Waterproof                 Yes           Yes       Yes         Yes        Yes       No          No       1.0
+                                                             product                               gloves to keep
+                                                                                                   you dry
+ SizeRange                           Alpha             30    Size range name – blank for           6-14                       Yes           Yes       Yes         No         No        No          No       1.0
+                                                             non sized products
+ UpdateTimeStamp                     Alpha           256     Date/time the last update was         2010-08-                   Yes           Yes       No          Yes        Yes       No          No        2.0
+                                                             made to the product on the            30T11:33:09
+                                                             style table or the prices for
+                                                             that style changing for
+                                                             “today” (does not include
+                                                             stock quantity changes)
+ OriginalPriceFrom               Num(22,2)             22    Original lowest price of the          79.95                       No           No        No          Yes        Yes       No          No       1.0
+                                                             product
+ PriceFrom                       Num(22,2)             22    Current lowest price of the           69.95                       No           No        No          Yes        Yes       No          No       1.0
+                                                             product
+ OriginalPriceTo                 Num(22,2)             22    Original Highest price of the         109.95                      No           No        No          Yes        Yes       No          No       1.0
+                                                             product
+ PriceTo                         Num(22,2)             22    Current Highest price of the          99.95                       No           No        No          Yes        Yes       No          No       1.0
+                                                             product
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 35 of 221
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+ References                                                  The list of reference Ids for
+                                                             this product.
+      Reference                                              Reference is a sub-element of
+                                                             references.
+      ReferenceTypeId               Integer            22    The reference type Id                 257                        Yes           Yes       Yes         No         No        No          No       1.0
+      Id                            Integer            22    The reference Id of this              6326                       Yes           Yes       Yes         No         No        No          No       1.0
+                                                             reference type for this
+                                                             product
+ CustomData                                                  List of Cards of Custom Data                                     Yes           Yes       No          No         No        No          No       4.0
+                                                             on product level
+
+   Cards                             Alpha                   Type=”Array”                                                     Yes           Yes       No          No         No        No          No       4.0
+
+    Card                             Alpha                   Name=””                                                          Yes           Yes       No          No         No        No          No       4.0
+
+      Fields                         Alpha                   Type=”Array”                                                     Yes           Yes       No          No         No        No          No       4.0
+
+         Field                      Alpha,                   Name=””                               Summer,                    Yes           Yes       No          No         No        No          No       4.0
+                                   Number,                                                         2134558, YES,
+                                  Boolean,D                                                        2019-03-30
+                                     ate
+
+    ListValues                       Alpha                   Type=”Array”                                                     Yes           Yes       No          No         No        No          No       4.0
+
+          Value                     Alpha,                                                         Summer,                    Yes           Yes       No          No         No        No          No       4.0
+                                   Number,                                                         2134558, YES,
+                                   Boolean,                                                        2019-03-30
+                                     Date
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 36 of 221
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+ Images                                                      List of image URLs on product                                    Yes           Yes       No          No         No        No          No       4.0
+                                                             level Type=”Array”
+
+     Image                           Alpha                   Sub-element of Images                                            Yes           Yes       No          No         No        No          No       4.0
+
+        Sequence                    Integer            22    Sequence Id of image in the           1                          Yes           Yes       No          No         No        No          No       4.0
+                                                             array
+
+        TypeId                      Integer            22    Reference Type Id                     11804                      Yes           Yes       No          No         No        No          No       4.0
+
+      TypeCode                       Alpha             15    Code of Reference Type Id             WEB-02                     Yes           Yes       No          No         No        No          No       4.0
+
+      Url                            Alpha          1000     A web-based image URL                 https://res.clou           Yes           Yes       No          No         No        No          No       4.0
+                                                                                                   dinary.com/envi
+                                                                                                   mo/image/uplo
+                                                                                                   ad/v150163485
+                                                                                                   7/101780-
+                                                                                                   3820/0011/001
+                                                                                                   /3.png
+
+ Clrs                                                        The list of colours for this
+                                                             product
+        Clr                                                  Clr is a sub-element of Clrs
+        Id                          Integer            22    The Id for this colour for this       542                        Yes           Yes       Yes         No         No        No         Yes       1.0
+                                                             product
+        ProductId                   Integer            22    The product Id which is the           34053                      Yes           Yes       Yes         No         No        No          No       1.0
+                                                             parent of this colour
+        Sequence                    Integer            22    The sequence of this colour           1                          Yes           Yes       Yes         No         No        No          No       1.0
+                                                             within this product.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 37 of 221
+                                                                                                                                                       GET responses
+ Field                              Format         Max        Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                             Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                            by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                           :Versio
+                                                                                                                                                                                                               n_
+      Code                           Alpha             21     Colour code                           Noir                       Yes           Yes       Yes         No         No        No          No       1.0
+      Name                           Alpha             61     Colour Name                           Noir comme                 Yes           Yes       Yes         No         No        No          No       1.0
+                                                                                                    poix
+      TypeCode                       Alpha              21    If reference group ColType /          BLK                        Yes           Yes       Yes         No         No        No          No       1.0
+                                                              Colour Type (RGIDX = 426) is
+                                                              attached to the Colour object
+                                                              in Object Maintenance then
+                                                              this will extract the reference
+                                                              code applied to the colour I
+                                                              the colour table. If this
+                                                              reference group is NOT
+                                                              attached to the colour object,
+                                                              then this will extract colour
+                                                              code.
+                                                              The purpose of grouping
+                                                              colours with a type could be
+                                                              useful for grouping the many
+                                                              unique representations of a
+                                                              colour for different products.
+                                                              E.g. Black, Nero, Noir,
+                                                              grouped under one reference
+                                                              code called Black.
+      TypeName                       Alpha             61     The global type name for this         Black                      Yes           Yes       Yes         No         No        No          No       1.0
+                                                              colour. See above
+                                                              explanation for code. This is
+                                                              the reference description for
+                                                              the same thing. If colour type
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                               Apparel21 Reference Guide                                            Page 38 of 221
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+                                                             not set up, will show colour
+                                                             description.
+      MarkdownStatus                 Alpha              9    Permanent / Temporary /               Permanent                  Yes           Yes       No          No         No        No          No       1.0
+                                                             TempPermanent / None – this
+                                                             indicates whether the item is
+                                                             a clearance item or not. If
+                                                             permanent markdown, this
+                                                             indicates a clearance product
+                                                             / colour. TempPermanent is a
+                                                             permanently marked down
+                                                             item with a temporary
+                                                             markdown in place.
+ References                                                  The list of reference Ids for                                    Yes           Yes       Yes         No         No        No          No       4.0
+                                                             colour.
+      Reference                                              Reference is a sub-element of                                    Yes           Yes       Yes         No         No        No          No       4.0
+                                                             references.
+      ReferenceTypeId               Integer            22    The reference type Id                 1321                       Yes           Yes       Yes         No         No        No          No       4.0
+      Id                            Integer            22    The reference Id of this              4362                       Yes           Yes       Yes         No         No        No          No       4.0
+                                                             reference type for this
+                                                             product
+ CustomData                                                  List of Cards of Custom Data                                     Yes           Yes       No          No         No        No          No       4.0
+                                                             on colour level
+
+   Cards                             Alpha                   Type=”Array”                                                     Yes           Yes       No          No         No        No          No       4.0
+
+    Card                             Alpha                   Name=””                                                          Yes           Yes       No          No         No        No          No       4.0
+
+      Fields                         Alpha                   Type=”Array”                                                     Yes           Yes       No          No         No        No          No       4.0
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 39 of 221
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+         Field                      Alpha,                   Name=””                               Summer,                    Yes           Yes       No          No         No        No          No       4.0
+                                   Number,                                                         2134558, YES,
+                                  Boolean,D                                                        2019-03-30
+                                     ate
+
+    ListValues                       Alpha                   Type=”Array”                                                     Yes           Yes       No          No         No        No          No       4.0
+
+            Value                   Alpha,                                                         Summer,                    Yes           Yes       No          No         No        No          No       4.0
+                                   Number,                                                         2134558, YES,
+                                   Boolean,                                                        2019-03-30
+                                     Date
+
+ Images                                                      List of image URLs on product                                    Yes           Yes       No          No         No        No          No       4.0
+                                                             level Type=”Array”
+
+     Image                           Alpha                   Sub-element of Images                                            Yes           Yes       No          No         No        No          No       4.0
+
+      Sequence                      Integer            22    Sequence Id of image in the           1                          Yes           Yes       No          No         No        No          No       4.0
+                                                             array
+
+      TypeId                        Integer            22    Reference Type Id                     11804                      Yes           Yes       No          No         No        No          No       4.0
+
+      TypeCode                       Alpha             15    Code of Reference Type Id             WEB-02                     Yes           Yes       No          No         No        No          No       4.0
+
+      Url                            Alpha          1000     A web-based image URL                 https://res.clou           Yes           Yes       No          No         No        No          No       4.0
+                                                                                                   dinary.com/envi
+                                                                                                   mo/image/uplo
+                                                                                                   ad/v150163485
+                                                                                                   7/101780-
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 40 of 221
+

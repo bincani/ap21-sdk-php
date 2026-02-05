@@ -52,9 +52,11 @@ class CurlRequest
         // Set URL
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // used for dev - stop cURL from verifying the peers certificate.
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // SSL verification - enabled by default for security
+        // Can be disabled via config for development: [CURLOPT_SSL_VERIFYPEER => false]
+        $sslVerify = !isset(self::$config[CURLOPT_SSL_VERIFYPEER]) || self::$config[CURLOPT_SSL_VERIFYPEER];
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $sslVerify ? 2 : 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $sslVerify);
 
         //Return the transfer as a string
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -170,8 +172,15 @@ class CurlRequest
      */
     protected static function processRequest($ch)
     {
-        # Check for 429 leaky bucket error
-        while (1) {
+        // Rate limit retry settings
+        $maxRetries = isset(self::$config['MaxRetries']) ? (int)self::$config['MaxRetries'] : 5;
+        $retryCount = 0;
+
+        // Handle 429 rate limit with retry and backoff
+        while ($retryCount <= $maxRetries) {
+            // Enforce minimum gap between API calls
+            Ap21SDK::checkApiCallLimit();
+
             $output   = curl_exec($ch);
             $response = new CurlResponse($output);
             $response->getHeaders();
@@ -181,26 +190,32 @@ class CurlRequest
                 if (Status::httpResponse(self::$lastHttpCode)) {
                     self::$lastHttpResponse = Status::httpResponse(self::$lastHttpCode);
                 }
-                else if (http_response_code(CurlRequest::$lastHttpCode)) {
+                elseif (http_response_code(CurlRequest::$lastHttpCode)) {
                     self::$lastHttpResponse = http_response_code(CurlRequest::$lastHttpCode);
                 }
                 break;
             }
 
-            /*
-            $limitHeader = explode('/', $response->getHeader('X-...-Limit'), 2);
-            if (isset($limitHeader[1]) && $limitHeader[0] < $limitHeader[1]) {
-                throw new ResourceRateLimitException($response->getBody());
+            // Max retries exceeded
+            if ($retryCount >= $maxRetries) {
+                throw new ResourceRateLimitException(
+                    sprintf("Rate limit exceeded after %d retries", $maxRetries),
+                    429
+                );
             }
-            */
 
-            /*
+            // Use Retry-After header if available, otherwise exponential backoff
             $retryAfter = $response->getHeader('Retry-After');
-            if ($retryAfter === null) {
-                break;
+            if ($retryAfter !== null) {
+                $sleepTime = (int)$retryAfter;
+            } else {
+                // Exponential backoff: 1s, 2s, 4s, 8s, 16s
+                $sleepTime = pow(2, $retryCount);
             }
-            sleep((float)$retryAfter);
-            */
+
+            Log::debug(sprintf("%s: Rate limited (429), retry %d/%d after %ds", __METHOD__, $retryCount + 1, $maxRetries, $sleepTime));
+            sleep($sleepTime);
+            $retryCount++;
         }
 
         if (curl_errno($ch)) {

@@ -1,0 +1,1205 @@
+1.86 ADD NEW GIFTS TO AN ACCOUNT
+
+Do a POST on the below URI to issue new gifts to a reward account.
+
+
+1.86.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/Gifts/?countryCode={countryCode}
+
+
+1.86.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.86.3 EXAMPLE REQUEST
+
+POST       https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Gifts/?countryCode=AU
+
+           Content-type: text/xml
+           Accept: version_1.0
+
+
+1.86.4 EXAMPLE PAYLOAD
+
+<GiftPost>
+    <RequestId>63850e00-9ba03-406a-bae8-368e21d74c9g</RequestId>
+        <PersonId>1841</PersonId>
+    <GiftId>22</GiftId>
+        <Description>August Gift Issue API</Description>
+        <Reference>AUG123</Reference>
+        <ExpiryDate>2019-08-12</ExpiryDate>
+       <IssueReason>
+         <Id>17666</Id>
+       </IssueReason>
+</GiftPost>
+
+1.87 ADD NEW POINTS TO AN ACCOUNT
+
+Do a POST on the below URI to accrue points to a person’s reward account.
+
+
+1.87.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/points/?countryCode={countryCode}
+
+
+1.87.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.87.3 EXAMPLE REQUEST
+
+POST       https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Points?countryCode=AU
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 201 of 221
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.87.4 EXAMPLE PAYLOAD
+
+<PointsPost>
+       <RequestId>5AFC78B8-A622-438B-9ABE-AE9665827837</RequestId>
+       <PersonId>1841</PersonId>
+       <Points>100</Points>
+       <Description>Social Media Posts</Description>
+       <Reference>SMP123</Reference>
+       <ExpiryDate>2019-01-01</ExpiryDate>
+</PointsPost>
+
+1.88 REDEEM REWARD
+
+Do a POST on the below URI to redeem a reward from an account.
+
+
+1.88.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/rewards/redemptions?countryCode={countryCode}
+
+
+1.88.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.88.3 EXAMPLE REQUEST
+
+POST
+https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Rewards/Redemptions?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.88.4 EXAMPLE PAYLOAD
+
+<RewardRedemption>
+       <AutoConfirm>true</AutoConfirm>
+       <RequestId>5AFC78B8-A622-438B-9ABE-AE9665827837</RequestId>
+       <PersonId>1841</PersonId>
+       <Amount>10.50</Amount>
+       <Description>Redeem reward</Description>
+       <Reference>RED123</Reference>
+       <SpendAmount>19</SpendAmount>
+</RewardRedemption>
+
+
+1.89 REDEEM GIFT
+
+Do a POST on the below URI to redeem a gift from an account.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 202 of 221
+1.89.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/gifts/redemptions?countryCode={countryCode}
+
+
+1.89.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.89.3 EXAMPLE REQUEST
+
+POST https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Gifts/Redemptions?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+
+1.89.4 EXAMPLE PAYLOAD
+
+<GiftRedemption>
+       <AutoConfirm>false</AutoConfirm>
+       <RequestId>5AFC78B8-A622-438C-9ABE-AE9665127819</RequestId>
+       <PersonId>1841</PersonId>
+       <GiftId>21</GiftId>
+       <RedeemedSkuId>15541</RedeemedSkuId>
+       <Description>Redeem March Reward</Description>
+       <Reference>Redeen March Reward API</Reference>
+</GiftRedemption>
+
+1.90 REDEEM POINTS
+
+Do a POST on the below URI to redeem a points from an account.
+
+
+1.90.1 URI REQUEST FORMAT
+
+/rewards/accounts/{accountId}/points/redemptions?countryCode={countryCode}
+
+
+1.90.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Account Id     Mandatory Identity of the reward account of shopper
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.90.3 EXAMPLE REQUEST
+
+POST
+https://retailapi.apparel21.com/RetailAPI/Rewards/Accounts/1/Points/Redemptions?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 203 of 221
+1.90.4 EXAMPLE PAYLOAD
+
+<PointsRedemption>
+       <AutoConfirm>true</AutoConfirm>
+       <RequestId>5AFC78B8-A622-438B-9ABE-AE9665827817</RequestId>
+       <PersonId>1841</PersonId>
+       <Points>30</Points>
+       <Description>Redeem points</Description>
+       <Reference>RED456</Reference>
+</PointsRedemption>
+
+1.91 CONFIRM UNCONFIRMED REQUEST
+
+Do a POST on the below URI to confirm an unconfirmed request and commit the pending redemption of
+points or rewards.
+
+
+1.91.1 URI REQUEST FORMAT
+
+/rewards/confirmation?countryCode={countryCode}&requestId={requestId}
+
+
+1.91.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Country Code   Mandatory Country Code of shopper
+ Request Id                   Mandatory          Request Id (GUID)
+
+
+1.91.3 EXAMPLE REQUEST
+
+POST
+https://retailapi.apparel21.com/RetailAPI/Rewards/Confirmation?countryCode=AU&requestId=5AFC78B8-
+A622-438B-9ABE-AE9665827817
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.92 REVERSE UNCONFIRMED REQUEST
+
+Do a POST on the below URI to rollback redemption request. This can only be done within 24 hours of a
+redemption request.
+
+
+1.92.1 URI REQUEST FORMAT
+/rewards/reversal?countryCode={countryCode}&requestId={requestId}
+1.92.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Country Code   Mandatory Country Code of shopper
+ Request Id                   Mandatory          Request Id (GUID recommended)
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 204 of 221
+1.92.3 EXAMPLE REQUEST
+POST
+https://retailapi.apparel21.com/RetailAPI/Rewards/Reversal?countryCode=AU&requestId=5AFC78B8-
+A622-438B-9ABE-AE9665827817
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.93 SUCCESS RESPONSE
+
+ HTTP Response
+ 200                                               OK
+ 201                                               Created
+
+1.94 ERROR RESPONSE
+
+ HTTP Error               API Error Code         API Error Description
+ 403                      5152                   AccountId 'XXX' does not exist
+ 403                      5153                   XXX is not a positive number
+ 403                      5154                   XXX is neither zero nor a positive number
+ 403                      5155                   PersonId 'XXX' does not match AccountId 'YYY'
+ 403                      5156                   Not enough points available to redeem
+ 403                      5157                   Not enough rewards available to redeem
+ 403                      5158                   'RequestId' URL parameter is mandatory
+ 403                      5159                   TierId 'XXX' is not valid for ProgramId 'YYY'
+ 403                      5160                   Failed to create account for PersonId 'XXX' and ProgramId 'YYY'
+ 403                      5161                   Account already exists for PersonId 'XXX' and ProgramId 'YYY'
+ 403                      5162                   ProgramId 'XXX' does not exist
+ 403                      5163                   RequestId 'XXX has already been processed
+ 403                      5164                   RequestId is mandatory"
+ 403                      5165                   Account XXX is corrupt
+ 403                      5166                   Person XXX is not valid
+ 403                      5167                   AccountId 'XXX' is not valid for the API web store
+ 403                      5168                   ProgramId 'XXX' is not valid for the API web store
+ 403                      5169                   AccountId 'XXX' has changed since update was requested
+ 403                      5170                   Rewards Error: XXX
+ 403                      5171                   No gift with GiftId XXX available to redeem
+ 403                      5172                   GiftId XXX not valid for AccountId XXX
+ 403                      5173                   RedeemedSkudId XXX is invalid for GiftId XXX
+ 403                      5174                   AccountId XXX is not associated with an active program
+ 403                      5239                   The spend amount XXX is below the minimum spend XXX for this reward
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 205 of 221
+21 STORES
+
+The Stores resource retrieves store details to enable a shopper to purchase goods online and collect from a
+store that is convenient for them. The FreeStock resource is created in conjunction with Stores to display
+available stock by SKU.
+
+1.95 STORE DETAILS
+
+
+ Field            Format         Max             Comment                             Example                               GET              HTTP
+                                 Length                                                                                  Response         Header
+                                                                                                                                          Accept:
+                                                                                                                                         Version_
+ Store                                           Lists Store details
+ StoreId          Integer              22        Identifier for the Store            108864                                  Yes                 2.0
+ Code             Alpha                30        Store Code                          GEORGESTS                               Yes                 2.0
+ StoreNo          Integer               3        Store Number                        100                                     Yes                 2.0
+ Name             Alpha                30        Retail Store Name                   George St Store                         Yes                 2.0
+ Address1         Alpha                50        1st line of the store address       110 Cremorne St                         Yes                 2.0
+ Address2         Alpha                50        2nd line of the store address       Level 2                                 Yes                 2.0
+ City             Alpha                50        City of the store                   Cremorne                                Yes                 2.0
+ State            Alpha                50        State                               VIC                                     Yes                 2.0
+ Postcode         Integer              10        Postcode of the store               3131                                    Yes                 2.0
+ Country          Alpha                20        Country of the Store                Australia                               Yes                 2.0
+ Email            Alpha               250        Email address of the store          GeorgeSt@apparel21.com                  Yes                 2.0
+
+1.96 RETRIEVE STORE DETAILS
+
+To retrieve a list of stores use a GET on the following URI.
+
+
+1.96.1 URI REQUEST FORMAT
+
+/Stores/{StoreId}?countryCode={countryCode}
+
+
+1.96.2 REQUEST PARAMETERS
+ Field                                                      Required                Comment
+ StoreId                                                    Optional                Id of the Store to request details for a single
+                                                                                    store
+ CountryCode                                              Mandatory                 Country code of the shopper
+
+
+1.96.3 EXAMPLE REQUEST
+
+GET        https://retailapi.apparel21.com/RetailAPI/Stores/2701?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121       A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                           Page 206 of 221
+1.96.4 EXAMPLE PAYLOAD
+
+<Store>
+  <StoreId>108864</StoreId>
+  <Code>GEORGESTS</Code>
+  <StoreNo>100</StoreNo>
+  <Name>George St Store</Name>
+  <Address1>110 Cremorne St</Address1>
+  <Address2>Level 2</Address2>
+  <City>Cremorne</City>
+  <State>VIC</State>
+  <Postcode>3131</Postcode>
+  <Country>Australia</Country>
+  <Email>GeorgeSt@Appare21.com</Email>
+</Store>
+
+
+1.96.5 SUCCESS RESPONSE
+ HTTP Response
+ 200                                               OK
+ 201                                               Created
+
+1.96.6 ERROR RESPONSE
+ HTTP Error     API Error Code                     API Error Text
+ 404
+ 400            5081                               Store ID should be an integer
+ 403            5080                               You don’t have security for the requested store
+ 403            5014                               Size of field XXXX, 9999 is too long. Maximum length is 9999.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 207 of 221
+22 SHIPMENTS
+
+The Shipments resource retrieves shipment details for all orders that have been despatched from either the
+warehouse or retail stores. If an order has been despatched in multiple shipments, the response will return
+all shipments with corresponding Carrier and Consignment note details.
+
+1.97 SHIPMENT DETAILS
+
+
+ Field                         Format            Max       Comment                                   Example                    GET               HTTP
+                                                 Length                                                                       Response          Header
+                                                                                                                                               Accept:V
+                                                                                                                                                ersion_
+ Shipment                                                  Lists Shipment details
+ CarrierName                   Alpha                  22   Name of carrier                           Aust Post                     Yes                   2.0
+ CarrierUrl                    Alpha                  30   URL of carrier. Returns a value only      https://                      Yes                   2.0
+                                                           if carrier is a valid reference code in   AustraliaPost
+                                                           Apparel21, otherwise returns blank.
+ ConNote                       Alpha                  50   Consignment Note Number of                111Z02129729                  Yes                   2.0
+                                                           shipment
+ DespatchDate                  Date                        Date of despatch                          2023-08-18                    Yes                   2.0
+ Contents                                                  Lists of contents                                                       Yes                   2.0
+  Content                                                                                                                          Yes                   2.0
+    ProductCode                Alpha                       Product Code                              ADIDASRugbyNZ
+    ColourCode                 Alpha                       Colour Code                               RED
+    SizeCode                   Alpha                       Size Code                                 2
+    SkuId                      Integer                22   Id of the SKU                             214743                        Yes                   2.0
+    Quantity                   Num(22,2)              22   Quantity of SKU                           10                            Yes                   2.0
+ Packed Carton Contents                                    List of Packs
+ Tracking Number               Alpha                       Tracking number for Carton                1183391740                    Yes                   2.0
+ Carton SSCC                   Num                         SSCC for carton                           0039314442110                 Yes                   2.0
+                                                                                                     4571740
+     Product Code              Alpha                       Product Code                              ADIDASRugbyNZ                 Yes                   2.0
+     ColourCode                Alpha                       Colour Code                               RED                           Yes                   2.0
+     SizeCode                  Alpha                       Size Code                                 2                             Yes                   2.0
+     SkuId                     Integer                22   Id of the SKU                             214743                        Yes                   2.0
+     Quantity                  Num(22,2)                   Quantity of SKU in carton                 2                             Yes                   2.0
+
+
+
+1.98 RETRIEVE SHIPMENT DETAILS
+
+To retrieve a list of shipment details for an order perform a GET on the following URI.
+
+
+1.98.1 URI REQUEST FORMAT
+
+/Persons/{PersonId}/Shipments/{OrderId}?countryCode={countryCode}
+
+
+1.98.2 REQUEST PARAMETERS
+ Field                                                 Required                     Comment
+ PersonId                                              Mandatory                    Id of the Person the orders are requested for
+ OrderId                                               Mandatory                    Id of the Order to request shipment details for
+                                                                                    a single order
+ CountryCode                                           Mandatory                    Country code of the shopper
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00      P H : 613 8 415 9300       F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                                 Page 208 of 221
+1.98.3 EXAMPLE REQUEST
+
+GET         https://retailapi.apparel21.com/RetailAPI/persons/4323/shipments/3323?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.98.4 EXAMPLE PAYLOAD
+
+<Shipments xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-
+instance" Type="Array">
+    <Shipment>
+        <CarrierName>Australia Post</CarrierName>
+        <CarrierUrl>https:// Australia Post /mypost/track/111Z02129729</CarrierUrl>
+        <ConNote>111Z02129729</ConNote>
+        <DespatchDate>2023-08-18T00:00:00</DespatchDate>
+        <Contents>
+             <Content>
+                 <ProductCode>ADIDASRugbyNZY</ProductCode>
+                 <ColourCode>RED</ColourCode>
+                 <SizeCode>2</SizeCode>
+                 <SkuId>214743</SkuId>
+                 <Quantity>10</Quantity>
+             </Content>
+        </Contents>
+        <PackedCartonContents>
+             <PackedCartonContent>
+                 <TrackingNumber>1183391740</TrackingNumber>
+                 <CartonSSCC>00393144421104571740</CartonSSCC>
+                 <ProductCode>ADIDASRugbyNZY</ProductCode>
+                 <ColourCode>RED</ColourCode>
+                 <SizeCode>2</SizeCode>
+                 <SkuId>2</SkuId>
+                 <Quantity>2</Quantity>
+             </PackedCartonContent>
+             <PackedCartonContent>
+                 <TrackingNumber>1183391795</TrackingNumber>
+                 <CartonSSCC>00393144421104571795</CartonSSCC>
+                 <ProductCode>ADIDASRugbyNZY</ProductCode>
+                 <ColourCode>RED</ColourCode>
+                 <SizeCode>2</SizeCode>
+                 <SkuId>2</SkuId>
+                 <Quantity>1</Quantity>
+             </PackedCartonContent>
+             <PackedCartonContent>
+                 <TrackingNumber>1183391849</TrackingNumber>
+                 <CartonSSCC>00393144421104571849</CartonSSCC>
+                 <ProductCode>ADIDASRugbyNZY</ProductCode>
+                 <ColourCode>RED</ColourCode>
+                 <SizeCode>2</SizeCode>
+                 <SkuId>2</SkuId>
+                 <Quantity>7</Quantity>
+             </PackedCartonContent>
+        </PackedCartonContents>
+    </Shipment>
+</Shipments>
+
+
+
+
+1.98.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.98.6 ERROR RESPONSE
+ HTTP Error     API Error Code API Error Text
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 209 of 221
+23 FREIGHT OPTIONS
+
+A GET endpoint is added for retrieving freight options with details of carrier, service type and SLA. In
+Apparel21, a freight option is considered valid if it has an active flag. Since there is no explicit configuration
+in Apparel21 for pairing freight options to web stores, web developers will need to use the GET endpoint to
+get all valid freight options and then assign the specific freight option for order submission.
+
+Field                          Format            Comment                       Example                                   HTTP Header
+
+                                                                                                                         Accept:Version
+
+FreightOptions                 Alpha             Type="Array"                                                            4.0
+
+ FreightOption                 Alpha                                                                                     4.0
+
+    Id                         Integer           CrescoData needs to pass      884                                       4.0
+                                                 this Id for order
+                                                 submission
+
+    Name                       Alpha             Description of freight        eParcel Standard Signature + Optional     4.0
+                                                 option                        ATL
+
+    Carrier                    Alpha                                                                                     4.0
+
+         Id                    Integer           Ap21 identification           18936                                     4.0
+                                                 number of carrier
+
+         Code                  Alpha             Code of carrier               AUS                                       4.0
+
+         Name                  Alpha             Name of carrier which is      Australia Post                            4.0
+                                                 passed in <Carrier> of
+                                                 order updates payload.
+                                                 CrescoData can map this
+                                                 to marketplace’s carrier.
+
+         Url                   Alpha             Url of carrier which is       https://auspost.com.au/mypost/track       4.0
+                                                 used together with
+                                                 connote for tracking
+
+   ServiceType                 Alpha                                                                                     4.0
+
+         Id                    Integer           Ap21 identification           18934                                     4.0
+                                                 number of service type
+
+         Code                  Alpha             Code of service type          50S1                                      4.0
+
+         Name                  Alpha             Description of service        eParcel Standard                          4.0
+                                                 type
+
+    SLA                        Alpha                                                                                     4.0
+
+          Id                   Integer           Ap21 identificaton            19252                                     4.0
+                                                 number of SLA
+
+          Code                 Alpha             Code of SLA                   Std                                       4.0
+
+          Name                 Alpha             Description of SLA            Standard SLA's                            4.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00        P H : 613 8 415 9300    F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                              Page 210 of 221
+1.99 RETRIEVE FREIGHT OPTIONS FROM WEB FREIGHT OPTIONS
+
+
+1.99.1 URI REQUEST FORMAT
+
+/FreightOptions?countryCode={countryCode}
+
+
+1.99.2 REQUEST PARAMETERS
+ Field                                                Required                  Comment
+ CountryCode                                          Mandatory                 Country code of the shopper
+
+
+1.99.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/FreightOptions?countryCode=AU-GA-IO
+
+           Content-type: text/xml
+           Accept:version_4.0
+
+1.99.4 EXAMPLE PAYLOAD
+
+<FreightOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSc
+     hema-instance" Type="Array">
+    <FreightOption>
+        <Id>884</Id>
+        <Name>eParcel Standard Signature + Optional ATL</Name>
+        <Carrier>
+            <Id>18936</Id>
+            <Code>AUS</Code>
+            <Name>Australia Post</Name>
+            <Url />
+        </Carrier>
+        <ServiceType>
+            <Id>18934</Id>
+            <Code>50S1</Code>
+            <Name>eParcel Standard</Name>
+        </ServiceType>
+        <SLA>
+            <Id>19252</Id>
+            <Code>Std</Code>
+            <Name>Standard SLA's</Name>
+        </SLA>
+    </FreightOption>
+    <FreightOption>
+        <Id>901</Id>
+        <Name>eParcel Express Signature + Optional ATL</Name>
+        <Carrier>
+            <Id>18936</Id>
+            <Code>AUS</Code>
+            <Name>Australia Post</Name>
+            <Url />
+        </Carrier>
+        <ServiceType>
+            <Id>18935</Id>
+            <Code>50X1</Code>
+            <Name>eParcel Express Signature+Optional ATL</Name>
+        </ServiceType>
+        <SLA>
+            <Id>19254</Id>
+            <Code>Express</Code>
+            <Name>Express</Name>
+        </SLA>
+    </FreightOption>
+</FreightOptions>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 211 of 221
+1.99.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.99.6 ERROR RESPONSE
+ HTTP Error     API Error Code API Error Text
+ 404
+
+1.99.7 ADDITIONAL ERROR RESPONSES
+The following are common error codes.
+
+ HTTP Error              API Error Code            API Error Text
+ 403                     5015                      SQL Error
+ 403                     5029                      The country has not been setup at head office
+ 403                     5030                      You don’t have security for the requested store
+ 403                     5031                      Final customer not defined for country
+ 403                     5036                      Invalid warehouse code in API web site configurations file
+ 403                     5122                      Request content type is not XML
+ 403                     5121                      Cannot deserialise payload
+
+These errors can be resolved by contacting an Apparel21 consultant.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 212 of 221
+24 COUPONS
+
+The Retail API provides the ability to validate a shopper’s coupon code, reserving (locking) a coupon,
+submitting cart items and retrieving discount breakdown details and unreserving a coupon.
+
+How to redeem a coupon online when Apparel21 cart call is NOT used:
+
+     •     Web developers can do a POST Coupons/Redemptions to validate a coupon code with the Reserve
+           flag set to ‘false’. Product, colour, size, quantity details do not need to be passed when validating a
+           coupon code.
+
+     •     When the shopper finalises their cart, should reserve the coupon to ensure the coupon is ‘locked’.
+           Coupon can be reserved by doing a POST on Coupons/Redemptions with <Reserve> flag set to
+           ‘true’.
+           Reserving a coupon locks it for 24 hours unless it is explicitly unlocked or redeemed via the order
+           create call (POST Order).
+
+
+
+     •     Apparel2 recommends locking the coupon only just prior to processing the customer’s payment.
+           This avoids issues with locked coupons even if the customer abandons their cart.
+
+           If the customer backs out, the web developer can unlock / cancel the coupon by calling the DELETE
+           call otherwise the coupon is locked for 24 hours.
+
+           Note – There is no special mechanism to unlock the coupon. This happens by comparing the lock
+           date/time with the current date/time.
+
+           Only unique coupons have to be reserved / locked. Generic coupons do not get reserved, but it
+           does flag the coupon code against the request id. Doing a cancel on a generic coupon does not do
+           anything as the coupon does not get reserved.
+
+
+
+     •     If want to retrieve a breakdown of the coupon and other discount amounts, the web developer
+           should submit the shopper’s coupon code, product, colour, size, quantity, price, manual and
+           promotion discounts when doing a POST on Coupons/Redemptions. Apparel21 then uses the
+           promotions engine to evaluate the customer’s ‘cart’ and returns a discount breakdown in the
+           response.
+
+           Web developers can use this discount breakdown information when posting the final order to
+           Apparel21.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 213 of 221
+1.100 COUPONREDEMPTION DETAILS
+
+Field                    Format         Max       Comment                     Example                     POST           DELETE           HTTP
+                                        Length                                                                                           Header
+                                                                                                                                         Accept:V
+                                                                                                                                          ersion_
+CouponRedemp
+tion
+  RequestId              Alpha          250       Globally unique             5AFC78B8-A622-                  Yes          Yes -                  1.0
+                                                  request identifier.         438B-9ABE-                               mandatory
+                                                  Must be a GUID.             AE9665827837
+                                                  Mandatory.
+ PersonId                Number                   Unique Person Id            1841                            Yes                No               1.0
+ CouponCode              Alpha          250       Coupon code                 SALE21                          Yes                No               1.0
+ Reserved                Alpha          5         Should be True              True or false                   Yes                No               1.0
+                                                  when locking
+                                                  coupon or else false
+                                                  if checking coupon
+                                                  code validity
+ Transaction
+   Detail
+    Key                  Alpha                    Doesn’t get saved in        Line1                           Yes                No               1.0
+                                                  the database, useful
+                                                  for web developers
+                                                  to track lines
+   SkuId                 Number                   SKU id                      12431                           Yes                No               1.0
+   Quantity              Number                   Quantity of item            1                               Yes                No               1.0
+   Price                 Number                   Price of item               99.99                           Yes                No               1.0
+  Detail
+  New Detail                                      Is response only                                             No                No               1.0
+   SkuiId                                                                                                      No                No               1.0
+   Price                                                                                                       No                No               1.0
+   Quantity                                                                                                    No                No               1.0
+   Discount                                       This returns                                                 No                No               1.0
+                                                  discount value for
+                                                  applied discounts.
+   Value                                                                                                       No                No               1.0
+Discount Types                                    An array – response
+                                                  only
+   Discount                                                                                                                                       1.0
+                                                  5 = Coupon discount                                          No                No               1.0
+DiscountTypeId
+   DiscountType                                   Long description for                                         No                No               1.0
+                                                  discount reason
+                                                  “CouponDiscount”
+   Percentage                                     Percentage of                                                No                No               1.0
+                                                  discount
+   Value                                          Value of discount                                            No                No               1.0
+   Redemption                                                                                                                                     1.0
+   CouponCode                                                                                                  No                No               1.0
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 214 of 221
+Field                    Format         Max       Comment                     Example                     POST           DELETE           HTTP
+                                        Length                                                                                           Header
+                                                                                                                                         Accept:V
+                                                                                                                                          ersion_
+  RequestId                                                                                                    No                No            1.0
+Applied                  True /                   “True” if coupon                                             No                No            1.0
+                         False                    conditions were met
+                                                  for the provided
+                                                  products. “False” if
+                                                  coupon conditions
+                                                  were not met for the
+                                                  provided products.
+                                                  A “True” value
+                                                  doesn’t necessarily
+                                                  mean a discount was
+                                                  applied; need to
+                                                  check the
+
+
+
+
+1.101 VALIDATE COUPON
+
+Do a POST on the below URI to validate a coupon code for a person.
+
+
+1.101.1                URI REQUEST FORMAT
+
+/Coupons/Redemptions?countrycode={countryCode}
+
+
+1.101.2       REQUEST PARAMETERS
+ Field            Required Comment
+ Country Code    Mandatory Country Code of shopper
+
+
+1.101.3                EXAMPLE REQUEST
+POST       https://retailapi.apparel21.com/RetailAPI /Coupons/Redemptions?countrycode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.101.4                EXAMPLE PAYLOAD
+
+<CouponRedemption>
+   <RequestId>1f2e558a-a062-4e6c-84bc-697dd5fcfd462</RequestId>
+   <PersonId>1841</PersonId>
+   <CouponCode>BLACK21</CouponCode>
+   <Reserved>false</Reserved>
+</CouponRedemption>
+
+Example Response
+
+      <CouponRedemption>
+    <RequestId>1f2e558a-a062-4e6c-84bc-697dd5fcfd462</RequestId>
+    <PersonId>1841</PersonId>
+    <CouponCode>BLACK21</CouponCode>
+    <CouponName>BLACK FRIDAY 21</CouponName>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 215 of 221
+   <CouponDescription>Black Friday sale 2021</CouponDescription>
+   <Reserved>False</Reserved>
+</CouponRedemption>
+
+1.102 RESERVE COUPON CODE AND RETRIEVE DISCOUNT BREAKDOWN DETAILS
+
+Do a POST on the below URI to reserve a coupon code for a person.
+
+
+1.102.1                URI REQUEST FORMAT
+
+/Coupons/Redemptions?countrycode={countryCode}
+
+
+1.102.2       REQUEST PARAMETERS
+ Field            Required Comment
+ Country Code    Mandatory Country Code of shopper
+
+
+1.102.3                EXAMPLE REQUEST
+
+POST https://retailapi.apparel21.com/RetailAPI /Coupons/Redemptions?countrycode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.102.4                EXAMPLE PAYLOAD
+
+<CouponRedemption>
+<RequestId>1f2e558a-a062-4e6c-84bc-697dd5fcfd10</RequestId>
+<PersonId>1841</PersonId>
+<CouponCode>NRL21</CouponCode>
+<Reserved>true</Reserved>
+<Transaction>
+<Detail>
+<Key>NF02</Key>
+<SkuId>12431</SkuId>
+<Quantity>1</Quantity>
+<Price>129.99</Price>
+</Detail>
+<Detail>
+<Key>NF02</Key>
+<SkuId>33069</SkuId>
+<Quantity>1</Quantity>
+<Price>79.99</Price>
+</Detail>
+</Transaction>
+</CouponRedemption>
+
+
+1.102.5                EXAMPLE RESPONSE
+       <CouponRedemption>
+      <RequestId>1f2e558a-a062-4e6c-84bc-697dd5fcfd10</RequestId>
+      <PersonId>1841</PersonId>
+      <CouponCode>NRL21</CouponCode>
+      <CouponName>NRL21</CouponName>
+      <CouponDescription>NRL 2021</CouponDescription>
+      <Reserved>True</Reserved>
+      <Transaction Type="Array" TotalRows="2">
+          <Detail>
+              <Key>NF02</Key>
+              <SkuId>12431</SkuId>
+              <Price>129.99</Price>
+              <Quantity>1</Quantity>
+              <NewBreakdown Type="Array" TotalRows="1">
+                  <NewDetail>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 216 of 221
+                    <SkuId>12431</SkuId>
+                    <Price>129.99</Price>
+                    <Quantity>1</Quantity>
+                    <Discount>26.00</Discount>
+                    <Value>103.99</Value>
+                    <Discounts Type="Array" TotalRows="1">
+                        <Discount>
+                            <DiscountTypeId>5</DiscountTypeId>
+                            <DiscountType>CouponDiscount</DiscountType>
+                            <Percentage>20.0</Percentage>
+                            <Value>26.00</Value>
+                            <Redemption>
+                                <CouponCode>NRL21</CouponCode>
+                                <RequestId>1f2e558a-a062-4e6c-84bc-697dd5fcfd10</RequestId>
+                            </Redemption>
+                        </Discount>
+                    </Discounts>
+                </NewDetail>
+            </NewBreakdown>
+        </Detail>
+        <Detail>
+            <Key>NF02</Key>
+            <SkuId>33069</SkuId>
+            <Price>79.99</Price>
+            <Quantity>1</Quantity>
+            <NewBreakdown Type="Array" TotalRows="1">
+                <NewDetail>
+                    <SkuId>33069</SkuId>
+                    <Price>79.99</Price>
+                    <Quantity>1</Quantity>
+                    <Discount>16.00</Discount>
+                    <Value>63.99</Value>
+                    <Discounts Type="Array" TotalRows="1">
+                        <Discount>
+                            <DiscountTypeId>5</DiscountTypeId>
+                            <DiscountType>CouponDiscount</DiscountType>
+                            <Percentage>20.0</Percentage>
+                            <Value>16.00</Value>
+                            <Redemption>
+                                <CouponCode>NRL21</CouponCode>
+                                <RequestId>1f2e558a-a062-4e6c-84bc-697dd5fcfd10</RequestId>
+                            </Redemption>
+                        </Discount>
+                    </Discounts>
+                </NewDetail>
+            </NewBreakdown>
+        </Detail>
+    </Transaction>
+    <Applied>True</Applied>
+</CouponRedemption>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 217 of 221
+1.103 UNRESERVING A COUPON CODE
+
+Do a DELETE on the below URI to reserve a coupon code for a person.
+
+
+1.103.1                URI REQUEST FORMAT
+
+/Coupons/Redemptions/{requestId}?countrycode={countryCode}
+
+
+1.103.2                REQUEST PARAMETERS
+ Field                     Required Comment
+ Request Id               Mandatory Request Id (GUID) used to reserve coupon
+ Country Code                 Mandatory          Country Code of shopper
+
+
+1.103.3                EXAMPLE REQUEST
+
+DELETE https://retailapi.apparel21.com/RetailAPI /Coupons/Redemptions/1f2e558a-a062-4e6c-84bc-
+697dd5fcfd414?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.104 SUCCESS RESPONSE
+
+ HTTP Response
+ 200
+
+1.105 ERROR RESPONSE
+
+ HTTP Error                   API Error Code API Error Text
+ 404
+ 403                          5224                 Error redeeming coupon: {0}
+ 403                          5225                 Invalid coupon code '{0}
+ 403                          5226                 Coupon '{0}' is not enabled
+ 403                          5227                 Too early to redeem coupon '{0}
+ 403                          5228                 Coupon '{0}' has expired
+ 403                          5229                 Coupon '{0}' has already been redeemed
+ 403                          5230                 Coupon '{0}' has already been locked for redemption
+ 403                          5231                 Coupon '{0}' is not valid for PersonId '{1}
+ 403                          5232                 Coupon '{0}' is not valid for webstore
+ 403                          5233                 Coupon redemption RequestId '{0}' has already been finalised
+ 403                          5234                 Coupon redemption RequestId '{0}' is not valid
+ 403                          5235                 Redemption element missing from Coupon discount
+ 403                          5236                 Redemption element must specify one of the following elements:
+                                                   RequestId or CouponCode
+ 403                          5237                 Cannot redeem multiple coupons on the same order - Redemption
+                                                   elements must match for each Coupon discount
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 218 of 221
+1.106 RETRIEVE COUPONS
+
+A Get call is added at the coupon endpoint to retrieve all the coupons available to a person or to pull the
+list of coupons in a webstore that are modified, issued, and redeemed since the timestamp.
+
+The coupon response contains the following fields.
+
+Field                 Comment                                         Format                  Example                        HTTP Header
+                                                                                                                             Accept:Version
+Coupon                Returns the coupon code                                                 TESTBLKDAY-                    version_1.0
+Code                                                                                          Generic
+                                                                                              SEASONXPFCMVQ4
+                                                                                              FJ-Unique
+Coupon                Returns the campaign description                                        new season                     version_1.0
+description                                                                                   coupon
+Coupon                Returns the coupon status                                               Enabled                        version_1.0
+Status                Enabled/Disabled/Redeemed
+Coupon type           Returns the type of the coupon                                          Unique                         version_1.0
+                      UNIQUE or GENERIC
+Coupon                Returns the campaign name                                                                              version_1.0
+Name
+Valid from   Returns the date from which the                          YYYY-MM-                2023-02-                       version_1.0
+             coupon is valid                                          DDTHH:MM:SS             20T00:00:00
+Valid To     Returns the date till the coupon is                      YYYY-MM-                2023-04-                       version_1.0
+             valid                                                    DDTHH:MM:SS             20T00:00:00
+PersonID     Returns the personID of the                                                      11385                          version_1.0
+             shopper
+Firstname    Returns the first name of the                                                    amala                          version_1.0
+             shopper
+Lastname     Returns the last name of the                                                     Jithin                         version_1.0
+             shopper
+Mobile       Returns the mobile number of                                                     0470396583                     version_1.0
+number       the person to whom the coupon
+             is issued
+Email        Returns the emailID of the person                                                tgeof@gmail.com                version_1.0
+             to whom the coupon is issued.
+Created date Returns the coupon created date                          YYYY-MM-                2023-02-                       version_1.0
+                                                                      DDTHH:MM:SS             20T00:00:00
+Lastdate              Returns the last modified date of               YYYY-MM-                2023-02-                       version_1.0
+modified              the coupon                                      DDTHH:MM:SS             21T00:00:00
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 219 of 221
+1.106.1                URI REQUEST FORMAT
+
+Do a GET on the below URI to retrieve coupons for a person/in bulk.
+
+{BaseUrl}}/Coupons?countrycode={{CodeForCountry}}
+
+
+1.106.2      REQUEST PARAMETERS
+ Field           Required Comment
+ countrycode    Mandatory Country Code of shopper
+ personID                       Optional         PersonID of the shopper
+ ValidCoupon                    Optional
+                                                 This parameter passes either true or false.
+
+                                                 If the value= false, it shows all coupons that are ENABLED, DISABLED and
+                                                 REDEEMED.
+
+                                                 If the value is = true, it shows only valid coupons that are not expired and
+                                                 not redeemed. By default, this field is set to false.
+
+ UpdatedAfter                   Optional
+                                                 This field contains the date and time. The formats for this field are,
+
+                                                 YYYY-MM-DDTHH:MM:SS (24-hour format)
+
+                                                 YYYY-MM-DDTHH:MM (24-hour format)
+
+                                                 YYYY-MM-DD
+
+ StartRow                       Optional         Starting position of the coupons returned
+ PageRows                       Optional
+                                                 Displays the total number of coupons that needs to be returned.
+
+
+
+1.106.3      SUCCESS MESSAGE
+ HTTP Response
+ 200
+
+1.106.4                NEW ERROR MESSAGES
+ HTTP Error               API Error Code API Error Text
+ 403                      5245           UpdatedAfter date format is invalid. Valid format                                                 is
+                                         yyyy:MM:ddTHH:mm:ss
+ 403                      5244           Valid Coupon flag 'xxx' is invalid - Must be 'true' or 'false'"
+ 403                      5243           Ivalid PersonID ‘xxx”. PersonID cannot be a negative value.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 220 of 221
+1.106.5                EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Coupons?countrycode=AU&ValidCoupon=true&UpdatedAfter=2023-
+02-19T12:12:00&StartRow=1&PageRows=5
+
+           Content-type: text/xml
+           Accept:version_1.0
+
+1.106.6                EXAMPLE RESPONSE
+<Coupons xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-
+     instance" Type="Array" TotalRows="2" PageStartRow="1" PageRows="2">
+    <Coupon>
+        <CouponCode>TESTBLKDAY</CouponCode>
+        <CouponDescription>test- generic</CouponDescription>
+        <CouponStatus>Enabled</CouponStatus>
+        <CouponType>Generic</CouponType>
+        <CouponName>new test</CouponName>
+        <ValidFrom>2023-02-20T00:00:00</ValidFrom>
+        <ValidTo>2023-12-29T00:00:00</ValidTo>
+        <PersonId />
+        <FirstName />
+        <LastName />
+        <PhoneNumber />
+        <Email />
+        <CreatedDate>2023-02-20T11:24:55</CreatedDate>
+        <LastDateModified>2023-02-20T11:25:06</LastDateModified>
+    </Coupon>
+    <Coupon>
+        <CouponCode>SEASONXPFCMVQ4FJ</CouponCode>
+        <CouponDescription>new season coupon</CouponDescription>
+        <CouponStatus>Enabled</CouponStatus>
+        <CouponType>Unique</CouponType>
+        <CouponName>season coupon-$ 2 off</CouponName>
+        <ValidFrom>2023-02-20T00:00:00</ValidFrom>
+        <ValidTo>2023-03-20T00:00:00</ValidTo>
+        <PersonId>11385</PersonId>
+        <FirstName>amala</FirstName>
+        <LastName>Jithin</LastName>
+        <PhoneNumber>0470396583</PhoneNumber>
+        <Email />
+        <CreatedDate>2023-02-20T13:24:50</CreatedDate>
+        <LastDateModified />
+    </Coupon>
+</Coupons>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 221 of 221
+

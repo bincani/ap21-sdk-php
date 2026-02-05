@@ -29,13 +29,10 @@ class TestSimpleResource extends TestResource
     public $errorPostArray;
 
 
-    /**
-     * TestSimpleResource constructor.
-     */
-    public function __construct()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->resourceName = preg_replace('/.+\\\\(\w+)Test$/', '$1', get_called_class());
-        parent::__construct();
     }
 
     /**
@@ -45,18 +42,18 @@ class TestSimpleResource extends TestResource
      */
     public function testPost()
     {
-        if ($this->postArray) {
-            $result = static::$ap21->{$this->resourceName}->post($this->postArray);
-            $this->assertTrue(is_array($result));
-            $this->assertNotEmpty($result);
-            return $result['id'];
+        if (!$this->postArray) {
+            $this->markTestSkipped($this->resourceName . ' is read-only: POST not supported');
         }
+        $result = static::$ap21->{$this->resourceName}->post($this->postArray);
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+        $this->summary($this->resourceName . '::POST', $result);
+        return $result['id'];
     }
 
     /**
      * Test get resource
-     *
-     * @depends testPost
      */
     public function testGet()
     {
@@ -64,6 +61,7 @@ class TestSimpleResource extends TestResource
         $result = $resource->get();
 
         $this->assertTrue(is_array($result));
+        $this->summary($this->resourceName . '::GET', $result);
         //Data posted, so cannot be empty
         if($this->postArray) {
             $this->assertNotEmpty($result);
@@ -82,13 +80,15 @@ class TestSimpleResource extends TestResource
      */
     public function testGetSelf($id)
     {
-        if ($id) {
-            $product = static::$ap21->{$this->resourceName}($id)->get();
-
-            $this->assertTrue(is_array($product));
-            $this->assertNotEmpty($product);
-            $this->assertEquals($id, $product['id']);
+        if (!$id) {
+            $this->markTestSkipped($this->resourceName . '::testGetSelf skipped: no ID available (POST not supported or failed)');
         }
+        $product = static::$ap21->{$this->resourceName}($id)->get();
+
+        $this->assertTrue(is_array($product));
+        $this->assertNotEmpty($product);
+        $this->assertEquals($id, $product['id']);
+        $this->summary($this->resourceName . '::GET(' . $id . ')', $product);
     }
 
     /**
@@ -98,13 +98,15 @@ class TestSimpleResource extends TestResource
      */
     public function testPut($id)
     {
-        if ($this->putArray) {
-            $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
-            $this->assertTrue(is_array($result));
-            $this->assertNotEmpty($result);
-            foreach($this->putArray as $key => $value) {
-                $this->assertEquals($value, $result[$key]);
-            }
+        if (!$this->putArray) {
+            $this->markTestSkipped($this->resourceName . ' is read-only: PUT not supported');
+        }
+        $result = static::$ap21->{$this->resourceName}($id)->put($this->putArray);
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+        $this->summary($this->resourceName . '::PUT(' . $id . ')', $result);
+        foreach($this->putArray as $key => $value) {
+            $this->assertEquals($value, $result[$key]);
         }
     }
 
@@ -115,16 +117,18 @@ class TestSimpleResource extends TestResource
      */
     public function testDelete($id)
     {
-        if ($id) {
-            $result = static::$ap21->{$this->resourceName}($id)->delete();
-            $this->assertEmpty($result);
+        if (!$id) {
+            $this->markTestSkipped($this->resourceName . '::testDelete skipped: no ID available (POST not supported or failed)');
         }
+        $result = static::$ap21->{$this->resourceName}($id)->delete();
+        $this->assertEmpty($result);
     }
 
     public function testPostError() {
-        if ($this->errorPostArray) {
-            $this->expectException('PHPAP21\\Exception\\ApiException');
-            static::$ap21->{$this->resourceName}->post($this->errorPostArray);
+        if (!$this->errorPostArray) {
+            $this->markTestSkipped($this->resourceName . '::testPostError skipped: no error post data defined (POST not supported)');
         }
+        $this->expectException('PHPAP21\\Exception\\ApiException');
+        static::$ap21->{$this->resourceName}->post($this->errorPostArray);
     }
 }

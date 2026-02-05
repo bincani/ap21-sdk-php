@@ -1,0 +1,1206 @@
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+                                                                                                   3820/0011/001
+                                                                                                   /3.png
+
+          SKUs                                               The list of sizes for a colour
+          SKU                                                SKU is the lowest level
+                                                             representation for a product.
+                                                             SKU is a sub-element of SKUs
+          Id                        Integer            22    Unique Id for this size for this      55623                      Yes           Yes       Yes         No         No        No          No       1.0
+                                                             colour
+          ClrId                     Integer            22    Id of parent colour                   542                        Yes           Yes       Yes         No         No        No          No       1.0
+          Sequence                  Integer            22    Sequence of this size within          2                          Yes           Yes       Yes         No         No        No          No       1.0
+                                                             the colour
+          SizeCode                   Alpha              7    Code of the size                      S                          Yes           Yes       Yes         No         No        No          No       1.0
+                                     Alpha             30    Description of the size               36 / 38                    Yes           Yes       Yes         No         No        No          No       1.0
+      SizeDescription
+         OriginalPrice           Num (10,2)            10    The original price of this size       32.99                      Yes           Yes       Yes         No         No        No          No       1.0
+                                                             i.e. Price with no start / end
+                                                             date
+          Price                    Number              10    The current price of this size –      18.5                       Yes           Yes       Yes         No         No        No          No       1.0
+                                    (10,2)                   price for today
+          RetailPrice              Number              10    The current price for this size       30.00                      Yes           Yes       Yes         No         No        No          No       1.0
+                                    (10,2)                   in SalesNet_RRP interface
+                                                             table. Might not be the same
+                                                             price as the store price
+                                                             scheme.
+          Weight                  Number(2             22    Weight at SKU level                   1.1234                     Yes           Yes       Yes         No         No        No          No       1.0
+                                    2,4)
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 41 of 221
+                                                                                                                                                      GET responses
+ Field                              Format         Max       Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                            Products      Product   you might   products   product     notes     colour   Header
+                                                 Length
+                                                                                                                                           by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                          :Versio
+                                                                                                                                                                                                              n_
+          WeightUnitOf               Alpha                   Displays the unit of measure          mg                         Yes           Yes       Yes         No         No        No          No       1.0
+          Measure                                            for weight
+          Width                   Number(2             22    Width at SKU level                    1.1234                     Yes           Yes       Yes         No         No        No          No       1.0
+                                    2,4)
+          WidthUnitOf              Alpha                     Displays the unit of measure          mm                         Yes           Yes       Yes         No         No        No          No       1.0
+          Measure                                            for width
+          Height                  Number(2             22    Height at SKU level                   0.1234                     Yes           Yes       Yes         No         No        No          No       1.0
+                                    2,4)
+          HeightUnitOf             Alpha                     Displays the unit of measure          cm                         Yes           Yes       Yes         No         No        No          No       1.0
+          Measure                                            for height
+          Length                  Number(2             22    Length at SKU level                   1.1234                     Yes           Yes       Yes         No         No        No          No       1.0
+                                    2,4)
+          LengthUnitOf             Alpha                     Displays the unit of measure          mm                         Yes           Yes       Yes         No         No        No          No       1.0
+          Measure                                            for length.
+          Barcode                Text                        The default barcode for this          9312345111111              Yes
+                                                             size
+          Freestock                 Integer            22    The free stock available for          27                         Yes           Yes       Yes         No         No        No          No       1.0
+                                                             sale. This is based on a
+                                                             formula set up in a Generic
+                                                             Interface Translation in
+                                                             Apparel21
+          NextAvailable          Date (yyyy-           10    The next available date of            2001-07-29                 Yes           Yes       Yes         No         No        No          No       1.0
+                                  mm-dd)                     stock for this size calculated
+                                                             from incoming Purchase
+                                                             Orders in Apparel21.
+                                    Integer            22    The global sequence for the           562                        Yes           Yes       Yes         No         No        No          No       1.0
+      GlobalSequence                                         size. For example size S might
+                                                             be defined for many products
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 42 of 221
+                                                                                                                                                            GET responses
+ Field                              Format           Max           Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                                  Products      Product   you might   products   product     notes     colour   Header
+                                                   Length
+                                                                                                                                                 by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                                :Versio
+                                                                                                                                                                                                                    n_
+                                                                   and within each size it has a
+                                                                   different sequence, but this
+                                                                   global sequence defines this
+                                                                   size uniquely within the whole
+                                                                   product range.
+          Cost                     Number                    10    This is the “standard” cost for       56                         Yes           Yes       No          No         No        No          No       1.0
+                                    (10,2)                         the web store cost zone. This
+                                                                   is ONLY returned if the Retail
+                                                                   API is configured with
+                                                                   application setting
+                                                                   “AllowProductCost” = True
+
+ ProductNoteTypes                                                  The list of Product Note
+                                                                   Types for this product.
+      ProductNoteTyp                                               Product Note Type is a sub-
+ e                                                                 element of Product Note
+                                                                   Types
+      Code                           Alpha                   40    Code of Product Note Type             Styling                     No           No        No          No         No        Yes         No        2.0
+      Name                           Alpha                   40    Description of Product Note           Styling Hints               No           No        No          No         No        Yes         No        2.0
+                                                                   Type
+      Note                       Deserialise                       Note details saved for the            You can wear                No           No        No          No         No        Yes         No        2.0
+                                                 unlimited
+
+
+
+
+                                     d                             product in deserialised xhtml         this dress day or
+                                 Xhtml 1.0                         1.0 format in table                   night
+                                                                   OBJECT_NOTE.
+                                                                   Note length depends on
+                                                                   Oracle version.
+                                                                   Note to be re-serialised into
+                                                                   xhtml 1.0.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00           P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                    Apparel21 Reference Guide                                            Page 43 of 221
+                                                                                                                                                            GET responses
+ Field                              Format           Max           Comment                               Example                   List of       Single    Products    List of    Single    Product   Product     HTTP
+                                                                                                                                  Products      Product   you might   products   product     notes     colour   Header
+                                                   Length
+                                                                                                                                                 by Id       like     - simple   – simple               notes   Accept
+                                                                                                                                                                                                                :Versio
+                                                                                                                                                                                                                    n_
+ ProductColourNoteT                                                The list of Product Colour
+ ypes                                                              Note Types for this product.
+    ProductColourNo                                                Product Colour Note Type is a
+ teType                                                            sub-element of Product
+                                                                   Colour Note Types
+      Code                           Alpha                   40    Code of Product Note Type             Styling                     No           No        No          No         No        No          Yes       2.0
+      Name                           Alpha                   40    Description of Product Note           Styling Hints               No           No        No          No         No        No          Yes       2.0
+                                                                   Type
+      Note                       Deserialise                       Note details saved for the            Colour does not             No           No        No          No         No        No          Yes       2.0
+                                                 unlimited
+
+                                     d                             product colour in deserialised        fade
+                                 Xhtml 1.0                         xhtml 1.0 format in table
+                                                                   OBJECT_NOTE.
+                                                                   Note length depends on
+                                                                   Oracle version.
+                                                                   Note to be re-serialised into
+                                                                   xhtml 1.0.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00           P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                    Apparel21 Reference Guide                                            Page 44 of 221
+1.21 RETRIEVE PRODUCT LIST FOR NAVIGATION REFERENCE
+
+This GET request will return a list of all products based on the Product Reference Id. The query parameter
+is plugged in from the reference tree as described in Navigation tree. This is a detailed view of products.
+
+1.21.1 URI REQUEST FORMAT
+
+/Products?countryCode={countryCode}&query={queryString}&order={orderBy}&sizeFilter={sizeCode}&colo
+urFilter={colourCode}&updatedAfter={updateTimestamp}&startRow={startRow}&pageRows={pageRows}&
+CustomData=true
+
+
+1.21.2 REQUEST PARAMETERS
+ Field           Required Comment
+ Country Code   Mandatory Country Code of shopper
+ Query                          Optional         Sequence and Product Reference Type. Up to 5 combinations can be
+                                                 entered.
+
+                                                 For example, if want to filter products to only Product Type Jackets, and
+                                                 Gender Womens, need to identify Product Type sequence and Gender
+                                                 sequence and unique index for Womens and Jackets.
+
+                                                 1,123:2,234
+
+                                                 Means that product reference position 1 and reference code index 123
+                                                 AND product reference position 2 and reference code index 234 will be
+                                                 filtered.
+
+ order                          Optional         valid values are a series of product fields and sort sequence
+                                                 concatenated as
+                                                 {id:asc}
+                                                 {code:desc}
+                                                 {name:asc}
+                                                 {description:asc}
+                                                 Multiple fields may be selected to define the sequencing of the products
+                                                 in the result.
+
+ sizeFilter                     Optional         A size code to filter the products by size. The range of valid size codes can
+                                                 be obtained from the Sizes endpoint which is defined in section 11 Sizes
+
+
+
+ colourFilter                   Optional         A colour code to filter the products by colour. The range of valid colour
+                                                 codes can be obtained from the colours endpoint which is defined in
+                                                 section 1.32 Retrieve Colour List
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 45 of 221
+ ExtendedRefs                   Optional         Set to “True” to get all product references (up to 20), not just limited to
+                                                 style references. If NOT “true”, only “style” references (up to 10) are
+                                                 returned. This was introduced from version 2015.2 onwards.
+ updatedAfter                   Optional         Allows web developers to retrieve products updated after a specific
+                                                 timestamp.
+                                                 Valid date formats: YYYY-MM-DDTHH:MM:SS, YYYY-MM-DDTHH:MM,
+                                                 YYYY-MM-DD
+                                                 The timestamp format used to query should match the head office
+                                                 database date/time settings.
+
+                                                 In the case of a price markdown that has ended, this will be considered
+                                                 as a product update, even though the modified date on the product will
+                                                 NOT have changed. This is because the current price included in the
+                                                 response HAS changed due to date change.
+ startRow                       Optional         Starting position of products returned
+ pageRows                       Optional         Number of products returned
+ CustomData                     Optional         Include Custom Data in returned product information. Set to “True” to
+                                                 get all valid Custom Data values.
+
+1.21.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Products?countryCode=AU&query=1,1506:3,1441&order={name
+:asc}&startRow=1&pageRows=40
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+This will return up to 40 products per page, which belong to Commune, Accessories, Accessories
+references starting at the first product.
+
+
+1.21.4 EXAMPLE RESPONSE
+<Products>
+http://maree64bit7/RetailAPI2012.1_2.1/Products?countryCode=AU&query=1,2405:2,4060:3,2368&order
+     ={name:asc}{&startRow=1&pageRows=40<Product>
+<Id>7126</Id>
+<RowNumber>1</RowNumber>
+<Code>NAB32</Code>
+<Name>Dririder Off Road Tail Bag</Name>
+<Description />
+<RrpText>RRP</RrpText>
+<UpdateTimeStamp>2005-08-17T09:15:23</UpdateTimeStamp>
+<References Type="Array">
+<Reference>
+<ReferenceTypeId>258</ReferenceTypeId>
+<Id>2405</Id>
+   </Reference>
+<Reference>
+<ReferenceTypeId>257</ReferenceTypeId>
+<Id>4060</Id>
+   </Reference>
+<Reference>
+<ReferenceTypeId>1</ReferenceTypeId>
+<Id>2368</Id>
+   </Reference>
+<Reference>
+<ReferenceTypeId>2229</ReferenceTypeId>
+<Id />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 46 of 221
+   </Reference>
+<Reference>
+<ReferenceTypeId>1168</ReferenceTypeId>
+<Id>2390</Id>
+   </Reference>
+<Reference>
+<ReferenceTypeId>1169</ReferenceTypeId>
+<Id>7185</Id>
+   </Reference>
+   </References>
+<Clrs Type="Array">
+<Clr>
+<ProductId>7126</ProductId>
+<TypeCode>BLK</TypeCode>
+<ClrId>8376</ClrId>
+<SizeCode>-</SizeCode>
+<OriginalPrice>79.95</OriginalPrice>
+<RetailPrice>0</RetailPrice>
+<FreeStock>0</FreeStock>
+<NextAvailable />
+<GlobalSequence>0</GlobalSequence>
+   </Clr>
+   </Clrs>
+   </Product>
+      ….etc…..
+
+
+1.21.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.21.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+ 404          5034                                 Invalid pagination parameters
+
+
+1.22 RETRIEVE DETAILS FOR A SINGLE PRODUCT
+
+This request will return full details for a single product using a Product Id retrieved previously.
+
+Perform a GET on the following endpoint.
+
+1.22.1 URI REQUEST FORMAT
+
+/Products/{id}?countryCode={countryCode}
+
+
+1.22.2 REQUEST PARAMETERS
+ Field            Required Comment
+ Id              Mandatory Id of the Product
+ Country Code                   Mandatory        Country Code of shopper
+ markdownStatus                   Optional       Filter for colours based on their price status. Valid values are:
+                                                      • Permanent
+                                                      • Temporary
+                                                      • None
+ CustomData                       Optional       Include Custom Data in returned product information. Set to “True” to
+                                                 get all valid Custom Data values
+ styleCode                        Optional       Style code. This is not case sensitive
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 47 of 221
+ clrRefs                          Optional       Include product colour references in returned product information. Set
+                                                 to “True” to get all valid values for product colour references
+ imageUrls                        Optional       Include image URLs in returned product information. Set to “True” to
+                                                 get all valid image URLs at style and colour level
+
+1.22.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Products/1024?countryCode=AU&markdownStatus=None&Cust
+omData=true&clrRefs=true&imageUrls=true
+
+           Content-type: text/xml
+           Accept:version_4.0
+
+
+1.22.4 EXAMPLE RESPONSE
+<Product
+  <Id>5481</Id>
+  <RowNumber>1</RowNumber>
+  <Code>0011</Code>
+  <Name>SLEEVELESS ONESIE SUIT</Name>
+  <Description>ROYALTY FREE IMAGE</Description>
+  <SizeRange>6-14</SizeRange>
+  <RrpText>MSRP</RrpText>
+  <UpdateTimeStamp>2015-04-29T16:54:59</UpdateTimeStamp>
+  <References Type="Array">
+    <Reference>
+      <ReferenceTypeId>257</ReferenceTypeId>
+      <Id>1342</Id>
+    </Reference>
+    <Reference>
+      <ReferenceTypeId>1021</ReferenceTypeId>
+      <Id>5045</Id>
+    </Reference>
+    <Reference>
+      <ReferenceTypeId>1</ReferenceTypeId>
+      <Id>3281</Id>
+    </Reference>
+    <Reference>
+      <ReferenceTypeId>1201</ReferenceTypeId>
+      <Id>3081</Id>
+    </Reference>
+    <Reference>
+      <ReferenceTypeId>258</ReferenceTypeId>
+      <Id>12103</Id>
+    </Reference>
+    <Reference>
+      <ReferenceTypeId>1621</ReferenceTypeId>
+      <Id />
+    </Reference>
+    <Reference>
+      <ReferenceTypeId>315</ReferenceTypeId>
+      <Id>2981</Id>
+    </Reference>
+  </References>
+  <CustomData>
+  <Cards Type="Array">
+    <Card Name="Envimo Attributes">
+    <Fields Type="Array">
+     <Field Name="Extended Description">Best outfit ever</Field>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 48 of 221
+     <Field Name="Available from">2019-03-20</Field>
+     <Field Name="Activity">
+      <ListValues Type="Array">
+        <Value>Camping</Value>
+        <Value>Fishing</Value>
+        <Value>Hiking</Value>
+      </ListValues>
+     </Field>
+     <Field Name="New Arrivals">false</Field>
+    </Fields>
+   </Card>
+   </Cards>
+ </CustomData>
+ <Images Type="Array">
+    <Image>
+      <Sequence>2</Sequence>
+      <TypeId>11803</TypeId>
+      <TypeCode>WEB-01</TypeCode>
+      <Url>https://res.cloudinary.com/envimo/image/upload/v1512523925/101780-3820/0011/2.jpg</Url>
+    </Image>
+    <Image>
+      <Sequence>3</Sequence>
+      <TypeId>11804</TypeId>
+      <TypeCode>WEB-02</TypeCode>
+      <Url>https://res.cloudinary.com/envimo/image/upload/v1501634278/101780-3820/0011/3.png</Url>
+    </Image>
+    <Image>
+      <Sequence>4</Sequence>
+      <TypeId>11805</TypeId>
+      <TypeCode>WEB-03</TypeCode>
+      <Url>https://res.cloudinary.com/envimo/image/upload/v1501634279/101780-3820/0011/4.png</Url>
+    </Image>
+ </Images>
+ <Clrs Type="Array">
+    <Clr>
+      <Id>6123</Id>
+      <ProductId>5481</ProductId>
+      <Sequence>1</Sequence>
+      <Code>001</Code>
+      <Name>MULTICOLOURED - Rainbow Colour</Name>
+      <TypeCode>001</TypeCode>
+      <TypeName>MULTICOLOURED - Rainbow Colour</TypeName>
+      <MarkdownStatus>Permanent</MarkdownStatus>
+      <References Type="Array">
+         <Reference>
+           <ReferenceTypeId>1321</ReferenceTypeId>
+           <Id>4362</Id>
+         </Reference>
+         <Reference>
+           <ReferenceTypeId>1521</ReferenceTypeId>
+           <Id />
+         </Reference>
+         <Reference>
+           <ReferenceTypeId>1881</ReferenceTypeId>
+           <Id>12664</Id>
+         </Reference>
+         <Reference>
+           <ReferenceTypeId>2041</ReferenceTypeId>
+           <Id />
+         </Reference>
+      </References>
+       <CustomData>
+         <Cards Type="Array">
+           <Card Name="Envimo Attributes">
+             <Fields Type="Array">
+                <Field Name="Available from">2019-03-20</Field>
+                <Field Name="New Arrivals">false</Field>
+             </Fields>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 49 of 221
+            </Card>
+         </Cards>
+       </CustomData>
+      <Images Type="Array">
+         <Image>
+           <Sequence>1</Sequence>
+           <TypeId>9923</TypeId>
+           <TypeCode>Catalogue</TypeCode>
+           <Url>https://res.cloudinary.com/envimo/image/upload/v1501634817/101780-3820/0011/001/1.jpg</Url>
+         </Image>
+         <Image>
+           <Sequence>3</Sequence>
+           <TypeId>11804</TypeId>
+           <TypeCode>WEB-02</TypeCode>
+           <Url>https://res.cloudinary.com/envimo/image/upload/v1501634857/101780-3820/0011/001/3.png</Url>
+         </Image>
+      </Images>
+      <SKUs Type="Array">
+         <SKU>
+           <Id>12431</Id>
+           <ClrId>6123</ClrId>
+           <Sequence>1</Sequence>
+           <SizeCode>6</SizeCode>
+           <OriginalPrice>200</OriginalPrice>
+           <Price>5</Price>
+           <RetailPrice>200</RetailPrice>
+            <Weight>0.11</Weight>
+           <WeightUnitOfMeasure>Kg</WeightUnitOfMeasure>
+           <Width>22.3345</Width>
+           <WidthUnitOfMeasure>mm</WidthUnitOfMeasure>
+           <Height>0</Height>
+           <HeightUnitOfMeasure>mm</HeightUnitOfMeasure>
+           <Length>10.1234</Length>
+           <LengthUnitOfMeasure>mm</LengthUnitOfMeasure>
+           <FreeStock>-345</FreeStock>
+           <NextAvailable />
+           <GlobalSequence>1</GlobalSequence>
+         </SKU>
+         Etc…
+
+
+
+1.22.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.22.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 50 of 221
+1.23 RETRIEVE PRODUCTS YOU MIGHT LIKE
+
+This returns a list of products that have been grouped as similar in Apparel21. It enables products to be
+suggested to shoppers as products “you might like”.
+
+Perform a GET on the following URI
+
+
+1.23.1 URI REQUEST FORMAT
+
+/Products/{id}/YouMightLikeProducts?countryCode={countryCode}
+
+
+1.23.2 REQUEST PARAMETERS
+ Field                                             Required               Comment
+ Id                                                Mandatory              Id of the product
+ CountryCode                                       Mandatory              Country code of the shopper
+
+
+1.23.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Products/1155/YouMightLikeProducts?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.23.4 EXAMPLE RESPONSE
+
+<Product>
+    <Id>13806</Id>
+    <RowNumber>1</RowNumber>
+    <Code>1707</Code>
+    <Name>baby boy party suit</Name>
+    <Description>0-2 years baby boy party suites</Description>
+    <SizeRange>Baby</SizeRange>
+    <RrpText>MSRP</RrpText>
+    <UpdateTimeStamp>2023-04-14T16:37:58</UpdateTimeStamp>
+    <References Type="Array">
+      <Reference>
+        <ReferenceTypeId>257</ReferenceTypeId>
+        <Id>16105</Id>
+      </Reference>
+      <Reference>
+        <ReferenceTypeId>1021</ReferenceTypeId>
+        <Id>5043</Id>
+      </Reference>
+      <Reference>
+        <ReferenceTypeId>1</ReferenceTypeId>
+        <Id>12792</Id>
+      </Reference>
+      <Reference>
+        <ReferenceTypeId>1201</ReferenceTypeId>
+        <Id>3081</Id>
+      </Reference>
+      <Reference>
+        <ReferenceTypeId>258</ReferenceTypeId>
+        <Id>16364</Id>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 51 of 221
+      </Reference>
+      <Reference>
+         <ReferenceTypeId>1621</ReferenceTypeId>
+         <Id>9701</Id>
+      </Reference>
+      <Reference>
+         <ReferenceTypeId>1821</ReferenceTypeId>
+         <Id />
+      </Reference>
+      <Reference>
+         <ReferenceTypeId>2081</ReferenceTypeId>
+         <Id />
+      </Reference>
+      <Reference>
+         <ReferenceTypeId>2082</ReferenceTypeId>
+         <Id />
+      </Reference>
+      <Reference>
+         <ReferenceTypeId>2101</ReferenceTypeId>
+         <Id />
+      </Reference>
+    </References>
+    <Clrs Type="Array">
+      <Clr>
+         <Id>17132</Id>
+         <ProductId>13806</ProductId>
+         <Sequence>10</Sequence>
+         <Code>0023456789</Code>
+         <Name>BLACK</Name>
+         <TypeCode>BLK-TYPE</TypeCode>
+         <TypeName>BLK-TYPE</TypeName>
+         <MarkdownStatus>None</MarkdownStatus>
+         <SKUs Type="Array">
+           <SKU>
+              <Id>41921</Id>
+              <ClrId>17132</ClrId>
+              <Sequence>10</Sequence>
+              <SizeCode>000</SizeCode>
+              <OriginalPrice>110</OriginalPrice>
+              <Price>110</Price>
+              <RetailPrice>0</RetailPrice>
+              <Weight>0.1235</Weight>
+              <WeightUnitOfMeasure>Kg</WeightUnitOfMeasure>
+              <Width>22.3345</Width>
+              <WidthUnitOfMeasure>mm</WidthUnitOfMeasure>
+              <Height>0</Height>
+              <HeightUnitOfMeasure>mm</HeightUnitOfMeasure>
+              <Length>10.1234</Length>
+              <LengthUnitOfMeasure>mm</LengthUnitOfMeasure>
+              <FreeStock>0</FreeStock>
+              <NextAvailable />
+              <Barcode>1234567034027</Barcode>
+              <GlobalSequence>2</GlobalSequence>
+           </SKU>
+           <SKU>
+              <Id>41922</Id>
+              <ClrId>17132</ClrId>
+              <Sequence>20</Sequence>
+              <SizeCode>00</SizeCode>
+              <OriginalPrice>110</OriginalPrice>
+              <Price>110</Price>
+              <RetailPrice>0</RetailPrice>
+              <Weight>0.11</Weight>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 52 of 221
+             <WeightUnitOfMeasure>Kg</WeightUnitOfMeasure>
+             <Width>22.3345</Width>
+             <WidthUnitOfMeasure>mm</WidthUnitOfMeasure>
+             <Height>0</Height>
+             <HeightUnitOfMeasure>mm</HeightUnitOfMeasure>
+             <Length>10.1234</Length>
+             <LengthUnitOfMeasure>mm</LengthUnitOfMeasure>
+             <FreeStock>0</FreeStock>
+             <NextAvailable />
+             <Barcode>1234567034034</Barcode>
+             <GlobalSequence>1</GlobalSequence>
+           </SKU>
+         </SKUs>
+          ….etc…..
+
+
+
+1.23.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.23.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+ 403          5096                                 Free Stock Formula is invalid in the GIT setup
+ 403          5097                                 Future Stock Formula is invalid in the GIT setup
+
+1.24 RETRIEVE SIMPLE LIST OF PRODUCTS
+
+This query will return a list of products with fewer details than provided with “Get list of Products”. It can
+be used to present the shopper with the initial display of products without the colours and sizes and will
+considerably reduce the response payload.
+
+
+1.24.1 URI REQUEST FORMAT
+
+/ProductsSimple?countryCode={countryCode}&query={queryString}&updatedAfter={updateTimestamp}&o
+rder={orderBy}&startRow={startRow}&pageRows={pageRows}
+
+
+1.24.2 REQUEST PARAMETERS
+ Field                    Required                                    Comment
+ CountryCode              Mandatory                                   Country Code of the shopper
+ Query String                                      Optional           Sequence and Product Reference Type. Up to 5
+                                                                      combinations can be entered.
+
+ updatedAfter                                      Optional           Allows web developers to retrieve products updated after
+                                                                      a specific timestamp.
+                                                                      Valid date formats: YYYY-MM-DDTHH:MM:SS, YYYY-MM-
+                                                                      DDTHH:MM, YYYY-MM-DD
+                                                                      The timestamp format used to query should match the
+                                                                      head office database date/time settings.
+                                                                      This was introduced from version 2016.3 onwards.
+                                                                      This filter considers price changes for “today” as a
+                                                                      product update.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 53 of 221
+ Order                                             Optional           valid values are a series of product fields and sort
+                                                                      sequence concatenated as
+                                                                       {id:asc}
+                                                                      {code:desc}
+                                                                      {name:asc}
+                                                                      {description:asc}
+                                                                      {price:asc}
+
+                                                                      Multiple fields may be selected to define the sequencing
+                                                                      of the products in the result.
+
+ startRow                                          Optional           Starting product number
+ pageRows                                          Optional           Number of products per page
+ styleCode                                         Optional           Style code. This is not case sensitive
+
+
+1.24.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/ProductsSimple?countryCode=AU&query=1,1506:3,1441&order
+={name:asc}&startRow=1&pageRows=40
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.24.4 EXAMPLE RESPONSE
+
+<ProductsSimple>
+<ProductSimple>
+<Id>6264</Id>
+<RowNumber>1</RowNumber>
+<Code>M2</Code>
+<Name>MRP 2</Name>
+<Description />
+<OriginalPriceFrom>79.95</OriginalPriceFrom>
+<PriceFrom>79.95</PriceFrom>
+<OriginalPriceTo>79.95</OriginalPriceTo>
+<PriceTo>79.95</PriceTo>
+<AvailableStock>0</AvailableStock>
+<UpdateTimeStamp>2010-06-03T10:03:43</UpdateTimeStamp>
+</ProductSimple>
+<ProductSimple>
+<Id>7126</Id>
+<RowNumber>2</RowNumber>
+<Code>NAB32</Code>
+<Name>Dririder Off Road Tail Bag</Name>
+<Description />
+<OriginalPriceFrom>79.95</OriginalPriceFrom>
+<PriceFrom>79.95</PriceFrom>
+<OriginalPriceTo>79.95</OriginalPriceTo>
+<PriceTo>79.95</PriceTo>
+<AvailableStock>0</AvailableStock>
+<UpdateTimeStamp>2005-08-17T09:15:23</UpdateTimeStamp>
+</ProductSimple>
+</ProductsSimple>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 54 of 221
+1.24.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.24.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+ 400          5034                                 Invalid pagination parameters
+
+1.25 RETRIEVE SIMPLE DETAILS FOR A SINGLE PRODUCT
+
+This GET request will return ‘simple’ details for a single product using the Product Id retrieved previously.
+
+
+1.25.1 URI REQUEST FORMAT
+
+/ProductsSimple/{id}?countryCode={countryCode}
+
+
+1.25.2 REQUEST PARAMETERS
+ Field                    Required                                    Comment
+ Id                       Mandatory                                   Id of the Product
+ Country Code                                    Mandatory            Country Code of shopper
+
+
+1.25.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/ProductsSimple/1024?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.25.4 EXAMPLE RESPONSE
+
+<ProductSimple">
+<Id>7126</Id>
+<RowNumber>1</RowNumber>
+<Code>NAB32</Code>
+<Name>Dririder Off Road Tail Bag</Name>
+<Description />
+<OriginalPriceFrom>79.95</OriginalPriceFrom>
+<PriceFrom>79.95</PriceFrom>
+<OriginalPriceTo>79.95</OriginalPriceTo>
+<PriceTo>79.95</PriceTo>
+<AvailableStock>0</AvailableStock>
+<UpdateTimeStamp>2005-08-17T09:15:23</UpdateTimeStamp>
+   </ProductSimple>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 55 of 221
+1.25.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.25.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+1.26 RETRIEVE PRODUCT NOTES
+
+This GET request will return the note types and notes stored in AP21 for a product using the Product Id
+retrieved previously. If no notes exist for a Product Id, no notes are returned.
+
+
+1.26.1 URI REQUEST FORMAT
+
+/ProductNotes/{id}?countryCode={countryCode}
+
+
+1.26.2 REQUEST PARAMETERS
+ Field                    Required                                    Comment
+ Id                       Mandatory                                   Id of the Product
+ Country Code                                    Mandatory            Country Code of shopper
+
+
+1.26.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/ProductNotes/1155?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.26.4 EXAMPLE RESPONSE
+
+<ProductNoteTypes>
+<ProductNoteType>
+   <Code>Web Description</Code>
+   <Name>Web Description for Retail API</Name>
+   <Note>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html&gt;
+        &lt;head&gt;
+                &lt;meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"
+/&gt;&lt;title&gt;
+                &lt;/title&gt;
+                &lt;style type="text/css"&gt;
+                        .cs2E86D3A6{text-align:center;text-indent:0pt;margin:0pt 0pt 0pt 0pt}
+                        .cs5EFED22F{color:#000000;background-color:transparent;font-family:Times New
+Roman; font-size:12pt; font-weight:normal; font-style:normal; }
+                        .csB86C8CFE{color:#000000;background-color:transparent;font-family:Times New
+Roman; font-size:12pt; font-weight:bold; font-style:normal; }
+                        .cs91B7CE26{color:#000000;background-color:#FFFF80;font-family:Times New
+Roman; font-size:12pt; font-weight:normal; font-style:normal; }
+                &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 56 of 221
+               &lt;span&gt;&lt;p class="cs2E86D3A6"&gt;&lt;span class="cs5EFED22F"&gt;Heavyweight
+Cotton Drill Coverall with 3M &lt;/span&gt;&lt;span class="csB86C8CFE"&gt;50mm&lt;/span&gt;&lt;span
+class="cs5EFED22F"&gt; 8910 Reflective Tape&lt;/span&gt;&lt;/p&gt;&lt;p
+class="cs2E86D3A6"&gt;&lt;span class="cs91B7CE26"&gt;Two hoops around body and a hoop around each
+arm and leg&lt;/span&gt;&lt;/p&gt;&lt;/span&gt;&lt;/body&gt;
+&lt;/html&gt;
+</Note>
+</ProductNoteType>
+</ProductNoteTypes>
+
+
+
+1.26.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.26.6 ERROR RESPONSE
+ HTTP Error     API Error Code API Error Text
+ 404
+
+1.27 RETRIEVE PRODUCT COLOUR NOTES
+
+This GET request will return the note types and notes stored in AP21 for a product colour using the ClrId
+retrieved previously. If no notes exist for a ClrId, no notes are returned.
+
+
+1.27.1 URI REQUEST FORMAT
+
+/ProductColourNotes/{id}?countryCode={countryCode}
+
+
+1.27.2 REQUEST PARAMETERS
+ Field                    Required                                    Comment
+ Id                       Mandatory                                   Id of the Product Colour
+ Country Code                                    Mandatory            Country Code of shopper
+
+
+1.27.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/ProductColourNotes/1200?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.27.4 EXAMPLE RESPONSE
+
+<ProductColourNoteTypes
+        <ProductColourNoteType>
+        <Code>Note1</Code>
+        <Name>Note1</Name>
+        <Note>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html
+             xmlns="http://www.w3.org/1999/xhtml"&gt;
+        &lt;head&gt;
+                &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"
+/&gt;&lt;title&gt;
+                &lt;/title&gt;
+                &lt;style type="text/css"&gt;
+                        .cs95E872D0{text-align:left;text-indent:0pt;margin:0pt 0pt 0pt 0pt}
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00     P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                             Page 57 of 221
+                        .csCF6BBF71{color:#000000;background-color:transparent;font-family:Times New
+Roman;font-size:12pt;font-weight:normal;font-style:normal;}
+                &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+                &lt;p class="cs95E872D0"&gt;&lt;span class="csCF6BBF71"&gt;Blue
+Note2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;
+&lt;/html&gt;
+
+        </Note>
+    </ProductColourNoteType>
+    <ProductColourNoteType>
+        <Code>Note2</Code>
+        <Name>Note2</Name>
+        <Note>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html
+             xmlns="http://www.w3.org/1999/xhtml"&gt;
+        &lt;head&gt;
+                &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"
+/&gt;&lt;title&gt;
+                &lt;/title&gt;
+                &lt;style type="text/css"&gt;
+                        .cs95E872D0{text-align:left;text-indent:0pt;margin:0pt 0pt 0pt 0pt}
+                        .csCF6BBF71{color:#000000;background-color:transparent;font-family:Times New
+Roman;font-size:12pt;font-weight:normal;font-style:normal;}
+                &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+                &lt;p class="cs95E872D0"&gt;&lt;span class="csCF6BBF71"&gt;Blue
+Note&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;
+&lt;/html&gt;
+        </Note>
+    </ProductColourNoteType>
+</ProductColourNoteType
+
+
+1.27.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.27.6 ERROR RESPONSE
+ HTTP Error     API Error Code API Error Text
+ 404
+
+1.28 RETRIEVE PRODUCT CUSTOM DATA TEMPLATES AND ATTRIBUTES
+
+A GET endpoint is available to retrieve the list of product custom data templates available on a web store.
+Besides, details of a single template can be retrieved by supplying the template name.
+
+Generally, all product custom data templates with “Available to Retail API” selection will be returned. This
+can be limited by entering the web store and product custom data templates combination in GIT table
+called Retail API Custom Data filter in Apparel21 ( Reference 115891 Retail API - ability to restrict custom
+data cards to specific API instance) . The entries in GIT table is checked to ensure that only eligible product
+custom data templates are returned with the GET endpoint.
+
+ Custom data field can be defined at product, colour or inherited level. When a data field is defined at
+inherited level, the value of custom data field retrieved from /Product should be read at colour level.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 58 of 221
+Field                          Format            Comment                        Example                                  Single         HTTP Header
+                                                                                                                         template
+                                                                                                                         by name        Accept:Version
+
+CustomData                                       List of custom data                                                     Yes            4.0
+                                                 templates
+ Template                      Alpha                                                                                     Yes            4.0
+  Name                         Alpha             Template name                                                           Yes            4.0
+  ImageUrl                     Alpha             A web-based image URL          https://apparel21.com/wp-                Yes            4.0
+                                                                                content/uploads/2018/07/hero_p.jpg
+  Fields                       Alpha             Type="Array"                                                            Yes            4.0
+   Field                       Alpha                                                                                     Yes            4.0
+    Label                      Alpha             Label for data field                                                    Yes            4.0
+    Type                       Alpha             Data type of data field.       Text                                     Yes            4.0
+                                                 There are 6 data types         Memo
+                                                 available.                     Date
+                                                                                Number
+                                                                                Checkbox
+                                                                                TagList
+                                                                                TreeList
+    Level                      Alpha             Level at which data field      Product                                  Yes            4.0
+                                                 is defined.                    Clr
+                                                                                Inherited
+    Length                     Number            For Text data type             1000                                     Yes            4.0
+    Min                        Number            For Number data type           0                                        Yes            4.0
+    Max                        Number            For Number data type           1000                                     Yes            4.0
+    TagListMultiSelect         Alpha             For TagList datatype           False                                    Yes            4.0
+                                                                                True
+    IsAdhocList                Alpha             For TagList data type          False                                    Yes            4.0
+                                                                                True
+     Tags                      Alpha             Type="Array"                                                            Yes            4.0
+       Tag                     Alpha                                                                                     Yes            4.0
+       Value                   Alpha             For TagList data type          Australia                                Yes            4.0
+                                                                                1001
+     TreeListMultiSelect       Alpha             For TreeList data type         False                                    Yes            4.0
+                                                                                True
+     TreeList                  Alpha             Type="Array"                                                            Yes            4.0
+       TreeNode                Alpha                                                                                     Yes            4.0
+         FullPath              Alpha             Full path of the tree node     Clothing&gt;Jeans                        Yes            4.0
+
+
+
+1.28.1 URI REQUEST FORMAT
+
+/Products/CustomDataTemplates/{template name}?countryCode={countryCode}
+
+
+1.28.2 REQUEST PARAMETERS
+ Field                    Required                                        Comment
+ Country Code             Mandatory                                       Country Code of shopper
+ Template Name                                      Optional              Name of custom data template
+
+
+1.28.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Retailapi/Products/CustomDataTemplates?countryCode=AU-GA-IO
+
+            Content-type: text/xml
+            Accept:version_4.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00         P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                 Apparel21 Reference Guide                                               Page 59 of 221
+1.28.4 EXAMPLE RESPONSE
+<CustomData xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Template>
+        <Name>TheIconic 1</Name>
+        <ImageUrl />
+        <Fields Type="Array">
+            <Field>
+                <Label>Short Description</Label>
+                <Type>Text</Type>
+                <Level>Product</Level>
+                <Length>1000</Length>
+            </Field>
+            <Field>
+                <Label>Product Details</Label>
+                <Type>Memo</Type>
+                <Level>Product</Level>
+            </Field>
+            <Field>
+                <Label>Launch Date</Label>
+                <Type>Date</Type>
+                <Level>Inherited</Level>
+            </Field>
+            <Field>
+                <Label>Limited Edition</Label>
+                <Type>Checkbox</Type>
+                <Level>Clr</Level>
+            </Field>
+            <Field>
+                <Label>Iconic Category</Label>
+                <Type>TreeList</Type>
+                <Level>Product</Level>
+                <TreeListMultiSelect>True</TreeListMultiSelect>
+                <TreeList Type="Array">
+                    <TreeNode>
+                        <FullPath>Clothing</FullPath>
+                    </TreeNode>
+                    <TreeNode>
+                        <FullPath>Clothing&gt;Jeans</FullPath>
+                    </TreeNode>
+                    <TreeNode>
+                        <FullPath>Clothing&gt;Jeans&gt;Flares</FullPath>
+                    </TreeNode>
+                    <TreeNode>
+                        <FullPath>Clothing&gt;Jeans&gt;Girlfriend</FullPath>
+                    </TreeNode>
+                    <TreeNode>
+                        <FullPath>Clothing&gt;Jeans&gt;Tapered</FullPath>
+                    </TreeNode>
+                    <TreeNode>
+                        <FullPath>Clothing&gt;Jeans&gt;Boyfriend</FullPath>
+                    </TreeNode>
+                    <TreeNode>
+                        <FullPath>Clothing&gt;Jeans&gt;Bootcut</FullPath>
+                    </TreeNode>
+              </TreeList>
+            </Field>
+            <Field>
+                <Label>Weight in grams</Label>
+                <Type>Number</Type>
+                <Level>Product</Level>
+                <Min>1</Min>
+                <Max>1000</Max>
+            </Field>
+        </Fields>
+    </Template>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 60 of 221
+

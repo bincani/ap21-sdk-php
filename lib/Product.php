@@ -23,6 +23,10 @@ class Product extends HTTPXMLResource
     public const PAGE_LIMIT = 0;
     public const DEFAULT_PAGE_ROWS = 500;
 
+    /** @var bool Count not available; use TotalRows from XML response and getTotalProducts() */
+    public $countEnabled = false;
+
+
     /** @var array<string,mixed> */
     protected array $products = [];
     protected int $productLimit = 0;
@@ -63,7 +67,7 @@ class Product extends HTTPXMLResource
         if (is_string($xml)) {
             $xml = simplexml_load_string($xml);
             if (!$xml instanceof SimpleXMLElement) {
-                throw new \RuntimeException('Failed to parse XML response.');
+                throw new ApiException('Failed to parse XML response.', CurlRequest::$lastHttpCode);
             }
         }
 
@@ -104,6 +108,17 @@ class Product extends HTTPXMLResource
         if (array_key_exists('limit', $urlParams)) {
             $this->productLimit = (int) $urlParams['limit'];
             unset($urlParams['limit']);
+        }
+
+        // Default pagination params for collection requests (required by AP21 Products endpoint)
+        // Skip when a custom URL or dataKey is provided (e.g. count endpoint)
+        if (!$this->id && !$url && !$dataKey) {
+            if (!array_key_exists('startRow', $urlParams)) {
+                $urlParams['startRow'] = 1;
+            }
+            if (!array_key_exists('pageRows', $urlParams)) {
+                $urlParams['pageRows'] = self::DEFAULT_PAGE_ROWS;
+            }
         }
 
         if (!$url) {

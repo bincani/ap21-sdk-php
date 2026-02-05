@@ -1,0 +1,888 @@
+1.44.9 PAYMENTS
+
+Apparel21 Retail API requires payment information for all posted orders. Payment totals must match the
+posted order total.
+
+There are three types of payment possible;
+
+     1. Credit Card – shopper has paid for the order via website payment gateway (including
+        PayPal,SecurePay, Adyen or Afterpay)
+     2. Direct Debit – shopper will deposit money into back account as a separate process
+     3. Zip – shopper has paid for the order via website with Zip payment gateway
+
+Note: Direct Debit payment method is NOT available for Click and collect / buy online pick up in store
+orders.
+
+Note: POST Orders will be rejected where the payment is not equal to the Price X Quantity and the
+<TotalDiscount> or <Discount> elements are incorrect or missing.
+
+
+1.44.10                GIFT VOUCHERS
+
+Gift voucher sales are processed in the same manner as a standard product sale (using a product id for gift
+voucher product). However, there are additional elements available for voucher sales;
+
+     -     Voucher Type
+     -     Voucher Number (optional – normally not supplied) – used for when third party is selling/activating
+           a physical gift voucher and number is already known
+     -     Email subject – for emailed gift vouchers
+     -     Personalised message – message for recipient
+     -     Email – address for emailed gift vouchers
+     -     SenderName – friendly name for sender of gift voucher e.g. Mummy – used to print on the
+           voucher
+     -     ReceiverName – friendly name for receiver of gift voucher e.g. Daddy – used to print on the
+           voucher
+     -     DeliveryDate – date that an emailed voucher will be delivered (additional set up required if use this
+           feature – job 117077)
+
+Refer to the Section Gift Vouchers for detail required when selling a gift voucher. If the Gift Voucher does
+not have a value in Apparel21 the value of the voucher must be sent by the API.
+
+Gift Voucher type products cannot be ordered for orders that are Click & Collect (i.e. An order where the
+PickupStoreId differs from the web.config warehouse).
+
+1.44.11                RETURNS
+
+The API supports entry of a pending return of stock to the warehouse (introduced in version 2.3).
+
+Return quantities are entered as negative quantity and must have a return reason code assigned with
+optional text notes.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 101 of 221
+Valid return reason ids are retrieved as References. To obtain list of return reason ids with their code and
+long name, this is retrieved as ReferenceTypeId = 272.
+
+Where the stock is NOT going to be sent back to the warehouse, it is possible to post a return and
+automatically finalise it (refunds customer and posts negative sales and financials for the returned items
+and creates a stock adjustment). This is done using the <StockUpdate> element.
+
+Where this element is NOT supplied as “false”, the return is always assumed to be stock updated. i.e. The
+stock will be sent back to the warehouse for the return as a separate transaction.
+
+
+1.44.12                US EXTENDED TAX – VARIABLE TAX ON TOP OF PRICES
+
+The Apparel21 Retail API will accept Tax Percentages where the Tax will be calculated and added on to the
+Product Price. It also supports where price includes tax – see Website tax rates – prices include tax section
+for more information.
+
+To use this functionality to add the tax on to the Product Price the <PriceIncludeTax> element in the
+<Order> header should be set to false
+           <Order>
+                   <OrderNumber>POST_Orders310520131110</OrderNumber>
+                  <DeliveryInstructions>Step:POST 'Orders', to create an order with a single product ,
+           no discounts, no Freight.</DeliveryInstructions>
+                   <PricesIncludeTax>false</PricesIncludeTax>
+
+
+The Tax Percentage is be sent through on each <Order Detail> using the <TaxPercent> element
+     <OrderDetail>
+         <Id>57285</Id>
+         <Sequence>1</Sequence>
+         <ProductId>6184</ProductId>
+         <ColourId>7109</ColourId>
+         <SkuId>17081</SkuId>
+         <ProductCode>AUTOITEM1</ProductCode>
+         <ProductName>Automation - Style Only</ProductName>
+         <ColourCode>-</ColourCode>
+         <ColourName>-</ColourName>
+         <SizeCode>-</SizeCode>
+         <Quantity>1</Quantity>
+         <Price>45.90</Price>
+         <Value>51.64</Value>
+         <TaxPercent>12.5</TaxPercent>
+     </OrderDetail>
+
+The <Value> element should equal <Price>+<Price>*<TaxPercent> - if this is not specified the Order will
+POST with the correct financials.
+
+The GET Orders will return the <TaxPercent> specified even if it was not used (e.g Australian Store). Do not
+pass a tax rate for Non-US Stores to avoid confusion.
+
+
+1.44.13                WEBSITE TAX RATES – VARIABLE TAXES WITH PRICE INCLUSIVE OF TAX
+
+For some European websites, the collected tax rates might vary depending on the customer’s delivery
+address. The prices may continue to be inclusive of tax but the tax proportion varies.
+
+Where the website is calculating the tax rate, it can be passed through to Apparel21 against the order (but
+NOT the GET CART call).
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 102 of 221
+The element <UseSubmittedTaxRates>true</UseSubmittedTaxRates> against the order implies that the tax
+rates will be coming from detail items. If tax is to be supplied, each item must be posted with a
+<TaxPercent> element with the tax rate to be used.
+
+
+1.44.14                DISCOUNTS
+
+Discounts can be supplied to the order. There are four types of discounts:
+
+     •     1 = Discount applied by the website
+     •     2 = Discount from an Apparel21 promotion – using promotion id as supplied when submit cart
+     •     3 = Discount from Apparel 21 loyalty calculation – using loyalty id as supplied when submit cart
+     •     4 = Discount from reward redemption – using redemption details as supplied when submit cart
+     •     5 = Discount from coupon redemption – using redemption details retrieved from coupon
+           redemption call
+
+Many manual discounts (type 1) can apply to a single detail. Only one promotion, one loyalty discount and
+one reward redemption discount can apply to a single detail line.
+
+When using multiple discounts, they need to be supplied in the sequence of type 1, type 2, type 3 and then
+type 4.
+
+Discount values should correspond to currency precision. For example, if the orders is for AUD, discount of
+1.99 is acceptable but 1.9999 is not acceptable because AUD supports 2 decimal currency only.
+
+As well as supplying the discount amount, Apparel21 supports update of discount reason and web discount
+information.
+
+Discount reason (Reason id) can be supplied for each manual discount. These reasons link to Apparel 21
+reason codes. The list of reasons can be read by getting Reference type 271 codes.
+
+Alternatively, if the website itself is calculating discount information, this can be passed through to the
+order so that the Customer Service team can view the details in the Apparel21 screens when servicing
+shopper queries. The following four fields are text fields that have no bearing on the discount calculation
+but are used to post web discount information for visibility only.
+
+     1.    WebDiscount
+     2.    WebPromotion
+     3.    WebCampaign
+     4.    WebCoupon
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 103 of 221
+1.45 ORDER DETAILS
+
+
+
+ Field                                  Format          Max            Comment                                               Example                   GET        POST Request       HTTP
+                                                        Length                                                                                         Response                    Header
+                                                                                                                                                                                   Accept:
+                                                                                                                                                                                  Version_
+ Id                                     Integer              22        Unique Order Id generated by API                      96854213                     Yes            No             1.0
+                                                                       (WEBSALES_HEADER)
+ RowNumber                              Integer              10        Number generated by API, position of the              10                           Yes            No            1.0
+                                                                       order in the Order list, for reference
+                                                                       purpose only
+ OrderNumber                            Alpha                30        If left blank for a POST request, the API             W0000125                     Yes          Optional        1.0
+                                                                       will generate a unique order number. If
+                                                                       an OrderNumber is entered, this will be
+                                                                       known in Apparel21 as Customer Order
+                                                                       Number
+
+ PartnerOrderId                         Alpha                30        This field is used to post in other system ID         12345                        Yes          Optional        1.0
+                                                                       numbers. If left blank for a POST request,
+                                                                       no order id updated. This information is
+                                                                       displayed against the order in Apparel21
+                                                                       and is useful for understanding system
+                                                                       links.
+ NeedReview                             True/False                     Accepts ‘true’ or ‘false’. If set to ‘true’, the      True                         Yes          Optional        1.0
+                                                                       order will NOT be automatically
+                                                                       despatched. A user will need to review in
+                                                                       Apparel21 and release it before any
+                                                                       automated shipping is triggered. Designed
+                                                                       for fraud systems to flag suspicious orders.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00        P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                               Page 104 of 221
+ Field                                  Format         Max            Comment                                               Example                      GET           POST Request       HTTP
+                                                       Length                                                                                            Response                       Header
+                                                                                                                                                                                        Accept:
+                                                                                                                                                                                       Version_
+ ReviewNotes                            Alpha              250        Posts to mail order “Order Instructions”              Uzbekistan credit card for      Yes             Optional         1.0
+                                                                      field. Intended to reflect notes from                 USA delivery.
+                                                                      NeedReviww flag. i.e. Reason for
+                                                                      suspicion about this order.
+ UseSubmittedTaxRate                    true / false                  Accepts ‘true’ or ‘false’. If set to ‘true’ the       true                         If supplied        Optional        1.0
+                                                                      Tax Percent field MUST be supplied                                                  originally
+                                                                      against each item purchased (including
+                                                                      freight and gift vouchers). This model is
+                                                                      for when price is including tax.
+ PricesIncludeTax                       true/false             -      Prices include tax. Needs to be set to False          True                            No                No            2.0
+                                                                      for US Extended Tax orders only. If not
+                                                                      supplied, it is assumed that price does
+                                                                      NOT include tax.
+ PersonId                               Integer             22        Unique Person Id generated by API                     3583                            Yes              Yes            1.0
+ WarehouseId                            Integer             22        Id of the Web Store                                   4141                            Yes              No             2.0
+ OrderDateTime                          Date(YYYY-          10        Order date time. This is the date that the            2011-07-11T00:00:00             Yes            Optional         1.0
+                                        MM-                           website delivers, not the Head Office date.
+                                        DDTHH:M
+                                        M:SS)
+ TotalQuantity                          Num(22,2)           22        Total quantity of ordered products                    125                             Yes               No            1.0
+ TotalTax                               Num(22,2)           22        Tax value.                                            10.95                           Yes               No            1.0
+ TotalDiscount                          Num(22,2)           22        Discount value                                        20.16                           Yes               No            1.0
+ TotalDue                               Num(22,2)           22        Due amount value (Sum of individual                   2000.25                         Yes               No            1.0
+                                                                      product final value + freight value)
+ TotalPayment                           Num(22,2)           22        Payment value                                         2000.25                         Yes               No            1.0
+ PickupStoreId                          Num(22,2)           22        Id of Store the product will be picked up or          4141                            Yes             Optional        1.0
+                                                                      despatched from – required if Customer is
+                                                                      collecting from a Retail Store as a “Click
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00        P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 105 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                       Length                                                                                        Response                    Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+                                                                      and Collect” order. Optional for “Despatch
+                                                                      from Store” orders.
+
+                                                                      When PickupStore specified and despatch
+                                                                      type is “Despatch From Store” order is
+                                                                      created against specified despatch
+                                                                      location.
+
+ DespatchType                           Alpha               20        Allows values ClickAndCollect,                       DespatchFromStore            Yes          Optional        2.0
+                                                                      DespatchFromStore,
+                                                                      DespatchFromWarehouse or Blank.
+                                                                      DespatchFromWarehouse is the default
+                                                                      value. A blank DespatchType is treated as
+                                                                      a normal warehouse despatch order.
+
+                                                                      Optional for ClickAndCollect orders.
+
+                                                                      Required only when eCommerce site is
+                                                                      passing the despatch location to AP21.
+                                                                      Eg: when shopper offered 3 HR delivery
+                                                                      option on website.
+ ExpectedDeliveryDate                   Date                          Can be used to nominate an expected                  2019-12-10                   Yes          Optional        2.0
+                                                                      delivery date for an order. Typically, used
+                                                                      for week day after hours or Saturday
+                                                                      deliveries to let carrier know when the
+                                                                      customer is expecting the delivery.
+
+                                                                      Must be in yyyy-MM-dd format.
+                                                                      Does NOT support passing a time.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 106 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                       Length                                                                                        Response                    Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+ Carrier
+    Id                                  Number                        Index of carrier id reference code. Id or            1767                         No           Optional        2.0
+                                                                      Code can be passed.
+      Code                              Alpha               15        Reference code name of Carrier. Id or                TNT                          No           Optional        2.0
+                                                                      Code can be passed.
+ ServiceType
+    Id                                  Number                        Index of the Service Type reference code.            1780                         Yes          Optional        2.0
+                                                                      Id or Code can be passed.
+      Code                              Alpha               15        Reference code name of Service Type. Id              Express                      Yes          Optional        2.0
+                                                                      or Code can be passed.
+ SLA
+   Id                                   Number                        Index of the SLA reference code. Value               16784                        Yes          Optional        2.0
+                                                                      sent gets ignored when a
+                                                                      <selectedfreight> is passed - SLA tied to
+                                                                      selectedfreight option in GIT is saved
+                                                                      against the web order.
+     Code                               Alpha               15        Reference code name of SLA. Value sent               SameDay                      Yes          Optional        2.0
+                                                                      gets ignored when a <selectedfreight> is
+                                                                      passed - SLA tied to selectedfreight option
+                                                                      in GIT is saved against the web order.
+ DeliveryInstructions                   Alpha              250        Delivery Instructions                                Deliver on Monday            Yes          Optional        1.0
+ UnattendedDeliveryOptio                Alpha               16        Optional.                                            AuthorityToLeave             Yes            Yes           2.0
+ n                                                                    Valid values are ‘AuthorityToLeave’ or
+                                                                      ‘None’. If not passed, defaults to ‘None’.
+ Addresses                                                            Addresses consists of Billing and Delivery
+   Billing                                                            Billing is a sub-element of Addresses
+   AddressLine1                         Alpha               50        Address line 1                                       Level 2                      Yes           Yes1           1.0
+   AddressLine2                         Alpha               50        Address line 2                                       21 Cremorne Street           Yes           Yes1           1.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 107 of 221
+ Field                                  Format         Max            Comment                                              Example                    GET        POST Request                   HTTP
+                                                       Length                                                                                         Response                                Header
+                                                                                                                                                                                              Accept:
+                                                                                                                                                                                             Version_
+     City                               Alpha               50        City                                                 Cremorne                      Yes              Yes1                     1.0
+     State                              Alpha               50        State                                                VIC                           Yes              Yes1                     1.0
+     Postcode                           Alpha               10        Post code or ZIP code                                3121                          Yes              Yes1                     1.0
+     Country                            Alpha               20        Country                                              Australia                     Yes              Yes1                     1.0
+                                                                      Note 1: At least 1 Billing field must be
+                                                                      completed for a POST
+     Delivery                                                         Delivery is a sub-element of Addresses
+     ContactName                        Alpha              100        Contact Name                                         Jane Smith                    Yes     Yes1 Mandatory if sale is        1.0
+                                                                                                                                                                     for Gift Voucher
+     CompanyName                        Alpha               50        Company Name against Delivery Address                Apparel21                     Yes           Optional                   1.0
+                                                                      only. Must have head office configuration
+                                                                      to display on reports / labels
+     AddressLine1                       Alpha               50        Address line 1                                       Level 2                       Yes              Yes1                    1.0
+     AddressLine2                       Alpha               50        Address line 2                                       21 Cremorne Street            Yes              Yes1                    1.0
+     City                               Alpha               50        City                                                 Cremorne                      Yes              Yes1                    1.0
+     State                              Alpha               50        State                                                VIC                           Yes              Yes1                    1.0
+     Postcode                           Alpha               10        Post code or ZIP code                                3121                          Yes              Yes1                    1.0
+     Country                            Alpha               20        Country                                              Australia                     Yes              Yes1                    1.0
+                                                                      Note 1: At least 1 Delivery field must be
+                                                                      completed for a POST
+ Contacts                                                             Contacts consists of Email and Phone
+                                                                      numbers.
+ Email                                  Alpha              250        Email address. This is mandatory as it is            ajit.chandran@apparel21.      Yes               Yes                    1.0
+                                                                      used to uniquely identify the person’s               com
+                                                                      billing email.
+
+
+
+     Phones                                                           Phones is a sub element of Contacts
+     Home                               Alpha              250        Home phone                                           03 94275120                   Yes            Optional                  1.0
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 108 of 221
+ Field                                  Format          Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                        Length                                                                                        Response                    Header
+                                                                                                                                                                                  Accept:
+                                                                                                                                                                                 Version_
+    Mobile                              Alpha               250        Mobile Phone                                         0421 552 654                 Yes          Optional         1.0
+    Work                                Alpha               250        Work phone                                           84159300                     Yes          Optional         1.0
+ DeliveryContacts                                                      DeliveryContacts consists of Email and
+                                                                       Phone numbers.
+ Email                                  Alpha               250        Delivery email address. This doesn’t need            me@apparel21.com             No           Optional        2.0
+                                                                       to be supplied if it is the same as the
+                                                                       Contact email address. If this is NOT
+                                                                       supplied, the Contact email address will be
+                                                                       used as the delivery reference at POS for
+                                                                       searching for sales or managing freight
+                                                                       bookings.
+
+                                                                       The Delivery email address is also used for
+                                                                       delivery of purchased gift vouchers if the
+                                                                       Voucher – Email element hasn’t been
+                                                                       supplied at the voucher level.
+     Phones                                                            Phones is a sub element of Delivery
+                                                                       Contacts
+    Home                                Alpha               250        Home phone                                           03 94275120                  Yes          Optional        1.0
+    Mobile                              Alpha               250        Mobile Phone                                         0421 552 654                 Yes          Optional        1.0
+    Work                                Alpha               250        Work phone                                           84159300                     Yes          Optional        1.0
+ GiftId                                 Integer                        Unique identifier for gift reward                    123                          Yes            No            1.0
+ PartnerOrderId                         Alpha               250        Order ID of the eCommerce platformat eg:             123456                       Yes          Optional        1.0
+                                                                       Shopify ID, Magento ID
+ OrderDetails                                                          Contains a list of OrderDetail.
+   OrderDetail                                                         OrderDetail is a sub-element of
+                                                                       OrderDetails. One per original order,
+                                                                       product, colour, size, status.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 109 of 221
+ Field                                  Format          Max            Comment                                              Example                   GET        POST Request      HTTP
+                                                        Length                                                                                        Response                   Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+     Id                                 Integer              22        Unique OrderDetail Id generated by API               1234                      Optional          No            1.0
+                                                                       ((RETAIL_ORDER_DETAIL_IDX on SORD) or
+                                                                       (RETAIL_ORDER_DETAIL_IDX on RET_TRAND)
+                                                                       depending on where item is sent for despatch))
+                                                                       This value is only populated for web
+                                                                       orders. Any phone orders or non-web
+                                                                       orders included will be blank.
+     Sequence                           Integer              10        Number generated by API, position of the             10                           Yes            No           1.0
+                                                                       orderDetail in the OrderDetails list, for
+                                                                       reference purpose only
+     ProductId                          Integer              22        Unique Product Id                                    3641                         Yes           No            1.0
+     ColourId                           Integer              22        Unique Colourl Id                                    2566                         Yes           No            1.0
+     SkuId                              Integer              22        Unique SKU Id                                        1234                         Yes           Yes           1.0
+     ProductCode                        Alpha                10        Unique Product Code                                  W00123                       Yes           No            1.0
+     ProductName                        Alpha                30        Product Name                                         Long Sleeve Shirt            Yes           No            1.0
+     ColourCode                         Alpha                  21      Colour Code                                          BLK                          Yes           No            1.0
+     ColourName                         Alpha                61        Colour Name                                          Black                        Yes           No            1.0
+     SizeCode                           Alpha                 7        Size Code                                            XL                           Yes           No            1.0
+     Barcode                            Alpha                50        Barcode of product – only primary                    9312345111111                Yes           No            1.0
+                                                                       barcode
+     Quantity                           Num(22,2)            22        Quantity of product. Negative for returns.           100                          Yes           Yes           1.0
+     Customisation                      Alpha               100        Customisation message for a product                  Engrave- Joseph              Yes         Optional        1.0
+     Price                              Num(22,2)            22        Price of the orderDetail                             210                          Yes           Yes           1.0
+     Discount                           Num(22,2)            22        Discount of the orderDetail                          50                           Yes           No            1.0
+     Value                              Num(22,2)            22        Net Value                                            160                          Yes           Yes           1.0
+     QuantityTaken                      Num(22,2)            22        Applies to ‘Click and Collect’ and                   1                            Yes           No            2.0
+                                                                       ‘Despatch from Store’ orders only.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 110 of 221
+ Field                                  Format         Max            Comment                                               Example                   GET        POST Request      HTTP
+                                                       Length                                                                                         Response                   Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+                                                                      For ‘Click and Collect’ orders this is the
+                                                                      Quantity taken (collected) from the Retail
+                                                                      Store.
+                                                                      For ‘Despatch from Store’ orders this is
+                                                                      the Quantity shipped from the Retail
+                                                                      Store.
+
+     QuantityPacked                     Num(22,2)           22        Applies to ‘Click and Collect’ and                    2                            Yes            No           2.0
+                                                                      ‘Despatch from Store’ orders only.
+                                                                      Quantity Packed at the retail store – ready
+                                                                      to be collected or despatched.
+
+     GiftWrap                           Alpha                 5       Is this item to be gift wrapped? True =               True                         Yes         Optional        1.0
+                                                                      Yes, False = No. If not supplied, it is
+                                                                      assumed that the item is NOT to be gift
+                                                                      wrapped.
+                                                                      When set to True, order will be shipped
+                                                                      from the warehouse.
+     GiftWrapMessage                    Alpha            1000         This is the message for gift wrapping. If             Happy birthday, Mum.         Yes         Optional        1.0
+                                                                      this is supplied but GiftWrap field is not, it
+                                                                      will be assumed that the item is to be gift
+                                                                      wrapped.
+     SenderName                         Alpha               50        Friendly name for gift voucher sender.                Mummy                        Yes         Optional        1.0
+                                                                      Text that can be picked up on email or
+                                                                      print out of voucher.
+     ReceiverName                       Alpha               50        Friendly name for gift voucher receiver.              Daddy                        Yes         Optional        1.0
+                                                                      Text that can be picked up on email or
+                                                                      print out of voucher.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00        P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 111 of 221
+ Field                                  Format          Max            Comment                                              Example                    GET        POST Request                   HTTP
+                                                        Length                                                                                         Response                                Header
+                                                                                                                                                                                               Accept:
+                                                                                                                                                                                              Version_
+     WarehouseId                        Integer              22        Id of the Store despatching goods (Job               4141                          Yes                No                     2.0
+                                                                       118493)
+ ExtraVoucherInformation                                               Information for sold Gift Vouchers
+                                                                       ExtraVoucherInformation contains
+                                                                       VoucherType, EmailSubject and
+                                                                       PersonalisedMessage and is a sub-
+                                                                       element of OrderDetail
+     VoucherType                        Alpha                15        Must be valid Voucher Type Reference                 Online email                  No       Yes – if Product id is a        2.0
+                                                                                                                                                                        gift voucher
+                                                                       Code from RetVouch in AP21
+     VoucherNumber                      Integer              22        Optional field used when a specific gift             123456789                     No              Optional                 2.0
+                                                                       voucher number is sold. If not supplied
+                                                                       (most common), Apparel21 will assign the
+                                                                       next available number.
+     EmailSubject                       Alpha             4000         Entered as Subject line of the email or part         Happy Birthday!               No       Optional / Mandatory            2.0
+                                                                                                                                                                  If voucher type is email
+                                                                       of the letter that accompanies a mail type
+                                                                                                                                                                    voucher type, this is
+                                                                       voucher                                                                                      required. Otherwise
+                                                                                                                                                                            not.
+     Email                              Alpha                          Email address for voucher to be delivered            John.smith@apparel21.com      No       Optional / Mandatory            2.0
+                                                                                                                                                                  If voucher type is email
+                                                                       to. If not supplied, emailed voucher will
+                                                                                                                                                                    voucher type, this is
+                                                                       be sent to DeliveryContacts-Email address.                                                 mandatory. Otherwise
+                                                                                                                                                                            not.
+     PersonalisedMessage                Alpha             4000         Body of email that sends the voucher. Can            Hope you have a really        No              Optional                 2.0
+                                                                       form part of the letter that accompanies             great day on Friday
+                                                                       mail vouchers.
+     DeliveryDate                       Date(YYYY-           10        Don’t provide this unless purchased                  2021-11-14                    No              Optional                 2.0
+                                        MM-DD)                         voucher will be delivered via email and
+                                                                       email should be delayed. This is the future
+                                                                       date that the voucher will be delivered at.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 112 of 221
+ Field                                  Format          Max            Comment                                              Example                   GET        POST Request             HTTP
+                                                        Length                                                                                        Response                          Header
+                                                                                                                                                                                        Accept:
+                                                                                                                                                                                       Version_
+                                                                       If using this feature, additional set up is
+                                                                       required in the back office (job 117077).
+
+     TaxPercent                         Num(22,2)            22        Tax percentage numeric value (12.5 for               12.5                         Yes     Only if using Price        1.0
+                                                                       12.5%).                                                                                   excludes tax = true
+                                                                       Must be the value read from the Cart. If                                                  or Use submitted
+                                                                       the developer does not use the CART                                                       tax rate = true
+                                                                       function to obtain this information, the
+                                                                       correct tax to apply must be entered.
+                                                                       Order creation Total tax calculation will
+                                                                       use this value.
+
+     ReturnReasonId                     Integer              22        Unique Return Reason Id. Get list of valid           45                           Yes      Yes – mandatory           2.0
+                                                                       reason ID codes using – References for                                                        for returns
+                                                                       Reference Type = 272.
+     ReturnReasonNotes                  Alpha                          Text notes                                           Faulty zip                Optional        Optional              2.0
+     NonReturnable                      Alpha                  5       Set to True if the item is not returnable.           True                        Yes           Optional              2.0
+                                                                       False or no value assumed that the item is
+                                                                       returnable. Accepted values are True,
+                                                                       true, TRUE, false,Fasle, FASLSE. 0 and 1 are
+                                                                       not accepted values. Refer to Job 116830.
+     Carrier                            Alpha                40        Carrier name against a despatched sale.              Toll Ipec                    Yes             No                 2.0
+                                                                       This is the carrier that has been used to
+                                                                       deliver the goods. No value if not
+                                                                       “shipped”. Carrier passed in the order
+                                                                       header when creating an order will be
+                                                                       returned.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 113 of 221
+ Field                                  Format         Max            Comment                                                 Example                      GET          POST Request      HTTP
+                                                       Length                                                                                              Response                     Header
+                                                                                                                                                                                        Accept:
+                                                                                                                                                                                       Version_
+                                                                      Note – Only works for Warehouse despatch orders.
+                                                                      Shipment endpoint must be used to retrieve carrier
+                                                                      for Despatch from Store orders.
+
+
+     CarrierUrl                         Alpha              150        URL for Carrier’s website. This is set in the           https://online.toll.com.au      Yes –            No           2.0
+                                                                      Apparel21 back office against the carrier               /trackandtrace/index.jsp        when
+                                                                      code. Useful for track and trace lookup.                                             retrieving
+                                                                      Note – Only works for Warehouse despatch orders                                      all Orders
+                                                                      and returns.
+                                                                                                                                                               only
+                                                                      Shipment endpoint must be used to retrieve carrier
+                                                                      for Despatch from Store orders.
+     ConNote                            Alpha               20        Consignment note number against a                       TL000859                        Yes –            No           2.0
+                                                                      despatched sale or pending return. No                                                   when
+                                                                      value if not “shipped” for positive values.                                          retrieving
+                                                                      Note – Only works for Warehouse despatch orders.                                     all Orders
+                                                                      Shipment endpoint must be used to retrieve connote
+                                                                                                                                                               only
+                                                                      for Despatch from Store orders.
+     Status                             Alpha               10        The status of the ordered / transaction                 Shipped                         Yes              No           2.0
+                                                                      quantity.
+                                                                           • Processing = outstanding order
+                                                                           • Shipped = Positive value retail
+                                                                               sale
+                                                                           • Cancelled = ordered line that was
+                                                                               never shipped
+                                                                           • Returned = negative value retail
+                                                                               sale
+                                                                      Zero freight charges on an order that are
+                                                                      not copied to the invoice appear with a
+                                                                      status of “cancelled”.
+ ServiceType
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00        P H : 613 8 415 9300     F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                                 Page 114 of 221
+ Field                                  Format          Max            Comment                                              Example                   GET        POST Request            HTTP
+                                                        Length                                                                                        Response                         Header
+                                                                                                                                                                                       Accept:
+                                                                                                                                                                                      Version_
+   Id                                   Number                         Index of the Service Type reference code.            162                          Yes            No                  2.0
+                                                                       This returns the id of the service type
+                                                                       passed during an Order Post.
+   Code                                 Alpha                15        Reference code name of Service Type. This            Road                         Yes            No                 2.0
+                                                                       returns the code of the service type
+                                                                       passed during an Order Post.
+ Discounts                                                             Contains a list of Discounts and is a sub-
+                                                                       element of OrderDetail.
+                                                                       Non-web orders do not have discount sub
+                                                                       elements.
+     Discount                                                          Discount is a sub-element of Discounts
+     Id                                 Alpha                22        Discount Id generated by API                         1                            No             No                  1.0
+
+     ParentId                           Alpha                22        Parent OrderDetail Id of the Discount                1                            No             No                  1.0
+
+     DiscountType                       Alpha                50        ManualDiscount, PromotionDiscount or                 ManualDiscount               No             No                  1.0
+
+                                                                       LoyaltyDiscount
+     DiscountTypeId                     Integer              22        1 = manual Discount, 2 = Promotion                   2                            No             Yes                 1.0
+
+                                                                       Discount, 3 = Loyalty Discount, 4 = Reward
+                                                                       Redemption Discount, 5 = Coupon
+                                                                       Discount
+                                                                       If using multiple against one product item,
+                                                                       discounts MUST be in order of 1, 2, 3, 4
+                                                                       then 5 in the payload.
+     ReasonId                           Integer              22        Only relevant for manual discounts. i.e.             1231                         No      Optional (only for         1.0
+
+                                                                       Discount Type ID = 1                                                                      type 1 discounts)
+                                                                       This links to the reason id for the discount.
+                                                                       Look up reason idx using reference type id
+                                                                       271
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 115 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request               HTTP
+                                                       Length                                                                                        Response                            Header
+                                                                                                                                                                                         Accept:
+                                                                                                                                                                                        Version_
+                                                                      If not supplied for manual discounts (type
+                                                                      1, the “online” discount reason will be
+                                                                      used.
+     PromoId                            Alpha               22        Promotion ID in Apparel21                            1010                         No       Yes (only for type 2        1.0
+                                                                                                                                                                      discounts)
+     LoyaltyId                          Alpha               22        Loyalty ID in Apparel21 – RCIDX of loyalty           2020                         No       Yes (only for type 3        1.0
+                                                                                                                                                                      discounts)
+                                                                      program in table REFCODE (see RGIDX 366
+                                                                      to get list).
+     Sequence                           Alpha               22        Default as “0”                                       0                            No               No                  1.0
+
+     Description                        Alpha              280        Description of the discount                          Promotion Discount Buy       No               No                  1.0
+
+                                                                                                                           1 get 1 free
+     Percentage                         Num(22,4)           22        Discount percentage for 10% show 10                  10                           No              No                   1.0
+
+     Value                              Num(22,2)           22        Value of Discount                                    9.9                          No              Yes                  1.0
+
+     TaxPercent                         Num(22,2)           22        Tax percentage for 10% show 10                       10                           No            Optional               1.0
+
+     WebDiscount                        Alpha              250        Text from website regarding discount                 Shop and save                No           Optional                1.0
+
+                                                                      reason. Is displayed in Mail Order screen
+                                                                      for the customer service team to see what
+                                                                      discounts where applied.
+     WebPromotion                       Alpha              250        Promotion code used in website. This                 SHOPNSAVE                    No           Optional                1.0
+
+                                                                      doesn’t link to Apparel21 promotions. This
+                                                                      field is used so that web promotion codes
+                                                                      can be viewed in Mail order screen so that
+                                                                      Customer Service team can answer
+                                                                      shopper queries.
+     WebCampaign                        Alpha              250        Campaign code used in website. This is for           W1231321                     No           Optional                1.0
+
+                                                                      information only. It is displayed in
+                                                                      Apparel21 Mail order so that Customer
+                                                                      service can answer shopper queries.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 116 of 221
+ Field                                  Format          Max            Comment                                              Example                   GET        POST Request            HTTP
+                                                        Length                                                                                        Response                         Header
+                                                                                                                                                                                       Accept:
+                                                                                                                                                                                      Version_
+     WebCoupon                          Alpha               250        Coupon code used in website. This is for             QUICDISC                     No          Optional              1.0
+
+                                                                       information only. It is displayed in
+                                                                       Apparel21 Mail order so that Customer
+                                                                       Service can answer shopper queries.
+     Redemption                                                        Redemption is a sub-element of Discount.                                                                            1.0
+
+
+       AccountId                        Number                         This is the unique identifier of the person          861                          No          Optional              1.0
+
+                                                                       reward account.
+       Amount                           Number                         Redeem reward amount when redeeming                  10                           No        Optional (Either        1.0
+
+                                                                       reward $. Optional.                                                                        Amount, GiftId or
+                                                                                                                                                                 Request Id must be
+                                                                                                                                                                       passed)
+       GiftId                           Integer                        Unique identifier for gift when redeeming            261                          Yes       Optional (Either        1.0
+
+                                                                       gifts. Optional.                                                                           Amount, GiftId or
+                                                                                                                                                                 Request Id must be
+                                                                                                                                                                       passed)
+       RequestId                        Alpha               250        Used when redeeming rewards or                       6A4CFBB9-094E-422F-          No        Optional (Either        1.0
+
+                                                                       coupons.                                             8EC6-947946455C0F                     Amount, GiftId or
+                                                                       Rewards - This can be used only when                                                      Request Id must be
+                                                                       rewards are redeemed using the Redeem                                                           passed)
+                                                                       Reward or Redeem Gift endpoints in an
+                                                                       ‘unconfirmed’ state. All unconfirmed
+                                                                       rewards get automatically confirmed
+                                                                       when the order successfully posts. Won’t
+                                                                       be reversed if the call fails.
+
+                                                                       The request id must match the GUID value
+                                                                       that was posted in the redeem reward /
+                                                                       redeem gift calls.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 117 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                       Length                                                                                        Response                    Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+
+                                                                      The amount / gift being redeemed must
+                                                                      match the amount / gift that was specified
+                                                                      in the Redeem call. Optional.
+                                                                      Coupons – The request id was match the
+                                                                      GUID value posted when reserving the
+                                                                      coupon
+
+     CouponCode                         Alpha              250        Coupon code being redeemed                           NRL21                        No          Optional         1.0
+
+ ThirdPartyCouponCode                   Alpha                         Introduced as part of Job 116837 -                   CP928100                     No          Optional         1.0
+                                                       250            Capillary Integration
+ ThirdPartyCouponSource                 Alpha                         Introduced as part of Job 116837 -                   Capillary                    No          Optional         1.0
+                                                       250            Capillary Integration
+ SelectedFreightOption                                                Selected Freight option
+                                                                      Blank if non-web order.
+ Id                                     Number                22      Freight Id. (Read from Apparel21 system              123                          Yes          Optional        1.0
+
+                                                                      GIT, provided by Apparel21 Consultant).
+
+                                                                      Cannot specify freight id for
+                                                                      ‘ClickAndCollect’. Allowed only for
+                                                                      despatch type orders.
+
+                                                                      If an order must be despatched using a
+                                                                      specific carrier/service type via Temando
+                                                                      (eg: 3HR delivery), the freight option can
+                                                                      be configured in the GIT set up and passed
+                                                                      to Apparel21. This requires Apparel21
+                                                                      head office set up to map Apparel21
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                               Apparel21 Reference Guide                                            Page 118 of 221
+ Field                                  Format          Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                        Length                                                                                        Response                    Header
+                                                                                                                                                                                  Accept:
+                                                                                                                                                                                 Version_
+                                                                       carrier/service type values accepted by
+                                                                       the Temando system.
+                                                                       Please refer to an Apparel21 consultant
+                                                                       for more information.
+
+ Name                                   Alpha               250        Freight Name.                                        Fox Freight Service          Yes          Optional        1.0
+
+
+ Value                                  Num(22,2)            22        Freight Value. This is freight amount                156                          Yes          Optional        1.0
+
+                                                                       including tax.
+                                                                       Cannot specify freight value for
+                                                                       ‘ClickAndCollect’.orders. Allowed only for
+                                                                       warehouse or store despatch orders.
+
+ TaxPercent                             Num                22,2        Tax percentage for freight.                          13%
+                                                                       Note: It is assumed that freight ‘Value’
+                                                                       passed is inclusive of tax. When extended
+                                                                       tax is used, the tax percentage passed will
+                                                                       be used to calculate the tax amount the
+                                                                       when order is imported into Apparel21.
+ Payments                                                              Contains a list of PaymentDetail
+    PaymentDetail                                                      PaymentDetail is a sub-element of
+                                                                       Payments
+     Id                                 Integer              22        Unique payment id generated                          123                          Yes            No            1.0
+
+                                                                       automatically by Apparel21.
+     Sequence                           Integer              22        Line sequence, default as 0                          123                          Yes            No            1.0
+
+     Origin                             Alpha                50        Origin of payment.                                   CreditCard, AdyenWallet      Yes            Yes           1.0
+
+                                                                       For card payments, the value entered here
+                                                                       MUST be either
+                                                                       “CreditCard”,
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                              Page 119 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request                 HTTP
+                                                       Length                                                                                        Response                              Header
+                                                                                                                                                                                           Accept:
+                                                                                                                                                                                          Version_
+                                                                      “DirectDebit” (only if not pick up in store
+                                                                      or if no payments to be posted), Zip
+                                                                      (required for Zip payments) or
+                                                                      “GiftVoucher”
+                                                                      Other values will be rejected by the API.
+                                                                      For SecurePay, PayPal, Adyen and
+                                                                      AfterPay, this should be “CreditCard”.
+                                                                      For Adyen QR code wallet payments (eg:
+                                                                      wechat, alipay etc.), the origin should be
+                                                                      “AdyenWallet”.
+                                                                      For Zip, this should be “Zip”.
+                                                                      For Openpay, this should be “Openpay”
+
+     VoucherNumber                      Alpha               50        Gift Voucher Number if GV used for                   700125                       Yes               No                   2.0
+
+                                                                      payment
+     ValidationId                       Alpha               50        Gift voucher validation id – obtained by             cfde12b5-3b5c-4c3d-          No       Yes – for gift voucher        2.0
+                                                                                                                                                                     payment only
+                                                                      validating voucher before using it to pay            a089-aca58a8c44dd
+                                                                      for order.
+     CardType                           Alpha              250        Payment Card Type.                                   VISA                         Yes            Optional                1.0
+
+                                                                      For Adyen QR code wallet payments                    For Adyen wallets,
+                                                                      (wechat, alipay etc.), need to pass the              afterpaytouch,
+                                                                      payment method name returned in the                  wechatpay
+                                                                      Adyen payment response. This value must
+                                                                      match the “Wallet Payment Code” field in
+                                                                      Apparel21 Adyen wallet payment
+                                                                      reference code. Adyen wallet payment
+                                                                      reference code is used to translate
+                                                                      Adyen’s wallet payment method to an
+                                                                      Ap21 wallet name.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 120 of 221
+

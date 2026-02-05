@@ -14,14 +14,46 @@ Uses curl extension for handling http calls. So you need to have the curl extens
 
 >However if you prefer to use any other available package library for handling HTTP calls, you can easily do so by modifying 1 line in each of the `get()`, `post()`, `put()`, `delete()` methods in `PHPAP21\HttpRequest` class.
 
-You can pass additional curl configuration to `Ap21SDK`
+## Configuration
+
+### Required Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `ApiUrl` | Base URL of the Ap21 API endpoint |
+| `ApiUser` | API username for Basic Auth |
+| `ApiPassword` | API password for Basic Auth |
+| `CountryCode` | Country code for API requests |
+
+### Optional Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `AccessToken` | Alternative to ApiUser/ApiPassword, uses `X-Ap21-Access-Token` header | - |
+| `AllowedTimePerCall` | Minimum seconds between API calls | `0.5` |
+| `Curl` | Array of additional curl options | `[]` |
+
+### Basic Configuration
 
 ```php
 $config = array(
-    'ApiUrl'       => 'https://api21.end.pount/',
+    'ApiUrl'       => 'https://api.example.com/RetailAPI/',
     'ApiUser'      => 'apiuser',
     'ApiPassword'  => 'password',
-    'CountryCode'  => 'code',
+    'CountryCode'  => 'AU',
+);
+
+PHPAP21\Ap21SDK::config($config);
+```
+
+### Configuration with Curl Options
+
+```php
+$config = array(
+    'ApiUrl'       => 'https://api.example.com/RetailAPI/',
+    'ApiUser'      => 'apiuser',
+    'ApiPassword'  => 'password',
+    'CountryCode'  => 'AU',
     'Curl' => array(
         CURLOPT_TIMEOUT => 10,
         CURLOPT_FOLLOWLOCATION => true
@@ -30,22 +62,10 @@ $config = array(
 
 PHPAP21\Ap21SDK::config($config);
 ```
+
 ## Usage
 
 You can use PHPAP21 in a pretty simple object oriented way.
-
-#### Configure Ap21SDK
-
-```php
-$config = array(
-    'ApiUrl'       => 'https://api21.end.pount/',
-    'ApiUser'      => 'apiuser',
-    'ApiPassword'  => 'password',
-    'CountryCode'  => 'code',
-);
-
-PHPAP21\Ap21SDK::config($config);
-```
 
 #### Get the Ap21SDK Object
 
@@ -75,13 +95,50 @@ $productID = 23564666666;
 $product = $ap21->Product($productID)->get();
 ```
 
--- Get all the styles and freestock
+- Get all the styles and freestock
 ```php
-$styles = $ap21->FreeStock()->get();
+$styles = $ap21->Freestock()->get();
 ```
 
+### Available Resources
+
+| Resource | Description |
+|----------|-------------|
+| `Colour` | Colour definitions |
+| `Freestock` | Free stock / inventory levels |
+| `Info` | API information |
+| `Order` | Orders |
+| `Person` | Customer / person records |
+| `Product` | Products |
+| `ProductColourReference` | Product colour references |
+| `Reference` | References |
+| `ReferenceType` | Reference types |
+| `Size` | Size definitions |
+| `StockChanged` | Stock change events |
+| `Store` | Store locations |
+
+### Error Handling
+
+The SDK throws the following exceptions:
+
+| Exception | When |
+|-----------|------|
+| `PHPAP21\Exception\SdkException` | Invalid resource name, missing configuration, or SDK misuse |
+| `PHPAP21\Exception\ApiException` | API returns an error response |
+| `PHPAP21\Exception\CurlException` | HTTP request failure or unexpected HTTP status code |
+| `PHPAP21\Exception\ResourceRateLimitException` | API rate limit (429) exceeded after retries |
+
+```php
+try {
+    $products = $ap21->Product->get();
+} catch (PHPAP21\Exception\ApiException $e) {
+    // Handle API error
+} catch (PHPAP21\Exception\CurlException $e) {
+    // Handle HTTP error
+}
+```
 
 ## Reference
-- [Ap21 API Reference](doc/Retail API Guide - latest.pdf)
+- [Ap21 API Reference](doc/Retail%20API%20Guide%20-%20latest.pdf)
 - [seldaek/monolog](https://github.com/seldaek/monolog)
 - [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv)

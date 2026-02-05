@@ -1,0 +1,1228 @@
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                       Length                                                                                        Response                    Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+
+     Stan                               Alpha              250        Payment standard reference. This is the              405555                       Yes          Optional        1.0
+
+                                                                      value of “txnID” in the Securepay and
+                                                                      PayPal response or the “transaction id” in
+                                                                      Braintree or the “pspreference” in Adyen.
+                                                                      This is mandatory if refunds are to be
+                                                                      issued against this payment in Apparel 21
+                                                                      Mail order screen.
+                                                                      This is displayed as EFT Stan in Apparel21
+                                                                      Retail Transactions.
+
+                                                                      This should be the AfterPay Order ID for
+                                                                      AfterPay paments.
+
+
+
+                                                                      Zip-This is value of the “id” in the Zip
+                                                                      response which is the id of purchase
+                                                                      request. This is mandatory if refunds are
+                                                                      to be issued against Zip payment in
+                                                                      Apparel21 Mail Order screen.
+                                                                      For Openpay, this should be the ordered
+                                                                      that is returned in the Opepay payment
+                                                                      response.
+
+     AuthCode                           Alpha              250        Payment authorisation code. This is an               512                          Yes          Optional        1.0
+
+                                                                      information field and NOT required for
+                                                                      refunds to be processed.
+                                                                      This is displayed as EFT Auth No in
+                                                                      Apparel21 Retail Transactions.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 121 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                       Length                                                                                        Response                    Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+     AccountType                        Alpha              250        Payment account type                                 Credit                       Yes          Optional        1.0
+
+     Settlement                         Alpha              250        Settlement reference                                 20110625                     Yes          Optional        1.0
+
+     Reference                          Alpha              250        Payment Reference                                    13525233_22255               Yes          Optional        1.0
+
+                                                                      SecurePay - this is the value of
+                                                                      “purchaseOrderNo” in the Securepay
+                                                                      response and is mandatory if refunds are
+                                                                      to be issued against this payment.
+                                                                      PayPal – this is the PayPal payment
+                                                                      resource. This is common for all
+                                                                      sales/refunds around a single order.
+                                                                      There needs to be a value in this field for
+                                                                      PayPal refunds but the value isn’t used for
+                                                                      anything.
+                                                                      Braintree - Not required but is useful if
+                                                                      make this the customer order number.
+
+                                                                      Adyen - Not required but is useful if make
+                                                                      this the pspreference.
+
+                                                                      AfterPay – this should be the AfterPay
+                                                                      Merchant Order Id. This is listed as
+                                                                      mandatory for successful refund in store
+                                                                      and at head office, but the actual value is
+                                                                      not used for refunds. This is due to
+                                                                      inconsistency in AfterPay system that may
+                                                                      change in the future. We recommend
+                                                                      putting the AfterPay Merchant Order Id in
+                                                                      this field always, regardless.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 122 of 221
+ Field                                  Format         Max            Comment                                               Example                   GET        POST Request       HTTP
+                                                       Length                                                                                         Response                    Header
+                                                                                                                                                                                  Accept:
+                                                                                                                                                                                 Version_
+                                                                      Zip- this is the value of the ‘refCode’ that is
+                                                                      in the Zip response. This value is not used
+                                                                      by Zip to process refunds, but it is
+                                                                      mandatory if Zip payments are to be
+                                                                      refunded from Mail Order screen.
+
+                                                                      Other payment types – can be supplied
+                                                                      This is EFT Ref in Apparel21 Retail
+                                                                      Transactions.
+     Amount                             Num(22,2)           22        Payment amount. This must equal the                   500.5                        Yes            Yes           1.0
+
+                                                                      Order amount when posting a new order.
+                                                                      Negative amounts appearing mean a
+                                                                      credit.
+     Message                            Alpha            4000         Message                                               Purchased on Monday          Yes          Optional        1.0
+
+                                                                                                                            with an amount of 100
+                                                                                                                            dollars
+     VoucherGateway                     Alpha               15        Reference code name of Gift Voucher                   Web GV Gateway               Yes          Optional        2.0
+
+                                                                      Gateway which is set up in Code
+                                                                      Maintenance.It indicates that the gift
+                                                                      voucher in the payment is issued from a
+                                                                      3rd party (Gift Voucher Gateway). Refer to
+                                                                      Job 115136 for more detail.
+     MerchantId                         Alpha              100        Nominate the merchant ID that the                     Aa7g2BD4hHDDUrhXD8N          Yes          Optional        1.0
+
+                                                                      payment was posted against. This is used              j0N1UZ41lTVVSHNRpsEm
+                                                                      by Apparel21 to map to the correct                    bcSpOlSLwGm3UfEGdI0zt
+                                                                      payment gateway for future refunds of
+                                                                      this payment.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00        P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                               Page 123 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request       HTTP
+                                                       Length                                                                                        Response                    Header
+                                                                                                                                                                                 Accept:
+                                                                                                                                                                                Version_
+                                                                      Optional for SecurePay payments – if not
+                                                                      supplied, the default SecurePay account
+                                                                      will be used
+                                                                      Mandatory for PayPal payments – this
+                                                                      corresponds to RestAPI PayPal Client ID –
+                                                                      must have MailOrder app created in
+                                                                      PayPal.
+                                                                      Mandatory for AfterPay payments – this
+                                                                      corresponds to the MerchantId set up for
+                                                                      AfterPay.
+                                                                      Mandatory for Braintree payments – this
+                                                                      corresponds to the Merchant Id set up for
+                                                                      Braintree.
+                                                                      Mandatory for Adyen payments – this
+                                                                      corresponds to the Merchant Id set up for
+                                                                      Adyen.
+                                                                      Mandatory for Openpay payments – this
+                                                                      corresponds to the Merchant Id set up for
+                                                                      Openpay.
+ AccountId                              Alpha              100        Nominate the merchant account ID that                AP21_MERCHANT_NZ             Yes          Optional        1.0
+
+                                                                      the payment was posted against. This Is
+                                                                      used by Apparel21 to map to the correct
+                                                                      payment gateway for future refunds of
+                                                                      this payment.
+                                                                      Mandatory for Braintree payments - this
+                                                                      corresponds to the Braintree Merchant
+                                                                      Account Id for the relevant currency.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 124 of 221
+ Field                                  Format         Max            Comment                                              Example                   GET        POST Request      HTTP
+                                                       Length                                                                                        Response                   Header
+                                                                                                                                                                                Accept:
+                                                                                                                                                                               Version_
+                                                                      Braintree allows multiple merchant
+                                                                      accounts IDs within a single merchant
+                                                                      account.
+                                                                      Not used for SecurePay, Paypal, Adyen or
+                                                                      AfterPay payments.
+ Currency                                                             Currency consists of Code and Format.
+ Code                                   Alpha            50           Currency Code associated with the person             AUD                          Yes            No           2.0
+ Format                                 Alpha            50           Format the currency is displayed in                  #,##0.00 'Aud'               Yes            No           2.0
+                                                                      Apparel21
+ PointsPartner                                                        PointsPartner consists of
+                                                                      MembershipNumber
+   Id                                   Number            30          Apparel21 reference code index value                 123                          Yes           No            2.0
+   Name                                 Alpha             40          Apparel21 reference code name                        Qantas                       Yes           No            2.0
+   MembershipNumber                     Alpha            100          Third party loyalty card membership                  55555565444879               Yes           Yes           2.0
+                                                                      number. Value passed is only validated
+                                                                      against partner prefix defined in
+                                                                      Apparel21.
+                                                                      It is assumed that the membership
+                                                                      number passed has been pre validated on
+                                                                      the web site.
+
+
+1.45.1 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.45.2 ERROR RESPONSE
+ HTTP Error   API Error Code                        API Error Text
+ 404
+ 403          5082                                  The store pickup Id is invalid. Store does not exist.
+ 403          5083                                  Gift vouchers cannot be added to pick up in store orders
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 125 of 221
+ 403                      5092                      Invalid order date. Valid format is 'yyyy-MM-dd HH:mm:ss’
+ 403                      5014                      Size of field XXXX, 9999 is too long. Maximum length is 9999.
+ 403                      5128                      Voucher 9999 has already been issued
+ 403                      5056                      The voucher does not exist
+ 403                      5071                      The voucher number is invalid. For example, if supplied it in invalid format.
+ 403                      5127                      Voucher 9999 cannot be sold – this is when it is a promotional voucher.
+ 403                      5059                      The voucher is no longer valid – it belongs to a suspended range of vouchers
+ 403                      5130                      Membership Number XXXXXX does not match any known points partner
+ 403                      5088                      Sku value and discount should be negative for return
+ 403                      5145                      Invalid discount value: -40. Discount sign should be the same as Quantity sign
+ 403                      5146                      All lines with promotions must have a ’PromoId’ element
+ 403                      5150                      Unattended delivery option is invalid
+ 403                      5186                      Tax rate cannot be empty when UseSubmmitedTaxRate is true.
+ 403                      5220                      Pickup store ‘MAIN’ is invalid because sales warehouse ‘NZWEB’ is not omni
+                                                    channel and currencies are different
+ 403                      5238                      Need review flag 'Y' is not valid - Must be 'True' or 'False'
+ 403                      5239                      Order review status code not set in configuraiton
+ 403                      5421                      Request requires either personId, id, or updatedAfter to be set.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 126 of 221
+1.46 RETRIEVE ORDERS UPDATED SINCE A DATE/TIME
+
+To retrieve orders created or changed since a date/time, use a GET on the following URI. Only orders
+created via the web or Mail Order will be returned. These orders do not include retail sale transactions,
+Customer Orders created at a POS store or wholesale orders with the person attached. This endpoint
+should be used when the latest status of orders is required as the information is read from the Sales Order
+tables.
+
+
+1.46.1 URI REQUEST FORMAT
+
+/Orders/?countryCode={countryCode}&startRow={startRow}&pageRows={pageRows}&updatedAfter={time
+stamp}
+
+
+1.46.2 REQUEST PARAMETERS
+ Field                                                Required                 Comment
+ CountryCode                                          Mandatory                Country code of the shopper
+ StartRow                                              Optional                Starting position of orders returned
+ PageRows                                              Optional                Number of order returned
+ updatedAfter                                          Optional                To retrieve the list of orders which have been
+                                                                               changed after updatedAfter timestamp
+
+1.46.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Orders/?countryCode=AU&startRow=1&pageRows=20&updated
+After=2020-12-01T11:33:07
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.46.4 EXAMPLE PAYLOAD
+
+<Orders>
+   <Order>
+    <Id>20784</Id>
+    <RowNumber>1</RowNumber>
+    <OrderNumber>W0000124</OrderNumber>
+    <PersonId>3583</PersonId>
+    <WarehouseId>4141</WarehouseId>
+    <OrderDateTime>2011-07-11T00:00:00</OrderDateTime>
+    <TotalQuantity>2</TotalQuantity>
+    <TotalTax>16.33</TotalTax>
+    <TotalDiscount>0</TotalDiscount>
+    <TotalDue>147</TotalDue>
+    <TotalPayment>147</TotalPayment>
+    <DeliveryInstructions>Please leave on front porch. beware of dangerous dog
+         </DeliveryInstructions>
+    <UnattendedDeliveryOption>AuthorityToLeave</UnattendedDeliveryOption>
+    <Addresses>
+      <Billing>
+        <AddressLine1>73 Linlithgow Avenue</AddressLine1>
+        <AddressLine2 />
+        <City>GREYTHORN</City>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 127 of 221
+          <State>VIC</State>
+          <Postcode>3152</Postcode>
+          <Country>AUSTRALIA</Country>
+        </Billing>
+        <Delivery>
+          <CompanyName> Apparel21 <CompanyName>
+          <AddressLine1>37 Swan Street</AddressLine1>
+          <AddressLine2 />
+          <City>GREYTHORN</City>
+          <State>VIC</State>
+          <Postcode>3152</Postcode>
+          <Country>AUSTRALIA</Country>
+        </Delivery>
+      </Addresses>
+      <Contacts>
+        <Email>john.smith@gmaile.com></Email>
+      <Phones>
+          <Home>012351235</Home>
+          <Mobile>012341234</Mobile>
+          <Work />
+        </Phones>
+      </Contacts>
+      <OrderDetails Type="Array" TotalRows="2">
+        <OrderDetail>
+          <Id>56025</Id>
+          <Sequence>1</Sequence>
+          <ProductId>3641</ProductId>
+          <ColourId>4082</ColourId>
+          <SkuId>4323</SkuId>
+          <ProductCode>Beanie</ProductCode>
+          <ProductName>WInter Beanie</ProductName>
+          <ColourCode>BLU</ColourCode>
+          <ColourName>Blue</ColourName>
+          <SizeCode>1</SizeCode>
+          <Quantity>1</Quantity>
+          <Customisation />
+          <Price>147</Price>
+          <Discount>0</Discount>
+          <Value>147</Value>
+          <TaxPercent>12.5</TaxPercent>
+          <Status>Processing</Status>
+          <GiftWrap>true</Status>
+          <GiftWrapMessage>Happy birthday, Mum.</GiftWrapMessage>
+          <SenderName />
+          <ReceiverName />
+          <WarehouseId>4141</WarehouseId>
+        </OrderDetail>
+        <OrderDetail>
+          <Id>56026</Id>
+          <Sequence>2</Sequence>
+          <ProductId>4222</ProductId>
+          <ColourId>4742</ColourId>
+          <SkuId>5482</SkuId>
+          <ProductCode>FRGHTMO</ProductCode>
+          <ProductName>Ladies Freight</ProductName>
+          <ColourCode>-</ColourCode>
+          <ColourName>-</ColourName>
+          <SizeCode>-</SizeCode>
+          <Quantity>1</Quantity>
+          <Price>0</Price>
+          <Discount>0</Discount>
+          <Value>0</Value>
+          <TaxPercent>11</TaxPercent>
+           <Carrier/>
+          <CarrierUrl/>
+          <ConNote/>
+          <ServiceType>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 128 of 221
+         <Id>162</Id>
+         <Code>Road</Code>
+         </ServiceType>
+         <Status>Processing</Status>
+         <GiftWrap>false</Status>
+        <SenderName />
+        <ReceiverName />
+        <WarehouseId>4141</WarehouseId>
+      </OrderDetail>
+    </OrderDetails>
+    <SelectedFreightOption>
+      <Id />
+      <Name />
+      <Value>0</Value>
+    </SelectedFreightOption>
+    <Payments>
+      <PaymentDetail>
+         <Id>2791</Id>
+         <Sequence>0</Sequence>
+         <Origin>CreditCard</Origin>
+         <CardType>TEST</CardType>
+         <Stan>986516</Stan>
+         <AuthCode />
+         <AccountType />
+         <Settlement>20101129</Settlement>
+         <Reference>Apparel21Dev:100032</Reference>
+         <MerchantId>JGH123</MerchantId>
+         <AccountId>AP21_MERCHANT_AU</AccountId>
+         <Amount>147</Amount>
+         <Message>payment_statusCURRENTbank_reference986516remote_ip203.36.237.106card_typeTESTpaymen
+t_number100032countryAUorder_id77response_amount158.02response_textApproved or completed
+successfullyresponse_code00settlement_date20101129actioncomplete_direct_onesummary_code0vendor_nameA
+pparel21Devpayment_referenceTEST Payment Only - DO NOT
+CHARGEperson_id9585payment_groupNEWcurrencyAUD$controllerorderspayment_date1290986516</Message>
+      </PaymentDetail>
+    </Payments>
+  </Order>
+  <Order>
+    <Id>20785</Id>
+    <RowNumber>2</RowNumber>
+    <OrderNumber>W0000125</OrderNumber>
+    <PersonId>3583</PersonId>
+    <WarehouseId>4141</WarehouseId>
+    <OrderDateTime>2011-07-11T00:00:00</OrderDateTime>
+    <TotalQuantity>2</TotalQuantity>
+    <TotalTax>16.33</TotalTax>
+    <TotalDiscount>0</TotalDiscount>
+    <TotalDue>147</TotalDue>
+    <TotalPayment>147</TotalPayment>
+    <DeliveryInstructions>Please leave on front porch. beware of dangerous
+dog.</DeliveryInstructions>
+    <Addresses>
+      <Billing>
+         <AddressLine1>73 Linlithgow Avenue</AddressLine1>
+         <AddressLine2 />
+         <City>GREYTHORN</City>
+         <State>VIC</State>
+         <Postcode>3152</Postcode>
+         <Country>AUSTRALIA</Country>
+      </Billing>
+      <Delivery>
+         <AddressLine1>37 Swan Street</AddressLine1>
+         <AddressLine2 />
+         <City>GREYTHORN</City>
+         <State>VIC</State>
+         <Postcode>3152</Postcode>
+         <Country>AUSTRALIA</Country>
+      </Delivery>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 129 of 221
+      </Addresses>
+      <Contacts>
+        <Email> John.Smith@test.com.au</Email>
+        <Phones>
+          <Home>012351235</Home>
+          <Mobile>012341234</Mobile>
+          <Work />
+        </Phones>
+      </Contacts>
+      <DeliveryContacts>
+        <Email> John.Smith@test.com.au</Email>
+        <Phones>
+          <Home>012351235</Home>
+          <Mobile>012341234</Mobile>
+          <Work />
+        </Phones>
+      </DeliveryContacts>
+      <OrderDetails Type="Array" TotalRows="2">
+        <OrderDetail>
+          <Id>56027</Id>
+          <Sequence>1</Sequence>
+          <ProductId>3641</ProductId>
+          <ColourId>4082</ColourId>
+          <SkuId>4323</SkuId>
+          <ProductCode>Beanie</ProductCode>
+          <ProductName>WInter Beanie</ProductName>
+          <ColourCode>BLU</ColourCode>
+          <ColourName>Blue</ColourName>
+          <SizeCode>1</SizeCode>
+          <Quantity>1</Quantity>
+          <Price>147</Price>
+          <Discount>0</Discount>
+          <Value>147</Value>
+          <TaxPercent>12.5</TaxPercent>
+          <Carrier/>
+          <CarrierUrl/>
+          <ConNote/>
+          <SenderName />
+          <ReceiverName />
+          <WarehouseId>4141</WarehouseId>
+          <Status>Processing</Status>
+        </OrderDetail>
+        <OrderDetail>
+          <Id>56028</Id>
+          <Sequence>2</Sequence>
+          <ProductId>4222</ProductId>
+          <ColourId>4742</ColourId>
+          <SkuId>5482</SkuId>
+          <ProductCode>FRGHTMO</ProductCode>
+          <ProductName>Ladies Freight</ProductName>
+          <ColourCode>-</ColourCode>
+          <ColourName>-</ColourName>
+          <SizeCode>-</SizeCode>
+          <Quantity>1</Quantity>
+          <Price>0</Price>
+          <Discount>0</Discount>
+          <Value>0</Value>
+          <TaxPercent>11</TaxPercent>
+          <Carrier/>
+          <CarrierUrl/>
+          <ConNote/>
+          <SenderName />
+          <ReceiverName />
+          <WarehouseId>4141</WarehouseId>
+          <Status>Processing</Status>
+        </OrderDetail>
+      </OrderDetails>
+      <SelectedFreightOption>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 130 of 221
+      <Id />
+      <Name />
+      <Value>0</Value>
+    </SelectedFreightOption>
+    <Payments>
+      <PaymentDetail>
+         <Id>2792</Id>
+         <Sequence>0</Sequence>
+         <Origin>CreditCard</Origin>
+         <CardType>TEST</CardType>
+         <Stan>986516</Stan>
+         <AuthCode />
+         <AccountType />
+         <Settlement>20101129</Settlement>
+         <Reference>Apparel21Dev:100032</Reference>
+         <Amount>147</Amount>
+         <Message>payment_statusCURRENTbank_reference986516remote_ip203.36.237.106card_typeTESTpaymen
+t_number100032countryAUorder_id77response_amount158.02response_textApproved or completed
+successfullyresponse_code00settlement_date20101129actioncomplete_direct_onesummary_code0vendor_nameA
+pparel21Devpayment_referenceTEST Payment Only - DO NOT
+CHARGEperson_id9585payment_groupNEWcurrencyAUD$controllerorderspayment_date1290986516</Message>
+      </PaymentDetail>
+    </Payments>
+    <PointsPartner>
+         <Id>16044</Id>
+         <Name>Quantas</Name>
+         <MembershipNumber>1234999629624</MembershipNumber>
+    </PointsPartner>
+  </Order>
+</Orders>
+
+
+
+
+1.46.5 EXAMPLE PAYLOAD – SHIP FROM STORE ORDER WHERE DESPATCH LOCATION
+      DETERMINED OUTSIDE OF APPAREL 2 1
+ <Order>
+  <PersonId>1841</PersonId>
+  <PickupStoreId>8981</PickupStoreId>
+  <Carrier>
+    <Id>1156</Id>
+    <Code/>
+  </Carrier>
+  <ServiceType>
+    <Id>162</Id>
+    <Code />
+  </ServiceType>
+  <SLA>
+    <Id>16784</Id>
+    <Code/>
+  </SLA>
+  <DespatchType>DespatchFromStore</DespatchType>
+  <ExpectedDeliveryDate>2019-10-13</ExpectedDeliveryDate>
+  <DeliveryInstructions>Please leave on front porch. Beware of dangerous dog.</DeliveryInstructions>
+<UnattendedDeliveryOption>AuthorityToLeave</UnattendedDeliveryOption>
+  <Addresses>
+    <Billing>
+      <AddressLine1>73 Linlithgow Avenue</AddressLine1>
+      <AddressLine2></AddressLine2>
+      <City>GREYTHORN</City>
+      <State>VIC</State>
+      <Postcode>3152</Postcode>
+      <Country>AUSTRALIA</Country>
+    </Billing>
+
+
+      <Delivery>
+        <AddressLine1>37 Swan Street</AddressLine1>
+        <AddressLine2></AddressLine2>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 131 of 221
+      <City>GREYTHORN</City>
+      <State>VIC</State>
+      <Postcode>3152</Postcode>
+      <Country>AUSTRALIA</Country>
+    </Delivery>
+  </Addresses>
+  <Contacts>
+    <Email>aperera@gmail.comm</Email>
+    <Phones>
+      <Home>0399526532</Home>
+      <Mobile>045231218521</Mobile>
+          </Phones>
+</Contacts>
+<DeliveryContacts>
+  <Email>deliverycontacts.email@domain.com</Email>
+  <Phones>
+   <Home>0413837276</Home>
+  </Phones>
+</DeliveryContacts>
+  <OrderDetails>
+    <OrderDetail>
+      <SkuId>12431</SkuId>
+      <Quantity>1</Quantity>
+      <Value>150</Value>
+      <Price>150</Price>
+       <TaxPercent>0</TaxPercent>
+        </OrderDetail>
+    </OrderDetails>
+  <Payments>
+    <PaymentDetail>
+      <Origin>CreditCard</Origin>
+      <CardType>VISA</CardType>
+      <Amount>150</Amount>
+   </PaymentDetail>
+  </Payments>
+    <PointsPartner>
+        <Id>16044</Id>
+        <Name>Quantas</Name>
+        <MembershipNumber>1234999629624</MembershipNumber>
+    </PointsPartner>
+</Order>
+
+
+
+
+1.46.6 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.46.7 ERROR RESPONSE
+ HTTP Error API Error Code                       API Error Text
+ 404
+ 400        5034                                 Invalid pagination parameters
+ 403        5421                                 Request requires either personId, id, or updatedAfter to be set.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                           Page 132 of 221
+1.47 RETRIEVE ORDERS FOR A PERSON
+
+To retrieve previously created orders for a person use a GET on the following URI. Only orders for that
+person created via the web or Mail Order will be returned. These orders do not include retail sale
+transactions, Customer Orders created at a POS store or wholesale orders with the person attached. This
+endpoint should be used when the latest status of orders is required as the information is read from the
+Sales Order tables.
+
+
+1.47.1 URI REQUEST FORMAT
+
+/Persons/{personId}/Orders/?countryCode={countryCode}&startRow={startRow}&pageRows={pageRows}&
+updatedAfter={timestamp}
+
+
+1.47.2 REQUEST PARAMETERS
+ Field                                                Required                 Comment
+ PersonId                                             Mandatory                Id of the Person the orders are requested for
+ CountryCode                                          Mandatory                Country code of the shopper
+ StartRow                                              Optional                Starting position of orders returned
+ PageRows                                              Optional                Number of order returned
+ updatedAfter                                          Optional                To retrieve the list of orders which have been
+                                                                               changed after updatedAfter timestamp
+
+1.47.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Persons/4881/Orders/?countryCode=AU&startRow=1&pageRow
+s=20&updatedAfter=2020-12-01T11:33:07
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.47.4 EXAMPLE PAYLOAD
+
+<Orders>
+   <Order>
+    <Id>20784</Id>
+    <RowNumber>1</RowNumber>
+    <OrderNumber>W0000124</OrderNumber>
+    <PersonId>3583</PersonId>
+    <OrderDateTime>2011-07-11T00:00:00</OrderDateTime>
+    <TotalQuantity>2</TotalQuantity>
+    <TotalTax>16.33</TotalTax>
+    <TotalDiscount>0</TotalDiscount>
+    <TotalDue>147</TotalDue>
+    <TotalPayment>147</TotalPayment>
+    <DeliveryInstructions>Please leave on front porch. beware of dangerous dog
+         </DeliveryInstructions>
+    <UnattendedDeliveryOption>AuthorityToLeave</UnattendedDeliveryOption>
+    <Addresses>
+      <Billing>
+        <AddressLine1>73 Linlithgow Avenue</AddressLine1>
+        <AddressLine2 />
+        <City>GREYTHORN</City>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 133 of 221
+          <State>VIC</State>
+          <Postcode>3152</Postcode>
+          <Country>AUSTRALIA</Country>
+        </Billing>
+        <Delivery>
+          <CompanyName> Apparel21 <CompanyName>
+          <AddressLine1>37 Swan Street</AddressLine1>
+          <AddressLine2 />
+          <City>GREYTHORN</City>
+          <State>VIC</State>
+          <Postcode>3152</Postcode>
+          <Country>AUSTRALIA</Country>
+        </Delivery>
+      </Addresses>
+      <Contacts>
+        <Email>john.smith@gmaile.com></Email>
+      <Phones>
+          <Home>012351235</Home>
+          <Mobile>012341234</Mobile>
+          <Work />
+        </Phones>
+      </Contacts>
+      <OrderDetails Type="Array" TotalRows="2">
+        <OrderDetail>
+          <Id>56025</Id>
+          <Sequence>1</Sequence>
+          <ProductId>3641</ProductId>
+          <ColourId>4082</ColourId>
+          <SkuId>4323</SkuId>
+          <ProductCode>Beanie</ProductCode>
+          <ProductName>WInter Beanie</ProductName>
+          <ColourCode>BLU</ColourCode>
+          <ColourName>Blue</ColourName>
+          <SizeCode>1</SizeCode>
+          <Quantity>1</Quantity>
+          <Customisation />
+          <Price>147</Price>
+          <Discount>0</Discount>
+          <Value>147</Value>
+          <TaxPercent>12.5</TaxPercent>
+          <Status>Processing</Status>
+          <GiftWrap>true</Status>
+          <GiftWrapMessage>Happy birthday, Mum.</GiftWrapMessage>
+          <SenderName />
+          <ReceiverName />
+        </OrderDetail>
+        <OrderDetail>
+          <Id>56026</Id>
+          <Sequence>2</Sequence>
+          <ProductId>4222</ProductId>
+          <ColourId>4742</ColourId>
+          <SkuId>5482</SkuId>
+          <ProductCode>FRGHTMO</ProductCode>
+          <ProductName>Ladies Freight</ProductName>
+          <ColourCode>-</ColourCode>
+          <ColourName>-</ColourName>
+          <SizeCode>-</SizeCode>
+          <Quantity>1</Quantity>
+          <Customisation />
+          <Price>0</Price>
+          <Discount>0</Discount>
+          <Value>0</Value>
+          <TaxPercent>11</TaxPercent>
+           <Carrier/>
+          <CarrierUrl/>
+          <ConNote/>
+          <ServiceType>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 134 of 221
+         <Id>162</Id>
+         <Code>Road</Code>
+         </ServiceType>
+         <Status>Processing</Status>
+         <GiftWrap>false</Status>
+        <SenderName />
+        <ReceiverName />
+      </OrderDetail>
+    </OrderDetails>
+    <SelectedFreightOption>
+      <Id />
+      <Name />
+      <Value>0</Value>
+    </SelectedFreightOption>
+    <Payments>
+      <PaymentDetail>
+         <Id>2791</Id>
+         <Sequence>0</Sequence>
+         <Origin>CreditCard</Origin>
+         <CardType>TEST</CardType>
+         <Stan>986516</Stan>
+         <AuthCode />
+         <AccountType />
+         <Settlement>20101129</Settlement>
+         <Reference>Apparel21Dev:100032</Reference>
+         <MerchantId>JGH123</MerchantId>
+         <AccountId>AP21_MERCHANT_AU</AccountId>
+         <Amount>147</Amount>
+         <Message>payment_statusCURRENTbank_reference986516remote_ip203.36.237.106card_typeTESTpaymen
+t_number100032countryAUorder_id77response_amount158.02response_textApproved or completed
+successfullyresponse_code00settlement_date20101129actioncomplete_direct_onesummary_code0vendor_nameA
+pparel21Devpayment_referenceTEST Payment Only - DO NOT
+CHARGEperson_id9585payment_groupNEWcurrencyAUD$controllerorderspayment_date1290986516</Message>
+      </PaymentDetail>
+    </Payments>
+  </Order>
+  <Order>
+    <Id>20785</Id>
+    <RowNumber>2</RowNumber>
+    <OrderNumber>W0000125</OrderNumber>
+    <PersonId>3583</PersonId>
+    <OrderDateTime>2011-07-11T00:00:00</OrderDateTime>
+    <TotalQuantity>2</TotalQuantity>
+    <TotalTax>16.33</TotalTax>
+    <TotalDiscount>0</TotalDiscount>
+    <TotalDue>147</TotalDue>
+    <TotalPayment>147</TotalPayment>
+    <DeliveryInstructions>Please leave on front porch. beware of dangerous
+dog.</DeliveryInstructions>
+    <Addresses>
+      <Billing>
+         <AddressLine1>73 Linlithgow Avenue</AddressLine1>
+         <AddressLine2 />
+         <City>GREYTHORN</City>
+         <State>VIC</State>
+         <Postcode>3152</Postcode>
+         <Country>AUSTRALIA</Country>
+      </Billing>
+      <Delivery>
+         <AddressLine1>37 Swan Street</AddressLine1>
+         <AddressLine2 />
+         <City>GREYTHORN</City>
+         <State>VIC</State>
+         <Postcode>3152</Postcode>
+         <Country>AUSTRALIA</Country>
+      </Delivery>
+    </Addresses>
+    <Contacts>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 135 of 221
+        <Email> John.Smith@test.com.au</Email>
+        <Phones>
+          <Home>012351235</Home>
+          <Mobile>012341234</Mobile>
+          <Work />
+        </Phones>
+      </Contacts>
+      <DeliveryContacts>
+        <Email> John.Smith@test.com.au</Email>
+        <Phones>
+          <Home>012351235</Home>
+          <Mobile>012341234</Mobile>
+          <Work />
+        </Phones>
+      </DeliveryContacts>
+      <OrderDetails Type="Array" TotalRows="2">
+        <OrderDetail>
+          <Id>56027</Id>
+          <Sequence>1</Sequence>
+          <ProductId>3641</ProductId>
+          <ColourId>4082</ColourId>
+          <SkuId>4323</SkuId>
+          <ProductCode>Beanie</ProductCode>
+          <ProductName>WInter Beanie</ProductName>
+          <ColourCode>BLU</ColourCode>
+          <ColourName>Blue</ColourName>
+          <SizeCode>1</SizeCode>
+          <Quantity>1</Quantity>
+          <Price>147</Price>
+          <Discount>0</Discount>
+          <Value>147</Value>
+          <TaxPercent>12.5</TaxPercent>
+          <Carrier/>
+          <CarrierUrl/>
+          <ConNote/>
+          <SenderName />
+          <ReceiverName />
+          <Status>Processing</Status>
+        </OrderDetail>
+        <OrderDetail>
+          <Id>56028</Id>
+          <Sequence>2</Sequence>
+          <ProductId>4222</ProductId>
+          <ColourId>4742</ColourId>
+          <SkuId>5482</SkuId>
+          <ProductCode>FRGHTMO</ProductCode>
+          <ProductName>Ladies Freight</ProductName>
+          <ColourCode>-</ColourCode>
+          <ColourName>-</ColourName>
+          <SizeCode>-</SizeCode>
+          <Quantity>1</Quantity>
+          <Price>0</Price>
+          <Discount>0</Discount>
+          <Value>0</Value>
+          <TaxPercent>11</TaxPercent>
+          <Carrier/>
+          <CarrierUrl/>
+          <ConNote/>
+          <SenderName />
+          <ReceiverName />
+          <Status>Processing</Status>
+        </OrderDetail>
+      </OrderDetails>
+      <SelectedFreightOption>
+        <Id />
+        <Name />
+        <Value>0</Value>
+      </SelectedFreightOption>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 136 of 221
+    <Payments>
+      <PaymentDetail>
+         <Id>2792</Id>
+         <Sequence>0</Sequence>
+         <Origin>CreditCard</Origin>
+         <CardType>TEST</CardType>
+         <Stan>986516</Stan>
+         <AuthCode />
+         <AccountType />
+         <Settlement>20101129</Settlement>
+         <Reference>Apparel21Dev:100032</Reference>
+         <Amount>147</Amount>
+         <Message>payment_statusCURRENTbank_reference986516remote_ip203.36.237.106card_typeTESTpaymen
+t_number100032countryAUorder_id77response_amount158.02response_textApproved or completed
+successfullyresponse_code00settlement_date20101129actioncomplete_direct_onesummary_code0vendor_nameA
+pparel21Devpayment_referenceTEST Payment Only - DO NOT
+CHARGEperson_id9585payment_groupNEWcurrencyAUD$controllerorderspayment_date1290986516</Message>
+      </PaymentDetail>
+    </Payments>
+    <PointsPartner>
+         <Id>16044</Id>
+         <Name>Quantas</Name>
+         <MembershipNumber>1234999629624</MembershipNumber>
+    </PointsPartner>
+  </Order>
+</Orders>
+
+
+
+
+1.47.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.47.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+ 400          5034                                 Invalid pagination parameters
+
+1.48 RETRIEVE SINGLE ORDER FOR A PERSON
+
+This endpoint is used to obtain confirmation that an order has been generated in Apparel21 and to obtain
+the (Customer) Order Number if this has not been generated by the website. The information is retrieved
+from the temporary websales table, not from the sord table. It should not be used to obtain updated order
+status or other detail that has been added in the back office. To obtain the latest order information use the
+endpoint that retrieves all orders for a person.
+
+When multiple gift vouchers are purchased, the GET Order endpoint will not list the email addresses
+associated with each gift voucher.
+
+
+1.48.1 URI REQUEST FORMAT
+
+/Persons/{personId}/Orders/{orderId}/?countryCode={countryCode}&startRow={startRow}&pageRows={pa
+geRows}
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 137 of 221
+1.48.2 REQUEST PARAMETERS
+
+ Field                                              Required                Comment
+ personId                                           Mandatory               Id of the Person the orders are requested for
+ orderId                                            Mandatory               Id of the Order to be retrieved
+ CountryCode                                        Mandatory               Country code of the shopper
+ startRow                                            Optional               Starting position of orders returned
+ pageRows                                            Optional               Number of order returned
+
+
+1.48.3 EXAMPLE REQUEST
+
+GET
+https://retailapi.apparel21.com/RetailAPI/Persons/4881/Orders/1740/?countryCode=AU&startRow=1&pag
+eRows=20
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.48.4 EXAMPLE RESPONSE
+
+< Order>
+  <Id>1740</Id>
+  <RowNumber>1</RowNumber>
+  <OrderNumber>W0000202</OrderNumber>
+  <PersonId>3583</PersonId>
+  <OrderDateTime>2011-07-26T15:09:19</OrderDateTime>
+  <TotalQuantity>1</TotalQuantity>
+  <TotalTax>0</TotalTax>
+  <TotalDiscount>0</TotalDiscount>
+  <TotalDue>147</TotalDue>
+  <TotalPayment>147</TotalPayment>
+  <DeliveryInstructions>Please leave on front porch. beware of dangerous dog.</DeliveryInstructions>
+  <UnattendedDeliveryOption>AuthorityToLeave</UnattendedDeliveryOption>
+  <PartnerOrderId>123456</PartnerOrderId>
+  <Addresses>
+    <Billing>
+      <AddressLine1>73 Linlithgow Avenue</AddressLine1>
+      <AddressLine2 />
+      <City>GREYTHORN</City>
+      <State>VIC</State>
+      <Postcode>3152</Postcode>
+      <Country>AUSTRALIA</Country>
+    </Billing>
+    <Delivery>
+      <AddressLine1>37 Swan Street</AddressLine1>
+      <AddressLine2 />
+      <City>GREYTHORN</City>
+      <State>VIC</State>
+      <Postcode>3152</Postcode>
+      <Country>AUSTRALIA</Country>
+    </Delivery>
+  </Addresses>
+  <Contacts>
+    <Email> John.Smith@test.com.au</Email</Email>
+    <Phones>
+      <Home>012351235</Home>
+      <Mobile>012341234</Mobile>
+      <Work />
+    </Phones>
+  </Contacts>
+  <DeliveryContacts>
+    <Email> John.Smith@test.com.au</Email</Email>
+    <Phones>
+      <Home>012351235</Home>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 138 of 221
+      <Mobile>012341234</Mobile>
+      <Work />
+    </Phones>
+  </DeliveryContacts>
+  <OrderDetails Type="Array" TotalRows="1">
+    <OrderDetail>
+      <Id>1840</Id>
+      <Sequence>1</Sequence>
+      <ProductId>3641</ProductId>
+      <ColourId>4082</ColourId>
+      <SkuId>4323</SkuId>
+      <ProductCode>Beanie</ProductCode>
+      <ProductName>WInter Beanie</ProductName>
+      <ColourCode>BLU</ColourCode>
+      <ColourName>Blue</ColourName>
+      <SizeCode>1</SizeCode>
+      <Quantity>1</Quantity>
+      <Customisation />
+      <Price>147</Price>
+      <Discount>0</Discount>
+      <Value>147</Value>
+      <TaxPercent>0</TaxPercent>
+         <Carrier/>
+        <CarrierUrl/>
+        <ConNote/>
+         <SenderName/>
+         <ReceiverName/>
+      <Status>Processing</Status>
+      <ServiceType>
+      <Id>162</Id>
+      <Code>Road</Code>
+      </ServiceType>
+    </OrderDetail>
+  </OrderDetails>
+  <SelectedFreightOption>
+    <Id />
+    <Name />
+    <Value>0</Value>
+  </SelectedFreightOption>
+  <Payments>
+    <PaymentDetail>
+      <Id>761</Id>
+      <Sequence>0</Sequence>
+      <Origin>CreditCard</Origin>
+      <CardType>TEST</CardType>
+      <Stan>986516</Stan>
+      <AuthCode />
+      <AccountType />
+      <Settlement>20101129</Settlement>
+      <Reference>Apparel21Dev:100032</Reference>
+      <Amount>147</Amount>
+      <Message>payment_statusCURRENTbank_reference986516remote_ip203.36.237.106card_typeTESTpayment_
+number100032countryAUorder_id77response_amount158.02response_textApproved or completed
+successfullyresponse_code00settlement_date20101129actioncomplete_direct_onesummary_code0vendor_nameA
+pparel21Devpayment_referenceTEST Payment Only - DO NOT
+CHARGEperson_id9585payment_groupNEWcurrencyAUD$controllerorderspayment_date1290986516</Message>
+    </PaymentDetail>
+</Payments>
+    <PointsPartner>
+         <Id>16044</Id>
+         <Name>Quantas</Name>
+         <MembershipNumber>1234999629624</MembershipNumber>
+    </PointsPartner>
+</Order>
+
+
+
+
+1.48.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 139 of 221
+1.48.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+1.49 RETRIEVE ORDER FOR A ORDER NUMBER
+
+This endpoint is used to obtain order details by the initial web order number, this is a personless call. The
+information is retrieved from the temporary websales table, not from the sord table.
+
+
+1.49.1 URI REQUEST FORMAT
+
+/Orders/{orderId}/?countryCode={countryCode}
+
+
+1.49.2 REQUEST PARAMETERS
+
+ Field                                              Required                Comment
+ orderId                                            Mandatory               Id of the Order to be retrieved
+ CountryCode                                        Mandatory               Country code of the shopper
+
+
+1.49.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/OrderNumbers/{{OrderNumber}}?countryCode=AU
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.49.4 EXAMPLE RESPONSE
+
+There were no changes made to the payload, the extract is the same as the existing payload.
+
+
+
+
+1.49.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.49.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+1.50 CREATE NEW ORDER
+
+Orders are created via a POST request to the following URI. When the 201 response is received the
+Location header will provide the URI required to query the new order. This can be used to retrieve the
+Customer Order number if it was not provided in the post.
+
+When multiple gift vouchers are purchased, a Delivery Address may be specified in each Order Detail
+element, if omitted the gift voucher(s) will be delivered to the Email in Delivery Contact element.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                           Page 140 of 221
+

@@ -1,0 +1,1068 @@
+</CustomData>
+
+
+
+1.28.5 SUCCESS RESPONSE
+HTTP Response
+200
+
+1.28.6 ERROR RESPONSE
+HTTP Error      API Error Code                                    API Error Text
+403             5206                                              No custom data template found
+
+
+1.29 RETRIEVE PRODUCT COLOUR REFERENCE TYPES
+
+A GET endpoint is available for getting the definition of product colour references for data mapping
+purposes.
+
+Field                          Format            Comment                      Example                                  HTTP Header
+
+                                                                                                                       Accept:Version
+
+Id                             Integer           This Id describes which      21                                       4.0
+                                                 object the list of
+                                                 reference groups refers
+                                                 to. Fixed to 21 for
+                                                 product colour reference
+
+Name                           Alpha             Name of object               Product Colour                           4.0
+
+ReferenceTypes                 Alpha             Type="Array"                                                          4.0
+
+     Reference                 Alpha                                                                                   4.0
+
+      Sequence                 Integer           Sequence of the              3                                        4.0
+                                                 reference type
+
+      ReferenceTypeId          Integer           Unique Id for this           1644                                     4.0
+                                                 reference type
+
+      Code                     Alpha             Code for this reference      WebIconi                                 4.0
+                                                 type
+
+      Name                     Alpha             Description of this          Web Iconic                               4.0
+                                                 reference type
+
+
+
+
+1.29.1 URI REQUEST FORMAT
+
+/ProductColourReferenceTypes?countryCode={countryCode}
+
+
+1.29.2 REQUEST PARAMETERS
+ Field                    Required                                      Comment
+ Country Code             Mandatory                                     Country Code of shopper
+
+
+1.29.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Retailapi/ProductColourReferenceTypes?countryCode=AU-GA-IO
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00       P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                Apparel21 Reference Guide                                              Page 61 of 221
+            Content-type: text/xml
+            Accept:version_2.0
+
+1.29.4 EXAMPLE RESPONSE
+
+<ProductColourReferenceTypes xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.o
+rg/2001/XMLSchema-instance">
+    <Id>21</Id>
+    <Name>Product Colour</Name>
+    <ReferenceTypes Type="Array">
+        <Reference>
+            <Sequence>1</Sequence>
+            <ReferenceTypeId>1063</ReferenceTypeId>
+            <Code>SStatus</Code>
+            <Name>Style Status</Name>
+        </Reference>
+        <Reference>
+            <Sequence>2</Sequence>
+            <ReferenceTypeId>1464</ReferenceTypeId>
+            <Code>WebClr</Code>
+            <Name>Web Colour</Name>
+        </Reference>
+        <Reference>
+            <Sequence>3</Sequence>
+            <ReferenceTypeId>1644</ReferenceTypeId>
+            <Code>WebIconi</Code>
+            <Name>Web Iconic</Name>
+        </Reference>
+    </ReferenceTypes>
+</ProductColourReferenceTypes>
+
+
+
+1.29.5 SUCCESS RESPONSE
+HTTP Response
+200
+
+1.29.6 ERROR RESPONSE
+HTTP Error      API Error Code                               API Error Text
+404
+
+
+1.30 RETRIEVE PRODUCT FUTURE PRICES
+
+Future prices endpoint uses the product filter of the web store to determine eligible products. Pricing
+customer attached to the web site country code determines the price scheme, with which the endpoint
+looks for future price changes. Future prices of products (prices with start date in future) will be reterived
+except for products with below conditions.
+
+        •   Products that have only original price.
+        •   Price changes made directly onto the original price.
+        •   Products that do not have Price (current price) even though it has price changes in future.
+        •   Products that do not have any price changes for the specified time window supplied in GET call of
+            future prices endpoint.
+
+Field                       Format          Comment                          Example          HTTP Header
+
+                                                                                              Accept:Version
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 62 of 221
+Style                       Alpha                                                                     1.0 , 2.0 , 4.0
+
+ StyleId                    Integer         Id of the product                       10786             1.0 , 2.0 , 4.0
+
+ StyleCode                  Alpha           The product code                        00S3HX0EAD        1.0 , 2.0 , 4.0
+
+ Clr                        Alpha                                                                     1.0 , 2.0 , 4.0
+
+  ClrId                     Integer         Id of the colour under this             13332             1.0 , 2.0 , 4.0
+                                            product
+
+  ClrCode                   Alpha           Code of product colour                  BLK               1.0 , 2.0 , 4.0
+
+  Sku                       Alpha                                                                     1.0 , 2.0 , 4.0
+
+        SkuId               Integer         Unique Id for this size for this        34221             1.0 , 2.0 , 4.0
+                                            colour
+
+        SizeCode            Alpha           Code of the size                        XS                1.0 , 2.0 , 4.0
+
+        OriginalPrice       Integer         The original price of this size         100               1.0 , 2.0 , 4.0
+                                            i.e. Price with no start / end date
+
+        Price               Integer         The current price of this size –        100               1.0 , 2.0 , 4.0
+                                            price for today
+
+        PriceChanges        Alpha           Type="Array"                                              1.0 , 2.0 , 4.0
+
+          PriceChange       Alpha                                                                     1.0 , 2.0 , 4.0
+
+                Price       Integer         Price of this size starting on          89                1.0 , 2.0 , 4.0
+                                            FromDate
+
+           FromDate         Date            Future date where new price will        2021-05-13        1.0 , 2.0 , 4.0
+                                            take effect ( YYYY-MM-DD)
+
+
+
+
+1.30.1 URI REQUEST FORMAT
+
+/Products/FuturePrices?countryCode={countryCode}&cutOffDate={date}&numberOfPriceChange={num}
+
+
+1.30.2 REQUEST PARAMETERS
+ Field                                               Required                     Comment
+ countryCode                                         Mandatory                    Country Code which determines the price
+                                                                                  scheme of returned prices
+
+
+ cutOffDate                                          Optional                     A future date in YYYY-MM-DD format. Price
+                                                                                  changes from now to this date will be returned.
+ numberOfPriceChange                                 Optional                     Determine the maximum number of price change
+                                                                                  entries at SKU level
+
+1.30.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Products/FuturePrices?countryCode=AU&cutOffDate=2021-05-
+20&numberOfPriceChange=2
+
+                 Content-type: text/xml
+                 Accept:version_2.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121      A C N 005 997 9 00         P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                                  Apparel21 Reference Guide                                               Page 63 of 221
+1.30.4 EXAMPLE RESPONSE
+
+<FuturePrices xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSche
+ma-instance">
+    <Style>
+        <StyleId>13086</StyleId>
+        <StyleCode>00S1PV0TAQ1</StyleCode>
+        <Clr>
+            <ClrId>16272</ClrId>
+            <ClrCode>0023456789</ClrCode>
+            <Sku>
+                <SkuId>40501</SkuId>
+                <SizeCode>XS</SizeCode>
+                <OriginalPrice>159</OriginalPrice>
+                <Price>159</Price>
+                <PriceChanges Type="Array">
+                    <PriceChange>
+                        <Price>100</Price>
+                        <FromDate>2021-05-14</FromDate>
+                    </PriceChange>
+                    <PriceChange>
+                        <Price>80</Price>
+                        <FromDate>2021-05-16</FromDate>
+                    </PriceChange>
+                </PriceChanges>
+            </Sku>
+            <Sku>
+                <SkuId>40502</SkuId>
+                <SizeCode>S</SizeCode>
+                <OriginalPrice>159</OriginalPrice>
+                <Price>159</Price>
+                <PriceChanges Type="Array">
+                    <PriceChange>
+                        <Price>100</Price>
+                        <FromDate>2021-05-14</FromDate>
+                    </PriceChange>
+                    <PriceChange>
+                        <Price>80</Price>
+                        <FromDate>2021-05-16</FromDate>
+                    </PriceChange>
+                </PriceChanges>
+            </Sku>
+            <Sku>
+                <SkuId>40503</SkuId>
+                <SizeCode>M</SizeCode>
+                <OriginalPrice>159</OriginalPrice>
+                <Price>159</Price>
+                <PriceChanges Type="Array">
+                    <PriceChange>
+                        <Price>100</Price>
+                        <FromDate>2021-05-14</FromDate>
+                    </PriceChange>
+                    <PriceChange>
+                        <Price>80</Price>
+                        <FromDate>2021-05-16</FromDate>
+                    </PriceChange>
+                </PriceChanges>
+            </Sku>
+            <Sku>
+                <SkuId>40504</SkuId>
+                <SizeCode>L</SizeCode>
+                <OriginalPrice>159</OriginalPrice>
+                <Price>159</Price>
+                <PriceChanges Type="Array">
+                    <PriceChange>
+                        <Price>100</Price>
+                        <FromDate>2021-05-14</FromDate>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 64 of 221
+                     </PriceChange>
+                     <PriceChange>
+                         <Price>80</Price>
+                         <FromDate>2021-05-16</FromDate>
+                     </PriceChange>
+                 </PriceChanges>
+             </Sku>
+             <Sku>
+                 <SkuId>40505</SkuId>
+                 <SizeCode>XL</SizeCode>
+                 <OriginalPrice>159</OriginalPrice>
+                 <Price>159</Price>
+                 <PriceChanges Type="Array">
+                     <PriceChange>
+                         <Price>100</Price>
+                         <FromDate>2021-05-14</FromDate>
+                     </PriceChange>
+                     <PriceChange>
+                         <Price>80</Price>
+                         <FromDate>2021-05-16</FromDate>
+                     </PriceChange>
+                 </PriceChanges>
+             </Sku>
+        </Clr>
+    </Style>
+</FuturePrices>
+
+
+
+
+1.30.5 SUCCESS RESPONSE
+HTTP Response
+200
+
+1.30.6 ERROR RESPONSE
+HTTP Error      API Error Code                               API Error Text
+404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 65 of 221
+10 COLOURS
+
+The colours resource retrieves a list of colours that are active for the reference ids provided.
+
+1.31 COLOUR DETAILS
+
+ Field                           Format            Max      Comment              Example                      GET Response           HTTP Header
+                                                 Length                                                                             Accept:Versio
+                                                                                                                                              n_
+ Code                             Alpha              21 Colour Code              Noir                               Yes                            1.0
+ Name                             Alpha              61 Colour Name              Noir comme poix                    Yes                            1.0
+ Row Number                       Num                 1 Row Number               1                                  Yes                            1.0
+
+1.32 RETRIEVE COLOUR LIST
+
+
+1.32.1 URI REQUEST FORMAT
+
+Colours?countryCode={countryCode}&query={queryString}
+
+1.32.2 REQUEST PARAMETERS
+ Field                    Required                                      Comment
+ CountryCode              Mandatory                                     Country code of the shopper
+ Query                     Optional                                     Sequence and Product Reference Type.
+                                                                        Up to 5 combinations can be entered.
+
+1.32.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Colours?countryCode=AU&query=1,1506
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.32.4 EXAMPLE RESPONSE
+<Colours>
+<Colour>
+<Code>BLK</Code>
+<Name>Black</Name>
+<RowNumber>1</RowNumber>
+   </Colour>
+<Colour>
+<Code>BLK/BLU</Code>
+<Name>BLACK / BLUE</Name>
+<RowNumber>2</RowNumber>
+   </Colour>
+<Colour>
+<Code>BLK/GRY</Code>
+<Name>BLACK / GREY</Name>
+<RowNumber>3</RowNumber>
+   </Colour>
+<Colour>
+<Code>BLK/RED</Code>
+<Name>BLACK / RED</Name>
+<RowNumber>4</RowNumber>
+   </Colour>
+      Etc……
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121    A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                              Apparel21 Reference Guide                                            Page 66 of 221
+1.32.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.32.6 ERROR RESPONSE
+ HTTP Error     API Error Code API Error Text
+ 404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 67 of 221
+11 SIZES
+
+The sizes resource retrieves a list of sizes that are active for the reference ids provided.
+
+1.33 SIZE DETAILS
+
+
+ Field                    Format                   Max     Comment              Example             GET Response                 HTTP Header
+                                                 Length                                                                       Accept:Version_
+ Code                      Alpha                     6 Size Code                S                         Yes                                  1.0
+ Row Number                Num                       1 Row Number               1                         Yes                                  1.0
+
+1.34 RETRIEVE SIZE LIST
+
+
+1.34.1 URI REQUEST FORMAT
+
+/Sizes?countryCode={countryCode}&query={queryString}
+
+
+1.34.2 REQUEST PARAMETERS
+ Field              Required                              Comment
+ CountryCode        Mandatory                             Country code of the shopper
+ Query               Optional                             Sequence and Product Reference Type.
+                                                          Up to 5 combinations can be entered.
+ includeOutOfStock                      Optional          true / false. Defaults to false if not supplied.
+                                                          If false, sizes for products not in stock are not included. If set to
+                                                          true, sizes will be included in the results, even if the products don’t
+                                                          have stock currently.
+
+1.34.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/Sizes?countryCode=AU&query=1,1506&includeOutOfStock=true
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.34.4 EXAMPLE RESPONSE
+<Sizes> <Size>
+<Code>8</Code>
+<Name>1</Name>
+<RowNumber>1</RowNumber>
+   </Size>
+<Size>
+<Code>9</Code>
+<RowNumber>2</RowNumber>
+   </Size>
+<Size>
+<Code>10</Code>
+<RowNumber>3</RowNumber>
+   </Size>
+<Size>
+<Code>6</Code>
+<RowNumber>4</RowNumber>
+<Size>
+<Code>XS</Code>
+<RowNumber>5</RowNumber>
+   </Size>
+<Size>
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121     A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                               Apparel21 Reference Guide                                            Page 68 of 221
+etc……
+
+
+
+1.34.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.34.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 69 of 221
+12 PERSONS
+
+‘Persons’ is a term used within Apparel21 to store details for people who purchase goods from a retail store.
+When an online shopper creates an account, a Person record must be created in Apparel21 and include
+email address and other contact and delivery details. In Apparel21 the Person is attached to a predefined
+‘Customer’ record which is used to determine the pricing, discounts and freight for the shopper.
+
+The email address is used to login to the website and complete an order. Persons can be be created,
+updated and retrieved by the API. It is possible to create persons with the same email address for different
+brands or divisions in the same database. The person’s email address must be unique within a brand or
+division as it is used as the primary lookup.
+
+Custom Data
+
+Custom Data allows businesses to capture more information around retail customers (Persons).
+
+A GET endpoint is available to assist web developers for getting the list of custom data templates available
+on a web warehouse. Besides, details of a single template can be retrieved by supplying the template
+name.
+
+Get list of custom data templates available for the web warehouse
+
+/Persons/customdatatemplates?countryCode={countryCode}
+
+Get a single template by template name
+
+/Persons/customdatatemplates/{template name}?countryCode={countryCode}
+
+A request parameter ‘CustomData’ exists for getting a single Person with custom data.
+
+/Persons/{Id}?countryCode={CountryCode}&CustomData=true
+
+The POST and PUT endpoints have been enhanced to allow the creating and updating Persons with Custom
+Data.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 70 of 221
+1.35 PERSON DETAILS
+
+                                                                                                                                                                GET                               HTTP
+ Field                              Format             Max      Comment                                            Example                          GET      Timestamp    POST        PUT       Header
+                                                   Length                                                                                         Response    Response   Request    Request    Accept:V
+                                                                                                                                                                                                ersion_
+ Id                                 Integer              22     Id of the Person                                   101231                           Yes         Yes        No         Yes            1.0
+ Code                                Alpha               10     Code generated by API                              SMITJOHN22                       Yes         Yes        No         No             1.0
+ Title                               Alpha               10     Salutation                                         Mr                               Yes         No       Optional   Optional         1.0
+ Initials                            Alpha                6     Initials                                           JJ                               Yes         No       Optional   Optional         1.0
+ Firstname                           Alpha               20     First name                                         John                             Yes         No         Yes        Yes            1.0
+ Surname                             Alpha               20     Surname                                            Smith                            Yes         No         Yes        Yes            1.0
+ Sex                                 Alpha                1     Sex                                                M                                Yes         No       Optional   Optional         1.0
+                                                                Accepted values are
+                                                                “M” = Male
+                                                                “F”= Female
+                                                                “NS” = Non-specific
+                                                                Blank
+                                                                Other values can be passed but won’t
+                                                                display in store or at head office.
+ DateOfBirth                         Date                10     Date of birth                                      1984-12-25                       Yes         No       Optional   Optional        1.0
+                                 (yyyyy-MM-
+                                     dd)
+ StartDate                           Date                10     Date of addition                                   2011-03-25                       Yes         No       Optional   Optional        1.0
+                                 (yyyyy-MM-
+                                     dd)
+ JobTitle                           Alpha                20     Title                                              Office Admin                     Yes         No       Optional   Optional        1.0
+ Password                           Alpha                50     Hashed of password provided by                     xyzH334oQ12                      No          No       Optional   Optional        1.0
+                                                                website. This is stored by the API and
+                                                                required for subsequent GET requests for
+                                                                person.
+ UpdateTimeStamp                  Timestamp              22     D/MM/CCYY HH:MM:SS tt – must be                    6/05/2010                        Yes         Yes        No         Yes           1.0
+                                                                supplied when updating a person using              4:32:15 PM
+                                                                “PUT” request as this is how the API
+                                                                determines that the latest person data is
+                                                                being updated.
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 71 of 221
+                                                                                                                                                                GET                               HTTP
+ Field                              Format             Max      Comment                                            Example                          GET      Timestamp    POST        PUT       Header
+                                                   Length                                                                                         Response    Response   Request    Request    Accept:V
+                                                                                                                                                                                                ersion_
+                                                                Date time passed in the “PUT” must
+                                                                match the current record being
+                                                                updated. Note – Do a “GET” to get the
+                                                                current date/time and regurgitate that
+                                                                in the “PUT”.
+ Privacy                             Alpha                 5    Must be “true” or “false”. True = this             True                             Yes         No       Optional   Optional        1.0
+                                                                person has requested privacy. If not
+                                                                supplied, the default value in Apparel21
+                                                                will be “false”.
+ DocketNumber                        Alpha               50     Docket number which is passed along                D19800002202                     No          No       Optional     No            2.0
+                                                                in QR code URL. Refer to Job 115851
+                                                                for details
+ RewardProgramId                    Integer              38     Unique identifier of the reward                    1001                             No          No       Optional     No            2.0
+                                                                program. Refer to Job 115851 for
+                                                                details
+ References
+    Reference                                                   Reference is a sub element of
+                                                                References
+      ReferenceTypeId               Integer              22     Id of reference group – e.g. id of “Opt                                             Yes         No       Optional   Optional        1.0
+                                                                In?” reference
+    Id                              Integer              22     Id of reference code – e.g. id of “Yes”                                             Yes         No       Optional   Optional        1.0
+ CustomData                                                     List of custom data cards                                                           Yes         No       Optional   Optional        2.0
+    Cards                            Alpha                      Type="Array"                                                                        Yes         No       Optional   Optional        2.0
+    Card                             Alpha                      Name=""                                            Marketing data                   Yes         No       Optional   Optional        2.0
+   Fields                            Alpha                      Type="Array"                                                                        Yes         No       Optional   Optional        2.0
+     Field                           Alpha                      Name=""                                            Social influencer                Yes         No       Optional   Optional        2.0
+                                    Number                                                                         45789357
+                                    Boolean                                                                        True
+                                     Date                                                                          2020-05-25
+       ListValues                    Alpha                      Type="Array"                                                                        Yes         No       Optional   Optional        2.0
+          Value                      Alpha                                                                         English                          Yes         No       Optional   Optional        2.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 72 of 221
+                                                                                                                                                                GET                               HTTP
+ Field                              Format             Max      Comment                                            Example                          GET      Timestamp    POST        PUT       Header
+                                                   Length                                                                                         Response    Response   Request    Request    Accept:V
+                                                                                                                                                                                                ersion_
+ Addresses                                                      There are two addresses as part of the
+                                                                person resource - Billing and Delivery.
+                                                                The following field definitions are
+                                                                common for both. Billing and Delivery
+                                                                are sub-elements of Addresses.
+      AddressLine1                   Alpha               50     Address line 1                                     Level 2                          Yes         No       Optional     Yes1          1.0
+      AddressLine2                   Alpha               50     Address line 2                                     21 Cremorne                      Yes         No       Optional     Yes1          1.0
+                                                                                                                   Street
+      City                           Alpha               50     City                                               Cremorne                         Yes         No       Optional     Yes1          1.0
+      State                          Alpha               50     State                                              VIC                              Yes         No       Optional     Yes1          1.0
+      Postcode                       Alpha               10     Post code or ZIP code                              3121                             Yes         No       Optional     Yes1          1.0
+      Country                        Alpha               20     Country                                            Australia                        Yes         No       Optional     Yes1          1.0
+
+                                                                Note 1: At least 1 Billing field must be
+                                                                completed for a PUT
+ Contacts                                                       Contacts consist of Email and Phone
+                                                                numbers.
+      Email                          Alpha              250     Email address. This must be unique                 John.Smith@APP                   Yes         No       Optional   Optional        1.0
+                                                                within each company/division                       AREL21.COM
+                                                                (configured business by business).
+      Phones                                                    Phones is a sub element of Contacts
+      Home                           Alpha              250     This is the MAIN contact type of the               03 94275120                      Yes         No       Optional   Optional        1.0
+                                                                person. This is the only one that shows
+                                                                up in store. Use THIS ONE instead of
+                                                                Mobile field for the mobile phone.
+      Mobile                         Alpha              250     Mobile Phone in Apparel21. This is NOT             0421 552 654                     Yes         No       Optional   Optional        1.0
+                                                                visible in store.
+      Work                           Alpha              250     Work phone type in Apparel21. This is              84159300                         Yes         No       Optional   Optional        1.0
+                                                                visible in store under Business phone
+                                                                number field but is not a search or
+                                                                promoted field.
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 73 of 221
+                                                                                                                                                                GET                                HTTP
+ Field                              Format             Max      Comment                                            Example                          GET      Timestamp    POST        PUT        Header
+                                                   Length                                                                                         Response    Response   Request    Request     Accept:V
+                                                                                                                                                                                                 ersion_
+ Loyalties                                                      Prior to version 3.0, this section is
+                                                                optional. If not supplied, loyalty
+                                                                information will not be updated.
+                                                                WARNING: From version 3.0+, if loyalty
+                                                                information is not supplied it will
+                                                                inactivate any loyalties linked to the
+                                                                person being updated.
+      Loyalty                                                   Loyalty is a sub reference of Loyalties
+      Id                            Integer              22     Id of loyalty record                               123456                           Yes         No          No        Yes if         1.0
+                                                                                                                                                                                    updating
+                                                                                                                                                                                     existing
+                                                                                                                                                                                    loyalty –
+                                                                                                                                                                                      No to
+                                                                                                                                                                                    create a
+                                                                                                                                                                                      new
+                                                                                                                                                                                     loyalty
+                                                                                                                                                                                      on an
+                                                                                                                                                                                     existing
+                                                                                                                                                                                     person
+      LoyaltyTypeId                 Integer              22     Id of Loyalty Type record –– Loyalties are         30861                            Yes         No       Optional   Optional         1.0
+                                                                found under group id 366
+      LoyaltyType                    Alpha               40     Description of loyalty                             VIP Gold loyalty                 Yes         No         No         No             1.0
+      CardNo                         Alpha              250     Loyalty card number.                               LM12345678                       Yes         No       Optional   Optional         1.0
+                                                                All supplied numbers must begin with
+                                                                LM.
+                                                                If not supplied for a POST person, it is
+                                                                generated automatically using Apparel21
+                                                                standard logic. E.g. L prefix, loyalty ID,
+                                                                PERIDX
+      Expiry                      Date yyyy-             10     Expiry date of loyalty card for this person        2015-10-29                     Optional      No       Optional   Optional         1.0
+                                   MM-dd
+      Balance                      Integer               22     Loyalty balance as shown in Persons                100                            Optional      No       Optional   Optional         1.0
+                                                                loyalty “balance” column
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 74 of 221
+                                                                                                                                                                GET                               HTTP
+ Field                              Format             Max      Comment                                            Example                          GET      Timestamp    POST        PUT       Header
+                                                   Length                                                                                         Response    Response   Request    Request    Accept:V
+                                                                                                                                                                                                ersion_
+      CreditStatus                  Number               22     Extended loyalties only                            1321                           Optional      No       Optional   Optional         1.0
+                                                                Displayed at store and head office under
+                                                                Credit Status field
+      Message                        Alpha              250     Extended loyalties only                            You are 100                    Optional      No       Optional   Optional        1.0
+                                                                Message to display at POS                          points from
+                                                                                                                   updating to Gold
+      JoinDate                    Date yyyy-             10     Extended loyalties only                            2014-10-01                     Optional      No       Optional   Optional        1.0
+                                   MM-dd                        Date of joining loyalty program
+      StatusId                     Integer               22     Extended loyalties only                            1231                           Optional      No       Optional   Optional        1.0
+                                                                Id of Loyalty Status record –– Status idx
+                                                                are found under group of 437.
+                                                                Typically used to determine active and
+                                                                inactive statuses.
+ RewardsAccounts                                                List of rewards programs a person                                                                                                   1.0
+                                                                belongs to. Currently, limited to a single
+                                                                program.
+  Account                                                       Summary of reward account details                                                                                                   1.0
+  Id                                Number               38     This is the unique identifier of the               1                                Yes         No          No         No           1.0
+                                                                rewards account of the person
+  ProgramId                         Number               38     Rewards Program Id                                 1                                Yes         No          No         No           1.0
+
+  ProgramName                        Alpha              250     Rewards Program Name                               Apparel21                        Yes         No          No         No           1.0
+                                                                                                                   Rewards Program
+ TierId                             Number               38     Tier Id                                            1                                Yes         No          No         No           1.0
+ TierName                            Alpha              250     Tier Name                                          Bronze                           Yes         No          No         No           1.0
+ Currency                                                       Currency consists of Code and Format.
+ Code                                Alpha               50     Currency Code associated with the                  AUD                              Yes         No          No         No           1.0
+                                                                person
+ Format                              Alpha               50     Format of currency display in Ap21                 #,##0.00 'Aud'                   Yes         No          No         No           1.0
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 75 of 221
+1.36 RETRIEVE PERSON DETAILS
+
+The Person details are retrieved by submitting a GET. The following URI will return person records that
+match the parameters entered.
+
+
+1.36.1 URI REQUEST FORMAT
+
+/Persons?countryCode={countryCode}&surname={surname}&firstname={firstname}&phone={phone}&ema
+il={email}&code={code}&password={password}
+
+
+1.36.2 REQUEST PARAMETERS
+ Field                    Required                                    Comment
+ CountryCode             Mandatory                                    Country Code of Shopper
+ Surname                                         Optional
+ Firstname                                       Optional
+ Email                                           Optional             Email address used to uniquely identify the person.
+
+ Phone                                           Optional             May be one of either
+                                                                      - Home
+                                                                      - Mobile or
+                                                                      - Work phone number
+ Code                                            Optional             Person Code
+ Password                                        Optional             Password of the Person
+ LoyaltyOnly                                     Optional             If set to “true” will retrieve only loyalty customers on a
+                                                                      GET and will limit the email uniqueness check to loyalty
+                                                                      customers only on PUT and POST requests.
+ UpdatedAfter                                    Optional             Used to retrieve person records that have been updated
+                                                                      after a specific timestamp
+                                                                      The following are the valid formats for the timestamp:
+                                                                      YYYY-MM-DDTHH:MM:SS (24-hour format)
+                                                                      YYYY-MM-DDTHH:MM (24-hour format)
+                                                                      YYYY-MM-DD
+
+
+1.36.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Persons?countryCode=AU&email=john.hill@apparel21.com
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.36.4 EXAMPLE RESPONSE
+<Person
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Id>1241</Id>
+    <Code>HILLJO00</Code>
+    <Title>MR</Title>
+    <Initials>JH</Initials>
+    <Firstname>JOHN</Firstname>
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00      P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                              Page 76 of 221
+      <Surname>HILL</Surname>
+      <Sex>M</Sex>
+      <DateOfBirth />
+      <StartDate>2006-03-02</StartDate>
+      <JobTitle></JobTitle>
+      <Privacy>True</Privacy>
+      <UpdateTimeStamp>15/09/2014 2:05:34 PM</UpdateTimeStamp>
+      <References Type="Array">
+          <Reference>
+              <ReferenceTypeId>373</ReferenceTypeId>
+              <Id />
+          </Reference>
+          <Reference>
+              <ReferenceTypeId>1781</ReferenceTypeId>
+              <Id />
+          </Reference>
+          <Reference>
+              <ReferenceTypeId>1782</ReferenceTypeId>
+              <Id />
+          </Reference>
+          <Reference>
+              <ReferenceTypeId>1801</ReferenceTypeId>
+              <Id />
+          </Reference>
+          <Reference>
+              <ReferenceTypeId>1501</ReferenceTypeId>
+              <Id />
+          </Reference>
+          <Reference>
+              <ReferenceTypeId>27</ReferenceTypeId>
+              <Id />
+          </Reference>
+      </References>
+      <IsAgent>false</IsAgent>
+      <Addresses>
+          <Billing>
+              <ContactName />
+              <AddressLine1>1 SWAN ST</AddressLine1>
+              <AddressLine2 />
+              <City>RICHMOND</City>
+              <State>VIC</State>
+              <Postcode>3121</Postcode>
+              <Country>AUSTRALIA</Country>
+          </Billing>
+      </Addresses>
+      <Contacts>
+          <Email>john.hill@apparel21.com</Email>
+          <Phones>
+              <Home>0384159300</Home>
+              <Mobile />
+              <Work />
+          </Phones>
+      </Contacts>
+      <Currency>
+          <Code />
+          <Format />
+      </Currency>
+      <Loyalties Type="Array">
+          <Loyalty>
+              <Id>1261</Id>
+              <LoyaltyTypeId>8561</LoyaltyTypeId>
+              <LoyaltyType>VIP</LoyaltyType>
+              <CardNo>L011241</CardNo>
+              <Expiry>2014-09-28</Expiry>
+              <Balance />
+              <CreditStatus />
+              <Message />
+              <JoinDate />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 77 of 221
+            <StatusId />
+        </Loyalty>
+        <Loyalty>
+            <Id>1262</Id>
+            <LoyaltyTypeId>10570</LoyaltyTypeId>
+            <LoyaltyType>Staff Loyalty 40%</LoyaltyType>
+            <CardNo>L40</CardNo>
+            <Expiry />
+            <Balance />
+            <CreditStatus />
+            <Message />
+            <JoinDate>2014-09-11</JoinDate>
+            <StatusId />
+        </Loyalty>
+    </Loyalties>
+    <RewardsAccounts>
+        <Account>
+            <Id>1</Id>
+            <ProgramId>1</ProgramId>
+            <ProgramName>Apparel21 Rewards Program</ProgramName>
+            <TierId>1</TierId>
+            <TierName>Bronze</TierName>
+        </Account>
+    </RewardsAccounts>
+</Person>
+
+
+
+1.36.5 SUCCESS RESPONSE
+ HTTP Response
+ 200
+
+1.36.6 ERROR RESPONSE
+ HTTP Error   API Error Code                       API Error Text
+ 404          5008                                 No data found
+ 400          5013                                 More than one person satisfies filter
+ 403          5144                                 Invalid date value: 0011-03-02
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 78 of 221
+1.37 RETRIEVE SINGLE PERSON DETAILS
+
+This request will return full details for a single person using the Person Id retrieved previously.
+
+
+1.37.1 URI REQUEST FORMAT
+
+Perform a GET on the following endpoint.
+
+/Persons/{id}?countryCode={countryCode}
+
+
+1.37.2 REQUEST PARAMETERS
+ Field            Required                              Comment
+ Id               Mandatory                             Id of the Person
+ Country Code                    Mandatory              Country Code of shopper
+ CustomData                        Optional             Include Custom Data in returned Person. Set to “True” to get all
+                                                        valid Custom Data values
+
+1.37.3 EXAMPLE REQUEST
+
+GET https://retailapi.apparel21.com/RetailAPI/Persons/4881?countryCode=AU&CustomData=true
+
+           Content-type: text/xml
+           Accept:version_2.0
+
+1.37.4 EXAMPLE RESPONSE
+<Person
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Id>1241</Id>
+    <Code>HILLJO00</Code>
+    <Title>MR</Title>
+    <Initials>JH</Initials>
+    <Firstname>JOHN</Firstname>
+    <Surname>HILL</Surname>
+    <Sex>M</Sex>
+    <DateOfBirth />
+    <StartDate>2006-03-02</StartDate>
+    <JobTitle></JobTitle>
+    <Privacy>True</Privacy>
+    <UpdateTimeStamp>15/09/2014 2:05:34 PM</UpdateTimeStamp>
+    <References Type="Array">
+        <Reference>
+            <ReferenceTypeId>373</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1781</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1782</ReferenceTypeId>
+            <Id />
+        </Reference>
+        <Reference>
+            <ReferenceTypeId>1801</ReferenceTypeId>
+            <Id />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 79 of 221
+        </Reference>
+        <Reference>
+             <ReferenceTypeId>1501</ReferenceTypeId>
+             <Id />
+        </Reference>
+        <Reference>
+             <ReferenceTypeId>27</ReferenceTypeId>
+             <Id />
+        </Reference>
+    </References>
+    <CustomData>
+                <Cards Type="Array">
+                        <Card Name="Special request">
+                                <Fields Type="Array">
+                                        <Field Name="Special request from customer">Prefer to receive
+a catalogue</Field>
+                                </Fields>
+                        </Card>
+                        <Card Name="Marketing information ">
+                                <Fields Type="Array">
+                                        <Field Name="SMS ">true</Field>
+                                        <Field Name="Email">true</Field>
+                                </Fields>
+                        </Card>
+                        <Card Name="hobby and interest"> <!—No data for this card-->
+                                <Fields Type="Array">
+                                        <Field Name="List of interests">
+                                        <ListValues Type="Array"/>
+                                </Field>
+                                <Field Name="Interests">
+                                        <ListValues Type="Array"/>
+                                </Field>
+                        </Fields>
+                        </Card>
+                </Cards>
+        </CustomData>
+    <IsAgent>false</IsAgent>
+    <Addresses>
+        <Billing>
+             <ContactName />
+             <AddressLine1>1 SWAN ST</AddressLine1>
+             <AddressLine2 />
+             <City>RICHMOND</City>
+             <State>VIC</State>
+             <Postcode>3121</Postcode>
+             <Country>AUSTRALIA</Country>
+        </Billing>
+    </Addresses>
+    <Contacts>
+        <Email>john.hill@apparel21.com</Email>
+        <Phones>
+             <Home>0384159300</Home>
+             <Mobile />
+             <Work />
+        </Phones>
+    </Contacts>
+    <Currency>
+        <Code />
+        <Format />
+    </Currency>
+    <Loyalties Type="Array">
+        <Loyalty>
+             <Id>1261</Id>
+             <LoyaltyTypeId>8561</LoyaltyTypeId>
+             <LoyaltyType>VIP</LoyaltyType>
+             <CardNo>L011241</CardNo>
+             <Expiry>2014-09-28</Expiry>
+             <Balance />
+
+
+
+
+101 C R E M O R NE ST C R E M O R NE VI C 3121   A C N 005 997 9 00    P H : 613 8 415 9300   F A X: 613 9427 1752 W WW. A P P A R E L 21. C OM
+
+
+RETAIL API GUIDE - LATEST.DOCX                             Apparel21 Reference Guide                                            Page 80 of 221
+
