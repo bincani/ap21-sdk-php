@@ -76,6 +76,11 @@ The HTTP call chain: `Resource` -> `HttpRequest[Json|Xml]` -> `CurlRequest` -> c
 
 PSR-4: `PHPAP21\` maps to `lib/` (source) and `tests/` (dev). Resource class names match their filenames in `lib/`.
 
+## Git Workflow
+
+- **NEVER commit directly to master.** Always create a feature branch and submit a PR for merging.
+- **Always prompt the user for a feature branch name** before creating the branch. Branch names must include a Jira ticket ID, e.g. `feature/DEV-1880-download-costs` or `bugfix/DEV-1880-fix-download-costs`.
+
 ## Testing
 
 PHPUnit 10 with bootstrap via `vendor/autoload.php`. Tests are in `tests/`. Configuration in `phpunit.xml`.
