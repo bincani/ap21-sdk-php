@@ -63,7 +63,7 @@ class Colour extends HTTPXMLResource
         $code = $this->innerHTML($colour->getElementsByTagName('Code')[0]);
         $name = $this->innerHTML($colour->getElementsByTagName('Name')[0]);
         //Log::debug(__METHOD__, [$code, $name, $colour->nodeValue]);
-        $this->colours[$code] = [
+        $this->colours[] = [
             'code' => $code,
             'name' => $name
         ];
